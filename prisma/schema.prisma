@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Technology {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  icon      String?  // path napr. /icons/technologies/nextdotjs.svg
+  category  String?  // framework, language, database, tool, etc.
+  sortOrder Int      @default(0)
+  projects  ProjectTechnology[]
+}
+
+model Integration {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  icon      String?  // path napr. /icons/integrations/google.svg
+  category  String?  // auth, maps, kyc, payments, etc.
+  sortOrder Int      @default(0)
+  projects  ProjectIntegration[]
+}
+
+model ProjectTechnology {
+  projectId    String
+  technologyId String
+  project      Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  @@id([projectId, technologyId])
+}
+
+model ProjectIntegration {
+  projectId     String
+  integrationId String
+  project       Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  @@id([projectId, integrationId])
+}
+
+model Project {
+  id            String   @id @default(cuid())
+  titleEn       String
+  titleSk       String
+  slug          String   @unique
+  descriptionEn String?
+  descriptionSk String?
+  url          String?
+  appStoreUrl  String?
+  playStoreUrl String?
+  logo         String?  // path napr. /logos/my-project.png
+  category     String   @default("personal")
+  year         Int?
+  featured     Boolean  @default(false)
+  sortOrder    Int      @default(0)
+  visible      Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  technologies ProjectTechnology[]
+  integrations ProjectIntegration[]
+}
+
+model Job {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  companyEn     String
+  companySk     String
+  positionEn    String
+  positionSk    String
+  descriptionEn String?
+  descriptionSk String?
+  url           String?
+  urlLabelEn    String?
+  urlLabelSk    String?
+  startYear     Int
+  endYear       Int?
+  current       Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

@@ -1,0 +1,38 @@
+services:
+  stredan-db:
+    image: postgres:16-alpine
+    container_name: stredan-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: stredan
+      POSTGRES_USER: stredan
+      POSTGRES_PASSWORD: stredan_secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5434:5432"
+    networks:
+      - internal
+
+  stredan-app:
+    image: stredan-app:latest
+    container_name: stredan-app
+    restart: unless-stopped
+    depends_on:
+      - stredan-db
+    environment:
+      DATABASE_URL: "postgresql://stredan:stredan_secret@stredan-db:5432/stredan"
+      NODE_ENV: production
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    networks:
+      - internal
+      - web
+
+volumes:
+  pgdata:
+
+networks:
+  internal:
+    driver: bridge
+  web:
+    external: true
