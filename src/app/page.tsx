@@ -183,7 +183,7 @@ function ProjectBadgePill({
     <span
       className={`inline-flex shrink-0 items-center gap-1 rounded-full font-medium ${sizeClass} ${config.className}`}
     >
-      <span aria-hidden>{config.icon}</span>
+      {config.icon && <span aria-hidden>{config.icon}</span>}
       {config.label}
     </span>
   );

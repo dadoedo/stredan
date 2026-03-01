@@ -128,7 +128,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                       key={badge}
                       className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-sm font-medium ${config.className}`}
                     >
-                      <span aria-hidden>{config.icon}</span>
+                      {config.icon && <span aria-hidden>{config.icon}</span>}
                       {config.label}
                     </span>
                   );
