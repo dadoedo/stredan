@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { getStats } from "@/lib/stats";
 import { getLocale } from "@/lib/locale";
 import { ui, type Locale } from "@/lib/translations";
+import { BADGE_CONFIG } from "@/lib/badges";
 import Link from "next/link";
 
 export default async function Home() {
@@ -27,6 +28,7 @@ export default async function Home() {
           include: { integration: true },
           orderBy: { integration: { sortOrder: "asc" } },
         },
+        badges: true,
       },
     }),
     prisma.job.findMany({
@@ -165,6 +167,28 @@ function truncatePreview(text: string, maxChars: number): string {
   return cut.slice(0, end).trim() + "...";
 }
 
+function ProjectBadgePill({
+  badge,
+  locale,
+  size = "sm",
+}: {
+  badge: string;
+  locale: Locale;
+  size?: "sm" | "md";
+}) {
+  const config = BADGE_CONFIG[badge];
+  if (!config) return null;
+  const sizeClass = size === "sm" ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 text-sm";
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center gap-1 rounded-full font-medium ${sizeClass} ${config.className}`}
+    >
+      <span aria-hidden>{config.icon}</span>
+      {config.label}
+    </span>
+  );
+}
+
 function ProjectCard({
   project,
   locale,
@@ -173,6 +197,7 @@ function ProjectCard({
     slug: string;
     titleEn: string;
     titleSk: string;
+    category: string;
     descriptionEn: string | null;
     descriptionSk: string | null;
     url: string | null;
@@ -182,6 +207,7 @@ function ProjectCard({
     playStoreUrl: string | null;
     technologies: { technology: { name: string; slug: string; icon: string | null } }[];
     integrations: { integration: { name: string; slug: string; icon: string | null } }[];
+    badges: { badge: string }[];
   };
   locale: Locale;
 }) {
@@ -202,14 +228,19 @@ function ProjectCard({
               className="size-10 shrink-0 rounded object-contain"
             />
           )}
-          <h3 className="font-heading text-lg font-semibold tracking-tight">
-            <Link
-              href={`/projects/${project.slug}`}
-              className="transition-colors hover:text-zinc-400"
-            >
-              {title}
-            </Link>
-          </h3>
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <h3 className="font-heading text-lg font-semibold tracking-tight">
+              <Link
+                href={`/projects/${project.slug}`}
+                className="transition-colors hover:text-zinc-400"
+              >
+                {title}
+              </Link>
+            </h3>
+            {project.badges.map(({ badge }) => (
+              <ProjectBadgePill key={badge} badge={badge} locale={locale} />
+            ))}
+          </div>
         </div>
         <span className="shrink-0 text-sm text-zinc-500">{project.year}</span>
       </div>
@@ -291,11 +322,13 @@ function CompactProject({
     slug: string;
     titleEn: string;
     titleSk: string;
+    category: string;
     url: string | null;
     year: number | null;
     logo: string | null;
     technologies: { technology: { name: string; icon: string | null } }[];
     integrations: { integration: { name: string; icon: string | null } }[];
+    badges: { badge: string }[];
   };
   locale: Locale;
 }) {
@@ -315,12 +348,17 @@ function CompactProject({
             className="size-6 shrink-0 rounded object-contain"
           />
         )}
-        <Link
-          href={`/projects/${project.slug}`}
-          className="min-w-0 truncate text-sm text-muted transition-colors hover:text-foreground"
-        >
-          {title}
-        </Link>
+        <div className="flex min-w-0 items-center gap-2">
+          <Link
+            href={`/projects/${project.slug}`}
+            className="min-w-0 truncate text-sm text-muted transition-colors hover:text-foreground"
+          >
+            {title}
+          </Link>
+          {project.badges.map(({ badge }) => (
+            <ProjectBadgePill key={badge} badge={badge} locale={locale} />
+          ))}
+        </div>
         {project.url && (
           <a
             href={project.url}

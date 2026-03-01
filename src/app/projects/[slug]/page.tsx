@@ -9,6 +9,7 @@ import { LinkifyText } from "@/components/LinkifyText";
 import { getLocale } from "@/lib/locale";
 import { prisma } from "@/lib/prisma";
 import { ui } from "@/lib/translations";
+import { BADGE_CONFIG } from "@/lib/badges";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -81,6 +82,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         include: { integration: true },
         orderBy: { integration: { sortOrder: "asc" } },
       },
+      badges: true,
     },
   });
 
@@ -106,7 +108,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           </Link>
 
           <header className="mt-6 border-b border-border pb-8">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {project.logo && (
                 <img
                   src={project.logo}
@@ -114,9 +116,24 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   className="size-14 shrink-0 rounded object-contain"
                 />
               )}
-              <h1 className="font-heading text-4xl font-semibold tracking-tight sm:text-5xl">
-                {title}
-              </h1>
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="font-heading text-4xl font-semibold tracking-tight sm:text-5xl">
+                  {title}
+                </h1>
+                {project.badges.map(({ badge }) => {
+                  const config = BADGE_CONFIG[badge];
+                  if (!config) return null;
+                  return (
+                    <span
+                      key={badge}
+                      className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-sm font-medium ${config.className}`}
+                    >
+                      <span aria-hidden>{config.icon}</span>
+                      {config.label}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
             {description && (
               <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted sm:text-lg">

@@ -27,6 +27,15 @@ model Integration {
   projects  ProjectIntegration[]
 }
 
+model ProjectBadge {
+  id        String  @id
+  projectId String
+  badge     String  // marketplace, open-source, etc.
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
 model ProjectTechnology {
   projectId    String
   technologyId String
@@ -63,6 +72,7 @@ model Project {
   updatedAt    DateTime @updatedAt
   technologies ProjectTechnology[]
   integrations ProjectIntegration[]
+  badges       ProjectBadge[]
 }
 
 model Job {
