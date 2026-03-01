@@ -15,8 +15,14 @@ export default async function EditProjectPage({ params }: PageProps) {
     prisma.project.findUnique({
       where: { id },
       include: {
-        technologies: { include: { technology: true } },
-        integrations: { include: { integration: true } },
+        technologies: {
+          include: { technology: true },
+          orderBy: { technology: { sortOrder: "asc" } },
+        },
+        integrations: {
+          include: { integration: true },
+          orderBy: { integration: { sortOrder: "asc" } },
+        },
       },
     }),
     prisma.technology.findMany({ orderBy: { sortOrder: "asc" } }),

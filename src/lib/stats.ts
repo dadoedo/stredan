@@ -22,8 +22,14 @@ export async function getStats(): Promise<StatsData> {
     prisma.project.findMany({
       where: { visible: true },
       include: {
-        technologies: { include: { technology: true } },
-        integrations: { include: { integration: true } },
+        technologies: {
+          include: { technology: true },
+          orderBy: { technology: { sortOrder: "asc" } },
+        },
+        integrations: {
+          include: { integration: true },
+          orderBy: { integration: { sortOrder: "asc" } },
+        },
       },
     }),
     prisma.projectTechnology.groupBy({

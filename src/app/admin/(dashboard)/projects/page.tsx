@@ -8,8 +8,14 @@ export default async function AdminProjectsPage() {
   const projects = await prisma.project.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
     include: {
-      technologies: { include: { technology: true } },
-      integrations: { include: { integration: true } },
+      technologies: {
+        include: { technology: true },
+        orderBy: { technology: { sortOrder: "asc" } },
+      },
+      integrations: {
+        include: { integration: true },
+        orderBy: { integration: { sortOrder: "asc" } },
+      },
     },
   });
 

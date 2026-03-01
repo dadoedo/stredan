@@ -36,6 +36,9 @@ yarn-error.log*
 # deploy artifacts
 *.tar.gz
 
+# db backups (optional: remove if you want to commit them)
+/backups
+
 # local docs
 /docs
 

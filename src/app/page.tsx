@@ -19,8 +19,14 @@ export default async function Home() {
       where: { visible: true },
       orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       include: {
-        technologies: { include: { technology: true } },
-        integrations: { include: { integration: true } },
+        technologies: {
+          include: { technology: true },
+          orderBy: { technology: { sortOrder: "asc" } },
+        },
+        integrations: {
+          include: { integration: true },
+          orderBy: { integration: { sortOrder: "asc" } },
+        },
       },
     }),
     prisma.job.findMany({
@@ -41,7 +47,7 @@ export default async function Home() {
 
       <main>
         {/* Hero */}
-        <section className="flex min-h-screen flex-col justify-center px-6 pt-14">
+        <section className="flex min-h-screen flex-col justify-center px-6">
           <div className="mx-auto w-full max-w-5xl">
             <h1 className="font-heading text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
               Read, Build, Write
