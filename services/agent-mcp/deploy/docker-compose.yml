@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: agentmcp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agentmcp}
+      POSTGRES_DB: agentmcp
+    ports:
+      - "5439:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentmcp -d agentmcp"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    env_file:
+      - ../.env
+    environment:
+      PORT: "3000"
+      NODE_ENV: development
+      COOKIE_SECURE: "false"
+      DATABASE_URL: postgres://agentmcp:${POSTGRES_PASSWORD:-agentmcp}@db:5432/agentmcp
+    ports:
+      - "3010:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy

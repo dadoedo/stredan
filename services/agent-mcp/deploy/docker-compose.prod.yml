@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: agent-mcp-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: agentmcp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: agentmcp
+    volumes:
+      - agent_mcp_db:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5439:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentmcp -d agentmcp"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - agent_mcp_net
+
+  app:
+    image: ${AGENT_MCP_IMAGE:-ghcr.io/dadoedo/agent-mcp}:${IMAGE_TAG:-prod}
+    container_name: agent-mcp-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: "3000"
+      NODE_ENV: production
+      COOKIE_SECURE: "true"
+      DATABASE_URL: postgres://agentmcp:${POSTGRES_PASSWORD}@db:5432/agentmcp
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+    networks:
+      - agent_mcp_net
+
+networks:
+  agent_mcp_net:
+    name: agent_mcp_net
+
+volumes:
+  agent_mcp_db:

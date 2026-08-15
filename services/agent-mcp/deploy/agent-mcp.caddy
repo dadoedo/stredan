@@ -1,0 +1,20 @@
+# Owned by: dadoedo/stredan services/agent-mcp
+# Targets: agent-mcp-app on agent_mcp_net
+mcp.stredan.sk {
+	encode zstd gzip
+	reverse_proxy agent-mcp-app:3000
+}
+
+postgres.mcp.stredan.sk {
+	encode zstd gzip
+	reverse_proxy agent-mcp-app:3000 {
+		header_up X-Agent-Mcp postgres
+	}
+}
+
+email.mcp.stredan.sk {
+	encode zstd gzip
+	reverse_proxy agent-mcp-app:3000 {
+		header_up X-Agent-Mcp email
+	}
+}
