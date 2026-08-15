@@ -1,0 +1,169 @@
+name: Deploy agent-mcp
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/agent-mcp/**"
+      - ".github/workflows/deploy-agent-mcp.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/agent-mcp
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment: agent-mcp-production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve deploy config
+        id: cfg
+        run: |
+          set -euo pipefail
+          REMOTE_DIR="${{ vars.REMOTE_DIR }}"
+          COMPOSE_FILE="${{ vars.COMPOSE_FILE }}"
+          APP_URL="${{ vars.APP_URL }}"
+          IMAGE_TAG="${{ vars.IMAGE_TAG }}"
+          : "${REMOTE_DIR:=/root/agent-mcp}"
+          : "${COMPOSE_FILE:=deploy/docker-compose.prod.yml}"
+          : "${APP_URL:=https://mcp.stredan.sk}"
+          : "${IMAGE_TAG:=prod}"
+          echo "remote_dir=${REMOTE_DIR}" >> "$GITHUB_OUTPUT"
+          echo "compose_file=${COMPOSE_FILE}" >> "$GITHUB_OUTPUT"
+          echo "app_url=${APP_URL}" >> "$GITHUB_OUTPUT"
+          echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: services/agent-mcp
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.cfg.outputs.image_tag }}
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=agent-mcp
+          cache-to: type=gha,mode=max,scope=agent-mcp
+
+      - name: Sync deploy manifests
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          source: services/agent-mcp/deploy/docker-compose.prod.yml,services/agent-mcp/deploy/agent-mcp.caddy
+          target: ${{ steps.cfg.outputs.remote_dir }}/deploy
+          strip_components: 3
+          overwrite: true
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+          IMAGE: ${{ env.IMAGE }}
+          IMAGE_TAG: ${{ steps.cfg.outputs.image_tag }}
+          REMOTE_DIR: ${{ steps.cfg.outputs.remote_dir }}
+          COMPOSE_FILE: ${{ steps.cfg.outputs.compose_file }}
+          APP_URL: ${{ steps.cfg.outputs.app_url }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          MASTER_ENCRYPTION_KEY: ${{ secrets.MASTER_ENCRYPTION_KEY }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          envs: GHCR_TOKEN,GHCR_USER,IMAGE,IMAGE_TAG,REMOTE_DIR,COMPOSE_FILE,APP_URL,POSTGRES_PASSWORD,MASTER_ENCRYPTION_KEY,SESSION_SECRET,ADMIN_EMAIL,ADMIN_PASSWORD
+          script: |
+            set -euo pipefail
+            mkdir -p "$REMOTE_DIR/deploy"
+            cd "$REMOTE_DIR"
+
+            if [[ ! -f .env ]]; then
+              : "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD secret missing for first bootstrap}"
+              : "${MASTER_ENCRYPTION_KEY:?MASTER_ENCRYPTION_KEY secret missing for first bootstrap}"
+              : "${SESSION_SECRET:?SESSION_SECRET secret missing for first bootstrap}"
+              : "${ADMIN_PASSWORD:?ADMIN_PASSWORD secret missing for first bootstrap}"
+              umask 077
+              {
+                echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+                echo "MASTER_ENCRYPTION_KEY=${MASTER_ENCRYPTION_KEY}"
+                echo "SESSION_SECRET=${SESSION_SECRET}"
+                echo "ADMIN_EMAIL=${ADMIN_EMAIL:-d.stredansky@gmail.com}"
+                echo "ADMIN_PASSWORD=${ADMIN_PASSWORD}"
+                echo "PUBLIC_DASHBOARD_URL=${APP_URL}"
+                echo "COOKIE_SECURE=true"
+                echo "NODE_ENV=production"
+              } > .env
+              echo "Wrote first-boot $REMOTE_DIR/.env"
+            fi
+
+            test -f "$COMPOSE_FILE" || { echo "Missing $REMOTE_DIR/$COMPOSE_FILE"; exit 1; }
+
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            docker pull "$IMAGE:$IMAGE_TAG"
+
+            docker network inspect agent_mcp_net >/dev/null 2>&1 || docker network create agent_mcp_net
+            docker network connect agent_mcp_net edge-caddy 2>/dev/null || true
+
+            if [[ -f /root/edge/docker-compose.yml ]] && ! grep -q agent_mcp_net /root/edge/docker-compose.yml; then
+              python3 - <<'PY'
+            from pathlib import Path
+            p = Path("/root/edge/docker-compose.yml")
+            text = p.read_text()
+            if "agent_mcp_net" not in text:
+                text = text.replace(
+                    "      - docker_fp-net\n",
+                    "      - docker_fp-net\n      - agent_mcp_net\n",
+                    1,
+                )
+                text = text.replace(
+                    "  docker_fp-net:\n    external: true\n",
+                    "  docker_fp-net:\n    external: true\n  agent_mcp_net:\n    external: true\n",
+                    1,
+                )
+                p.write_text(text)
+            PY
+            fi
+
+            if [[ -f deploy/agent-mcp.caddy ]]; then
+              cp deploy/agent-mcp.caddy /root/edge/sites/agent-mcp.caddy
+              docker exec edge-caddy caddy reload --config /etc/caddy/Caddyfile
+            fi
+
+            export AGENT_MCP_IMAGE="$IMAGE"
+            export IMAGE_TAG
+            COMPOSE="docker compose --project-directory . -f $COMPOSE_FILE"
+            $COMPOSE up -d --no-build --force-recreate --remove-orphans
+            docker image prune -f
+            for i in 1 2 3 4 5 6 7 8 9 10; do
+              if docker exec agent-mcp-app node -e "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1))"; then
+                echo "health:ok"
+                break
+              fi
+              if [[ "$i" -eq 10 ]]; then
+                docker logs --tail 80 agent-mcp-app || true
+                exit 1
+              fi
+              sleep 3
+            done
+            echo "deployed $IMAGE:$IMAGE_TAG"
