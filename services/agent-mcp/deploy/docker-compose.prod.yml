@@ -53,6 +53,7 @@ services:
 networks:
   agent_mcp_net:
     name: agent_mcp_net
+    external: true
 
 volumes:
   agent_mcp_db:
