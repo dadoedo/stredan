@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Separate package; linted/built via services/agent-mcp CI job
+    "services/**",
   ]),
 ]);
 
