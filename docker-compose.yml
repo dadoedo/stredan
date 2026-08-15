@@ -1,3 +1,6 @@
+# Local / ad-hoc stack (builds the app image).
+# Production CI uses deploy/docker-compose.prod.yml + GHCR — see deploy/README.md.
+
 services:
   stredan-db:
     image: postgres:16-alpine
@@ -6,33 +9,43 @@ services:
     environment:
       POSTGRES_DB: stredan
       POSTGRES_USER: stredan
-      POSTGRES_PASSWORD: stredan_secret
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stredan_secret}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "127.0.0.1:5434:5432"
+      - "49.13.94.193:15434:5432" # MCP host; iptables allowlist
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stredan -d stredan"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
     networks:
       - internal
 
   stredan-app:
-    image: stredan-app:latest
+    build: .
+    image: ${STREDAN_IMAGE:-ghcr.io/dadoedo/stredan}:${IMAGE_TAG:-local}
     container_name: stredan-app
     restart: unless-stopped
     depends_on:
-      - stredan-db
+      stredan-db:
+        condition: service_healthy
     environment:
-      DATABASE_URL: "postgresql://stredan:stredan_secret@stredan-db:5432/stredan"
+      DATABASE_URL: postgresql://stredan:${POSTGRES_PASSWORD:-stredan_secret}@stredan-db:5432/stredan
       NODE_ENV: production
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     networks:
       - internal
       - web
 
 volumes:
   pgdata:
+    name: stredan_pgdata
 
 networks:
   internal:
-    driver: bridge
+    name: stredan_internal
   web:
+    name: web
     external: true

@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.filter.outputs.app }}
+      agent_mcp: ${{ steps.filter.outputs.agent_mcp }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            app:
+              - "src/**"
+              - "public/**"
+              - "prisma/**"
+              - "prisma.config.ts"
+              - "package.json"
+              - "package-lock.json"
+              - "Dockerfile"
+              - "next.config.ts"
+              - "tsconfig.json"
+              - "postcss.config.mjs"
+              - "eslint.config.mjs"
+              - "deploy/**"
+              - ".github/workflows/ci.yml"
+              - ".github/workflows/deploy-stredan.yml"
+            agent_mcp:
+              - "services/agent-mcp/**"
+              - ".github/workflows/deploy-agent-mcp.yml"
+              - ".github/workflows/ci.yml"
+
+  app:
+    needs: changes
+    if: needs.changes.outputs.app == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+      - run: npm run lint
+      - run: npm run build
+        env:
+          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+          ADMIN_PASSWORD: ci-placeholder
+
+  agent-mcp:
+    needs: changes
+    if: needs.changes.outputs.agent_mcp == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/agent-mcp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: services/agent-mcp/package-lock.json
+      - run: npm ci
+      - run: npm run build

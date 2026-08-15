@@ -1,0 +1,71 @@
+# Production compose for www.stredan.sk on alldevs-hetzner (/root/stredan).
+# Image comes from GHCR (CI). Local emergency: ./deploy.sh
+#
+# Volume `stredan_pgdata` and network `stredan_internal` are pinned by name
+# so upgrades do not orphan existing data / Caddy wiring.
+#
+# Future: admin.stredan.sk can share this stack (same app or a second service)
+# via deploy/stredan.caddy + edge/Caddyfile — keep DB in this compose.
+
+services:
+  stredan-db:
+    image: postgres:16-alpine
+    container_name: stredan-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: stredan
+      POSTGRES_USER: stredan
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5434:5432"
+      # MCP host (stredan-hetzner); restrict with host iptables
+      - "49.13.94.193:15434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stredan -d stredan"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - internal
+
+  stredan-app:
+    image: ${STREDAN_IMAGE:-ghcr.io/dadoedo/stredan}:${IMAGE_TAG:-prod}
+    container_name: stredan-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DATABASE_URL: postgresql://stredan:${POSTGRES_PASSWORD}@stredan-db:5432/stredan
+    depends_on:
+      stredan-db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - internal
+      - web
+
+volumes:
+  pgdata:
+    name: stredan_pgdata
+
+networks:
+  internal:
+    name: stredan_internal
+  web:
+    name: web
+    external: true
