@@ -42,8 +42,8 @@ yarn-error.log*
 # db backups (optional: remove if you want to commit them)
 /backups
 
-# local docs
-/docs
+# Docs are tracked (cloud-agents operator guide, infra, MCP briefs).
+# Keep this comment so we don't re-ignore /docs by accident.
 
 # personal CV / cover letters — never commit
 /cv
