@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:anderro": "tsx scripts/seed-anderro.ts",
+    "seed:infinelabs": "tsx scripts/seed-infinelabs-job.ts",
+    "seed:leadgen": "tsx scripts/seed-leadgen-offers.ts",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.1",

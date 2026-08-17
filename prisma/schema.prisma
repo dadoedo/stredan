@@ -94,3 +94,287 @@ model Job {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
+
+// ─── Leadgen / offer lab (AI SME outbound) ───────────────────────────
+
+enum OfferStatus {
+  draft
+  active
+  paused
+  retired
+}
+
+enum LeadStatus {
+  sourced
+  enriching
+  enriched
+  scored
+  queued
+  contacted
+  replied
+  meeting
+  won
+  lost
+  suppressed
+  skipped
+}
+
+enum TouchChannel {
+  resend
+  gmail
+  smtp
+}
+
+enum TouchStatus {
+  draft
+  queued
+  sent
+  delivered
+  opened
+  replied
+  bounced
+  failed
+  unsubscribed
+}
+
+enum ReplyIntent {
+  interested
+  not_now
+  wrong_person
+  unsubscribe
+  bounce
+  ooo
+  unclear
+  other
+}
+
+model Offer {
+  id              String      @id @default(cuid())
+  code            String      @unique // A | B | C | D | E
+  slug            String      @unique
+  nameSk          String
+  nameEn          String
+  oneLinerSk      String
+  oneLinerEn      String
+  ctaSk           String
+  ctaEn           String
+  priceHintSk     String?
+  priceHintEn     String?
+  icpNotesSk      String?
+  icpNotesEn      String?
+  notForSk        String?
+  notForEn        String?
+  landingPath     String // e.g. /offers/ai-audit
+  status          OfferStatus @default(draft)
+  sortOrder       Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  templates       EmailTemplate[]
+  touches         Touch[]
+  scores          LeadScore[]
+}
+
+model EmailTemplate {
+  id              String       @id @default(cuid())
+  offerId         String
+  offer           Offer        @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  key             String // e.g. cold-1, cold-2, bump
+  channel         TouchChannel @default(gmail)
+  locale          String       @default("sk")
+  subject         String
+  bodyText        String
+  bodyHtml        String?
+  version         Int          @default(1)
+  active          Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  touches         Touch[]
+
+  @@unique([offerId, key, channel, locale, version])
+  @@index([offerId, active])
+}
+
+model Company {
+  id              String   @id @default(cuid())
+  rpoId           Int?     @unique // rpo2.organizations.id
+  ico             String?  @unique
+  name            String
+  legalForm       String?
+  naceCode        String?
+  naceLabel       String?
+  city            String?
+  region          String?
+  establishedAt   DateTime?
+  terminatedAt    DateTime?
+  website         String?
+  sourceRegister  String?
+  rawRpo          Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  leads           Lead[]
+
+  @@index([naceCode])
+  @@index([city])
+  @@index([legalForm])
+}
+
+model Lead {
+  id              String     @id @default(cuid())
+  companyId       String
+  company         Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  status          LeadStatus @default(sourced)
+  assignedOfferId String?
+  batchId         String?
+  notes           String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  contacts        LeadContact[]
+  enrichments     LeadEnrichment[]
+  scores          LeadScore[]
+  touches         Touch[]
+
+  @@index([status])
+  @@index([batchId])
+  @@index([assignedOfferId])
+}
+
+model LeadContact {
+  id              String   @id @default(cuid())
+  leadId          String
+  lead            Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  fullName        String?
+  role            String?
+  email           String?
+  emailSource     String? // website, pattern, public, manual
+  emailVerified   Boolean  @default(false)
+  phone           String?
+  linkedinUrl     String?
+  isPrimary       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  touches         Touch[]
+
+  @@index([leadId])
+  @@index([email])
+}
+
+model LeadEnrichment {
+  id              String   @id @default(cuid())
+  leadId          String
+  lead            Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  agentRunId      String?
+  provider        String // cursor-agent | manual | script
+  kind            String // website | email | decision_maker | firmographics
+  inputJson       Json
+  outputJson      Json
+  confidence      Float?
+  createdAt       DateTime @default(now())
+
+  @@index([leadId])
+  @@index([agentRunId])
+}
+
+model LeadScore {
+  id              String   @id @default(cuid())
+  leadId          String
+  lead            Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  offerId         String
+  offer           Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  agentRunId      String?
+  score           Int // 0-100
+  rationaleSk     String?
+  rationaleEn     String?
+  inputJson       Json?
+  outputJson      Json?
+  createdAt       DateTime @default(now())
+
+  @@index([leadId, offerId])
+  @@index([score])
+}
+
+model Touch {
+  id              String       @id @default(cuid())
+  leadId          String
+  lead            Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  contactId       String?
+  contact         LeadContact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  offerId         String
+  offer           Offer        @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  templateId      String?
+  template        EmailTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  channel         TouchChannel
+  accountKey      String? // MCP email account key
+  status          TouchStatus  @default(draft)
+  subject         String
+  bodyText        String
+  bodyHtml        String?
+  personalization Json?
+  providerMessageId String?
+  sentAt          DateTime?
+  error           String?
+  replyIntent     ReplyIntent?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  events          TouchEvent[]
+
+  @@index([leadId])
+  @@index([offerId, status])
+  @@index([channel, status])
+  @@index([sentAt])
+}
+
+model TouchEvent {
+  id              String   @id @default(cuid())
+  touchId         String
+  touch           Touch    @relation(fields: [touchId], references: [id], onDelete: Cascade)
+  type            String // sent | open | click | reply | bounce | unsubscribe
+  payload         Json?
+  createdAt       DateTime @default(now())
+
+  @@index([touchId])
+  @@index([type])
+}
+
+model AgentRun {
+  id              String   @id @default(cuid())
+  kind            String // daily-batch | enrich | score | send | reply-triage | eval
+  status          String // running | succeeded | failed | partial
+  trigger         String // schedule | manual | cloud-agent
+  inputJson       Json?
+  outputJson      Json?
+  summary         String?
+  error           String?
+  startedAt       DateTime @default(now())
+  finishedAt      DateTime?
+  costHintUsd     Float?
+
+  @@index([kind, startedAt])
+  @@index([status])
+}
+
+model Suppression {
+  id              String   @id @default(cuid())
+  email           String?  @unique
+  ico             String?
+  reason          String
+  source          String? // reply | manual | bounce
+  createdAt       DateTime @default(now())
+
+  @@index([ico])
+}
+
+model ExperimentDaily {
+  id              String   @id @default(cuid())
+  day             DateTime @db.Date
+  offerId         String
+  channel         TouchChannel
+  sent            Int      @default(0)
+  replied         Int      @default(0)
+  interested      Int      @default(0)
+  meetings        Int      @default(0)
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([day, offerId, channel])
+}

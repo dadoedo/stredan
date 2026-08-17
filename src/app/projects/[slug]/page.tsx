@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { ExternalLinkIcon } from "@/components/ExternalLinkIcon";
 import { TagBadge } from "@/components/TagBadge";
 import { LinkifyText } from "@/components/LinkifyText";
+import { OpensInNewTab } from "@/components/OpensInNewTab";
 import { getLocale } from "@/lib/locale";
 import { prisma } from "@/lib/prisma";
 import { ui } from "@/lib/translations";
@@ -98,11 +99,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   return (
     <>
       <Header locale={locale} />
-      <main className="px-6 pt-28 pb-24">
+      <main id="main-content" className="px-6 pt-28 pb-24">
         <article className="mx-auto max-w-5xl">
           <Link
             href="/#work"
-            className="inline-flex items-center text-sm text-muted transition-colors hover:text-foreground"
+            className="inline-flex items-center text-sm text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
           >
             ← {t.backToProjects}
           </Link>
@@ -136,22 +137,26 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </div>
             </div>
             {description && (
-              <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted sm:text-lg">
-                <LinkifyText text={description} />
-              </p>
+              <div className="mt-4 max-w-3xl space-y-3 text-base leading-relaxed text-muted sm:text-lg">
+                {description.split("\n\n").map((paragraph, i) => (
+                  <p key={i}>
+                    <LinkifyText text={paragraph} locale={locale} />
+                  </p>
+                ))}
+              </div>
             )}
           </header>
 
           <section className="mt-8 grid gap-6 sm:grid-cols-2">
             <div className="space-y-1">
-              <p className="text-xs uppercase tracking-wide text-zinc-500">
+              <p className="text-xs uppercase tracking-wide text-zinc-400">
                 {t.projectYear}
               </p>
               <p className="text-sm text-foreground">{project.year ?? "—"}</p>
             </div>
 
             <div className="space-y-1">
-              <p className="text-xs uppercase tracking-wide text-zinc-500">
+              <p className="text-xs uppercase tracking-wide text-zinc-400">
                 {t.projectCategory}
               </p>
               <p className="text-sm text-foreground">{category}</p>
@@ -206,10 +211,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-foreground"
+                    className="inline-flex min-h-11 items-center gap-1 text-sm text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
                   >
                     {t.projectWebsite}
                     <ExternalLinkIcon />
+                    <OpensInNewTab locale={locale} />
                   </a>
                 )}
                 {project.appStoreUrl && (
@@ -217,10 +223,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     href={project.appStoreUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-foreground"
+                    className="inline-flex min-h-11 items-center gap-1 text-sm text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
                   >
                     App Store
                     <ExternalLinkIcon />
+                    <OpensInNewTab locale={locale} />
                   </a>
                 )}
                 {project.playStoreUrl && (
@@ -228,10 +235,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     href={project.playStoreUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-foreground"
+                    className="inline-flex min-h-11 items-center gap-1 text-sm text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
                   >
                     Google Play
                     <ExternalLinkIcon />
+                    <OpensInNewTab locale={locale} />
                   </a>
                 )}
               </div>

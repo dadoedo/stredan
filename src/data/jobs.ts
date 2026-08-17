@@ -10,6 +10,15 @@ export interface Job {
 
 export const jobs: Job[] = [
   {
+    slug: "infinelabs",
+    company: "Infinee Labs",
+    position: "CTO & Co-founder",
+    description:
+      "Co-founded with Rene Remsik in September 2025. Sole technical owner (architecture, development, DevOps, security). In 8 months we shipped four products — Foodient, ViralSky, SkySnail, Anderro — to ~43k registered users and ~350 active paying subscribers across B2C mobile, creator SaaS, and a B2B affiliate marketplace.",
+    startYear: 2025,
+    current: true,
+  },
+  {
     slug: "csretail",
     company: "CSRetail",
     position: "Backend Engineer",

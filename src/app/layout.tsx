@@ -1,28 +1,27 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Serif_HK } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { getLocale } from "@/lib/locale";
 import LocaleScript from "@/components/LocaleScript";
+import { SkipLink } from "@/components/SkipLink";
 
-const inter = Inter({
-  variable: "--font-inter",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin", "latin-ext"],
-});
-
-const notoSerifHK = Noto_Serif_HK({
-  variable: "--font-noto-serif-hk",
-  subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
+
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const isSk = locale === "sk";
   return {
-    title: "Dávid Stredánsky",
+    title: isSk
+      ? "Stredan: AI, ktoré znižuje prácu"
+      : "Stredan: AI that cuts work",
     description: isSk
-      ? "Full-stack vývojár — Portfolio & CV"
-      : "Full-stack developer — Portfolio & CV",
+      ? "AI agenti a workflow pre slovenské SME. Od auditu po produkciu, s merateľným výsledkom."
+      : "AI agents and workflows for Slovak SMEs. From audit to production, with measurable results.",
     icons: {
       icon: [
         { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -32,14 +31,17 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     manifest: "/site.webmanifest",
     openGraph: {
-      title: "Dávid Stredánsky",
+      title: isSk
+        ? "Stredan: AI, ktoré znižuje prácu"
+        : "Stredan: AI that cuts work",
       description: isSk
-        ? "Full-stack vývojár — Portfolio & CV"
-        : "Full-stack developer — Portfolio & CV",
+        ? "AI agenti a workflow pre slovenské SME. Od auditu po produkciu."
+        : "AI agents and workflows for Slovak SMEs. From audit to production.",
       url: "https://stredan.sk",
-      siteName: "Dávid Stredánsky",
+      siteName: "Stredan",
       locale: isSk ? "sk_SK" : "en_US",
       type: "website",
+      images: [{ url: "/team/david.webp" }],
     },
   };
 }
@@ -52,10 +54,9 @@ export default async function RootLayout({
   const locale = await getLocale();
   return (
     <html lang={locale}>
-      <body
-        className={`${inter.variable} ${notoSerifHK.variable} antialiased`}
-      >
+      <body className={`${dmSans.variable} antialiased`}>
         <LocaleScript locale={locale} />
+        <SkipLink locale={locale} />
         {children}
       </body>
     </html>

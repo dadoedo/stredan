@@ -13,14 +13,11 @@ export function TagBadge({ name, icon, variant = "default", size = "md" }: TagBa
   const padding =
     size === "sm" ? "px-2 py-0.5" : size === "md" ? "px-2.5 py-1" : "px-3 py-1.5";
   const textColor =
-    variant === "muted"
-      ? "text-zinc-600 dark:text-zinc-400"
-      : "text-zinc-800 dark:text-zinc-200";
+    variant === "muted" ? "text-zinc-300" : "text-zinc-100";
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-md ${padding} ${textSize} ${textColor} bg-zinc-200/90 dark:bg-zinc-700/90`}
-      title={name}
+      className={`inline-flex items-center gap-1.5 rounded-md ${padding} ${textSize} ${textColor} bg-zinc-700/90`}
     >
       {icon ? (
         <img
