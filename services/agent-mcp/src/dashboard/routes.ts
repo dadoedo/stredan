@@ -43,7 +43,12 @@ function bool(value: unknown): boolean {
 }
 
 function idParam(req: Request): string {
-  return String(idParam(req));
+  const value = req.params.id;
+  const id = Array.isArray(value) ? value[0] : value;
+  if (typeof id !== "string" || !id) {
+    throw new Error("Missing route id");
+  }
+  return id;
 }
 
 async function requireSession(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -474,6 +479,7 @@ export function dashboardRouter(): Router {
         auth: { user: account.address, pass: password },
         logger: false,
       });
+      client.on("error", () => {});
       await client.connect();
       await client.logout().catch(() => {});
       res.redirect(`/email/${idParam(req)}?ok=${encodeURIComponent("IMAP connection succeeded.")}`);

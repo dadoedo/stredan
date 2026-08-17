@@ -46,6 +46,15 @@ async function getClient(account: ResolvedAccount): Promise<ImapFlow> {
     logger: false,
   });
 
+  // ImapFlow emits 'error' on idle socket timeouts; without a listener Node
+  // treats that as an uncaught exception and kills the process.
+  client.on("error", () => {
+    const current = clientPool.get(key);
+    if (current?.client === client) {
+      clientPool.delete(key);
+    }
+  });
+
   const pooled: PooledClient = { client, lastUsed: Date.now() };
   pooled.connecting = client.connect();
   clientPool.set(key, pooled);
