@@ -70,7 +70,7 @@ export default async function BooksPage() {
     <>
       <Header locale={locale} />
 
-      <main className="min-h-screen px-6 pt-24 pb-24">
+      <main id="main-content" className="min-h-screen px-6 pt-24 pb-24">
         <div className="mx-auto max-w-2xl">
           <Link
             href="/"
@@ -105,7 +105,7 @@ export default async function BooksPage() {
               {currentlyReading.map(({ title, author }) => (
                 <li key={title} className="text-muted">
                   <span className="text-foreground">{title}</span>
-                  <span className="text-zinc-600"> — {author}</span>
+                  <span className="text-zinc-400"> — {author}</span>
                 </li>
               ))}
             </ul>
@@ -120,7 +120,7 @@ export default async function BooksPage() {
               {recommendedBooks.map(({ title, author }) => (
                 <li key={title} className="text-muted">
                   <span className="text-foreground">{title}</span>
-                  <span className="text-zinc-600"> — {author}</span>
+                  <span className="text-zinc-400"> — {author}</span>
                 </li>
               ))}
             </ul>

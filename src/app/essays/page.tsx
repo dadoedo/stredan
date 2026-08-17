@@ -33,7 +33,7 @@ export default async function EssaysPage() {
     <>
       <Header locale={locale} />
 
-      <main className="min-h-screen px-6 pt-24 pb-24">
+      <main id="main-content" className="min-h-screen px-6 pt-24 pb-24">
         <div className="mx-auto max-w-2xl">
           <Link
             href="/"

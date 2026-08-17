@@ -18,6 +18,7 @@ import {
 } from "recharts";
 import type { StatsData } from "@/lib/stats";
 import type { Locale } from "@/lib/translations";
+import { OpensInNewTab } from "@/components/OpensInNewTab";
 
 const CHART_COLORS = [
   "#d4d4d8", // zinc-300
@@ -57,6 +58,47 @@ function preparePieData<T extends { name: string; value: number }>(
   const top = sorted.slice(0, TOP_IN_CHART);
   const other = sorted.slice(TOP_IN_CHART);
   return { data: top, other };
+}
+
+function formatChartSummary(
+  items: { name: string; value: number }[],
+  locale: Locale,
+  unit: { en: string; sk: string },
+) {
+  return items
+    .map(
+      (item) =>
+        `${item.name}: ${item.value} ${locale === "sk" ? unit.sk : unit.en}`,
+    )
+    .join(", ");
+}
+
+function ChartDataTable({
+  caption,
+  rows,
+}: {
+  caption: string;
+  rows: { name: string; value: number }[];
+}) {
+  return (
+    <table className="sr-only">
+      <caption>{caption}</caption>
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.name}>
+            <td>{row.name}</td>
+            <td>{row.value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
 export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
@@ -131,19 +173,31 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
           {locale === "sk" ? "Štatistiky portfólia" : "Portfolio Stats"}
         </h2>
 
-        <div className="mt-6 flex gap-1 rounded-lg border border-zinc-600 bg-zinc-900/80 p-1">
+        <div
+          className="mt-6 flex gap-1 rounded-lg border border-zinc-600 bg-zinc-900/80 p-1"
+          role="tablist"
+          aria-label={
+            locale === "sk" ? "Štatistiky portfólia" : "Portfolio stats"
+          }
+        >
           {tabs.map((tab) => (
             <button
               key={tab.id}
+              type="button"
+              role="tab"
+              id={`stats-tab-${tab.id}`}
+              aria-selected={activeTab === tab.id}
+              aria-controls={`stats-panel-${tab.id}`}
+              tabIndex={activeTab === tab.id ? 0 : -1}
               onClick={() => {
                 setActiveTab(tab.id);
                 setSelectedTechSlug(null);
                 setSelectedIntSlug(null);
               }}
-              className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+              className={`min-h-11 rounded-md px-4 py-2.5 text-sm font-medium transition-colors ${
                 activeTab === tab.id
                   ? "bg-zinc-600 text-white shadow-sm"
-                  : "text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                  : "text-zinc-300 hover:bg-zinc-700 hover:text-white"
               }`}
             >
               {locale === "sk" ? tab.labelSk : tab.labelEn}
@@ -151,7 +205,12 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
           ))}
         </div>
 
-        <div className="mt-6 rounded-xl border border-zinc-600 bg-zinc-900/50 p-6 sm:p-8">
+        <div
+          id={`stats-panel-${activeTab}`}
+          role="tabpanel"
+          aria-labelledby={`stats-tab-${activeTab}`}
+          className="mt-6 rounded-xl border border-zinc-600 bg-zinc-900/50 p-6 sm:p-8"
+        >
           {activeTab === "technologies" && (
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Left: chart + legend only */}
@@ -162,7 +221,23 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     : "Projects by technology"}
                 </h3>
                 {techPieData.length > 0 ? (
-                  <div className="h-[340px] overflow-hidden pt-4 sm:h-[280px]">
+                  <>
+                    <ChartDataTable
+                      caption={
+                        locale === "sk"
+                          ? "Projekty podľa technológie"
+                          : "Projects by technology"
+                      }
+                      rows={techPieData}
+                    />
+                    <div
+                      className="h-[340px] overflow-hidden pt-4 sm:h-[280px]"
+                      role="img"
+                      aria-label={formatChartSummary(techPieData, locale, {
+                        en: "projects",
+                        sk: "projektov",
+                      })}
+                    >
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart margin={{ top: 24, right: 8, bottom: 8, left: 8 }}>
                         <Pie
@@ -210,9 +285,10 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                         />
                       </PieChart>
                     </ResponsiveContainer>
-                  </div>
+                    </div>
+                  </>
                 ) : (
-                  <p className="py-12 text-center text-sm text-zinc-500">
+                  <p className="py-12 text-center text-sm text-zinc-400">
                     {locale === "sk" ? "Žiadne dáta" : "No data"}
                   </p>
                 )}
@@ -230,12 +306,13 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     <button
                       key={item.techSlug}
                       type="button"
+                      aria-pressed={selectedTechSlug === item.techSlug}
                       onClick={() =>
                         setSelectedTechSlug(
                           selectedTechSlug === item.techSlug ? null : item.techSlug
                         )
                       }
-                      className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm transition-colors ${
+                      className={`inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors ${
                         selectedTechSlug === item.techSlug
                           ? "bg-zinc-500 text-white"
                           : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600 hover:text-white"
@@ -268,7 +345,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                         <Link
                           key={p.slug}
                           href={`/projects/${p.slug}`}
-                          className="text-zinc-400 transition-colors hover:text-white"
+                          className="text-zinc-300 underline-offset-2 transition-colors hover:text-white hover:underline focus-visible:underline"
                         >
                           {getProjectTitle(p)}
                         </Link>
@@ -276,7 +353,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     </div>
                   </div>
                 ) : (
-                  <p className="py-2 text-sm text-zinc-500">
+                  <p className="py-2 text-sm text-zinc-400">
                     {locale === "sk"
                       ? "Vyber technológiu vyššie"
                       : "Select a technology above"}
@@ -296,7 +373,23 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     : "Projects by integration"}
                 </h3>
                 {intPieData.length > 0 ? (
-                  <div className="h-[340px] overflow-hidden pt-4 sm:h-[280px]">
+                  <>
+                    <ChartDataTable
+                      caption={
+                        locale === "sk"
+                          ? "Projekty podľa integrácie"
+                          : "Projects by integration"
+                      }
+                      rows={intPieData}
+                    />
+                    <div
+                      className="h-[340px] overflow-hidden pt-4 sm:h-[280px]"
+                      role="img"
+                      aria-label={formatChartSummary(intPieData, locale, {
+                        en: "projects",
+                        sk: "projektov",
+                      })}
+                    >
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart margin={{ top: 24, right: 8, bottom: 8, left: 8 }}>
                         <Pie
@@ -345,8 +438,9 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                         </PieChart>
                       </ResponsiveContainer>
                     </div>
+                  </>
                   ) : (
-                    <p className="py-12 text-center text-sm text-zinc-500">
+                    <p className="py-12 text-center text-sm text-zinc-400">
                       {locale === "sk"
                         ? "Žiadne integrácie"
                         : "No integrations"}
@@ -366,12 +460,13 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     <button
                       key={item.intSlug}
                       type="button"
+                      aria-pressed={selectedIntSlug === item.intSlug}
                       onClick={() =>
                         setSelectedIntSlug(
                           selectedIntSlug === item.intSlug ? null : item.intSlug
                         )
                       }
-                      className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm transition-colors ${
+                      className={`inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors ${
                         selectedIntSlug === item.intSlug
                           ? "bg-zinc-500 text-white"
                           : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600 hover:text-white"
@@ -404,7 +499,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                         <Link
                           key={p.slug}
                           href={`/projects/${p.slug}`}
-                          className="text-zinc-400 transition-colors hover:text-white"
+                          className="text-zinc-300 underline-offset-2 transition-colors hover:text-white hover:underline focus-visible:underline"
                         >
                           {getProjectTitle(p)}
                         </Link>
@@ -412,7 +507,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     </div>
                   </div>
                 ) : (
-                  <p className="py-2 text-sm text-zinc-500">
+                  <p className="py-2 text-sm text-zinc-400">
                     {locale === "sk"
                       ? "Vyber integráciu vyššie"
                       : "Select an integration above"}
@@ -431,7 +526,23 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     : "Projects by category"}
                 </h3>
                 {categoryPieData.length > 0 ? (
-                  <div className="overflow-hidden pt-4">
+                  <>
+                    <ChartDataTable
+                      caption={
+                        locale === "sk"
+                          ? "Projekty podľa kategórie"
+                          : "Projects by category"
+                      }
+                      rows={categoryPieData}
+                    />
+                    <div
+                      className="overflow-hidden pt-4"
+                      role="img"
+                      aria-label={formatChartSummary(categoryPieData, locale, {
+                        en: "projects",
+                        sk: "projektov",
+                      })}
+                    >
                     <ResponsiveContainer width="100%" height={220}>
                       <PieChart margin={{ top: 24, right: 8, bottom: 8, left: 8 }}>
                         <Pie
@@ -479,9 +590,10 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                         />
                       </PieChart>
                     </ResponsiveContainer>
-                  </div>
+                    </div>
+                  </>
                 ) : (
-                  <p className="py-12 text-center text-zinc-500">
+                  <p className="py-12 text-center text-zinc-400">
                     {locale === "sk" ? "Žiadne dáta" : "No data"}
                   </p>
                 )}
@@ -493,6 +605,29 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     : "Projects by year"}
                 </h3>
                 {stats.byYear.length > 0 ? (
+                  <>
+                    <ChartDataTable
+                      caption={
+                        locale === "sk"
+                          ? "Projekty podľa roka"
+                          : "Projects by year"
+                      }
+                      rows={stats.byYear.map((row) => ({
+                        name: String(row.year),
+                        value: row.count,
+                      }))}
+                    />
+                    <div
+                      role="img"
+                      aria-label={formatChartSummary(
+                        stats.byYear.map((row) => ({
+                          name: String(row.year),
+                          value: row.count,
+                        })),
+                        locale,
+                        { en: "projects", sk: "projektov" },
+                      )}
+                    >
                   <ResponsiveContainer width="100%" height={220}>
                     <BarChart
                       data={stats.byYear}
@@ -531,8 +666,10 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                       />
                     </BarChart>
                   </ResponsiveContainer>
+                    </div>
+                  </>
                 ) : (
-                  <p className="py-12 text-center text-zinc-500">
+                  <p className="py-12 text-center text-zinc-400">
                     {locale === "sk" ? "Žiadne dáta" : "No data"}
                   </p>
                 )}
@@ -552,6 +689,11 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
             href="https://github.com/dadoedo"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={
+              locale === "sk"
+                ? "GitHub profil dadoedo — príspevky za posledných 12 mesiacov"
+                : "dadoedo GitHub profile — contributions in the last 12 months"
+            }
             className="block [&_svg]:max-w-full"
           >
             <GitHubCalendar
@@ -590,6 +732,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     : "{{count}} contributions in the last 12 months",
               }}
             />
+            <OpensInNewTab locale={locale} />
           </a>
         </div>
       </div>

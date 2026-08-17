@@ -1,5 +1,5 @@
 import { setLocale } from "@/actions/locale";
-import type { Locale } from "@/lib/translations";
+import { ui, type Locale } from "@/lib/translations";
 
 type LocaleSwitcherProps = {
   locale: Locale;
@@ -8,12 +8,14 @@ type LocaleSwitcherProps = {
 
 export default function LocaleSwitcher({ locale, className }: LocaleSwitcherProps) {
   const otherLocale: Locale = locale === "sk" ? "en" : "sk";
+  const t = ui[locale];
 
   return (
     <form action={setLocale.bind(null, otherLocale)}>
       <button
         type="submit"
-        className={`text-sm transition-colors hover:opacity-80 ${className ?? "text-muted hover:text-foreground"}`}
+        aria-label={otherLocale === "sk" ? t.switchToSlovak : t.switchToEnglish}
+        className={`min-h-11 min-w-11 px-2 text-sm transition-colors hover:opacity-80 ${className ?? "text-muted hover:text-foreground"}`}
       >
         {otherLocale === "sk" ? "SK" : "EN"}
       </button>

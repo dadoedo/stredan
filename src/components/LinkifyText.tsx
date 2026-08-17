@@ -1,7 +1,16 @@
+import type { Locale } from "@/lib/translations";
+import { OpensInNewTab } from "@/components/OpensInNewTab";
+
 /**
  * Renders text with URLs as clickable links.
  */
-export function LinkifyText({ text }: { text: string }) {
+export function LinkifyText({
+  text,
+  locale = "en",
+}: {
+  text: string;
+  locale?: Locale;
+}) {
   const urlRegex = /(https?:\/\/[^\s)]+)/g;
   const parts = text.split(urlRegex);
 
@@ -14,13 +23,14 @@ export function LinkifyText({ text }: { text: string }) {
             href={part}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground underline decoration-zinc-500 underline-offset-2 transition-colors hover:decoration-foreground"
+            className="text-foreground underline decoration-zinc-400 underline-offset-2 transition-colors hover:decoration-foreground"
           >
             {part}
+            <OpensInNewTab locale={locale} />
           </a>
         ) : (
           part
-        )
+        ),
       )}
     </>
   );
