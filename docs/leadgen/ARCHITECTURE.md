@@ -1,19 +1,33 @@
 # AI SME Leadgen — Architecture
 
-Operator: Cursor Cloud Agent (daily). Human: evaluate + tweak offers/templates/ICP.
+Operator: **Cursor Cloud Agent / Automations** (daily). Human: evaluate + tweak offers, templates, ICP in **stredan.sk/admin**.
+
+**mcp.stredan.sk is not the agent control board.** It only grants access to Postgres and email. Scheduling, prompts, and runs live in Cursor Automations. The human ops UI is the Stredan admin.
 
 ## Goal
 
-High-volume outbound to Slovak SMEs testing **5 offers (A–E)** in parallel, with every judgment step logged in Postgres (`inputJson` / `outputJson`).
+High-volume outbound to Slovak SMEs testing **5 offers (A–E)** across **5 send identities (1–5)**. Every judgment step is logged in Postgres (`inputJson` / `outputJson`). No public HTTP API: agents write via **Postgres MCP**.
 
-## Stack (already mostly exists)
+## Experiment matrix
+
+| Axis | Meaning |
+|------|---------|
+| Rows **A–E** | Content / opening / cold offer (`Offer` + `EmailTemplate`) |
+| Columns **1–5** | Sending identity (`SendAccount` → Email MCP `accountKey`) |
+
+Each send picks a **random active cell** (offer × account) under daily caps. Later we can add more dimensions; v1 is 2D.
+
+Admin (`/admin/matrix`) shows volume and replies per cell. Templates are edited at `/admin/templates` (content only, not bound to a mailbox).
+
+## Stack
 
 | Layer | What |
 |-------|------|
-| Source data | `~/Downloads/rpo2.sql.gz` → Register právnických osôb (schema `rpo2.organizations`, JSONB) |
-| App DB | `stredan` Postgres — offers, leads, touches, agent_runs |
+| Source data | RPO DB `rpo`, schema `rpo2` (readonly on MCP) |
+| App DB | `stredan` Postgres — offers, send accounts, leads, touches, agent_runs |
 | Agent access | Team MCP: `postgres.mcp.stredan.sk` + `email.mcp.stredan.sk` |
-| Outreach | Email MCP accounts: Gmail (personal), Resend (SMTP/API), optional SMTP |
+| Operator | Cursor Automations + playbook `AGENT_PLAYBOOK.md` |
+| Ops UI | `stredan.sk/admin` (matrix, templates, leads, sent, runs) |
 | Site | `stredan.sk` — agency home + `/about` + `/offers/[slug]` |
 
 ## Agent-first vs deterministic (cost)
@@ -22,65 +36,60 @@ High-volume outbound to Slovak SMEs testing **5 offers (A–E)** in parallel, wi
 
 | Step | Who | Why |
 |------|-----|-----|
-| Pull candidate IČO batch from RPO | Agent runs SQL via MCP | Free, fast, 1.1G dump is not something to “LLM” |
-| Website / email / DM discover | Agent (browse + heuristics) | Judgment; coding every scraper is costlier to build/maintain |
+| Pull candidate IČO batch from RPO | Agent runs SQL via MCP | Free, fast |
+| Website / email / DM discover | Agent (browse + heuristics) | Judgment; write `LeadEnrichment` |
 | Score fit × offer A–E | Agent | Soft criteria; log rationale |
-| Pick template + personalize | Agent | Locked templates, free vars only |
-| Send | Agent via Email MCP | Channels: `gmail` / `resend` / `smtp` |
-| Reply triage | Agent | Classify intent → update lead + suppression |
-| Daily eval summary | Agent writes `AgentRun` + `ExperimentDaily` | You read in morning |
+| Pick cell (offer × account) | Agent, random among active under cap | Experiment |
+| Render template + send | Agent via Email MCP | Channel comes from `SendAccount` |
+| Reply triage | Agent | Classify intent → lead + suppression |
+| Daily eval | Agent writes `AgentRun` + `ExperimentDaily` | You read in admin |
 
-**Cost intuition (order of magnitude):**
-
-- SQL select 500 s.r.o. from RPO: ~$0
-- Agent enrich+score+draft 50 leads/day: Cursor agent minutes (dominated by browsing), not Clay/Apollo seats
-- Building + hosting a full deterministic enrich stack (Hunter, scrapers, queues): higher fixed cost unless volume >> thousands/day
-
-When volume grows past ~200–500 enrichments/day, add cheap deterministic helpers (MX check, `info@` pattern, sitemap fetch) **as MCP/SQL tools the agent uses** — still agent-orchestrated.
+When volume grows past ~200–500 enrichments/day, add cheap deterministic helpers as MCP/SQL tools the agent uses.
 
 ## Daily loop
 
 ```text
 00  AgentRun(kind=daily-batch) start
-01  SQL: next N companies from RPO filters (active s.r.o., NACE allowlist, city, not suppressed)
+01  SQL: next N companies from RPO (active s.r.o., NACE, city, not suppressed)
 02  Upsert Company + Lead(status=sourced)
 03  For each lead (cap N):
-      enrich → LeadEnrichment rows
+      enrich → LeadEnrichment (inputJson / outputJson)
       score per active offers → LeadScore
-      assign offer (experiment allocation)
-      render template → Touch(status=queued|sent)
-04  Send via Email MCP (respect channel caps / warmup)
-05  Triage new replies in offer folders
+      pick random active matrix cell under caps
+      render template → Touch(queued|sent) with offerId + sendAccountId
+04  Send via Email MCP (account = SendAccount.mcpAccountKey)
+05  Triage new replies
 06  Roll ExperimentDaily + AgentRun summary
-07  STOP — human reviews dashboard / SQL in morning
+07  STOP — human reviews /admin/matrix in the morning
 ```
 
-## Experiment allocation
+## Logging (source of truth = DB)
 
-Round-robin or weighted by current interested-rate:
+Agents **do not** need a custom HTTP API. They insert/update via Postgres MCP:
 
-- Start: equal weight A–E
-- After ≥30 replies total: upweight winners, keep 10–20% exploration on losers
-
-Always store `offerId` + `templateId` + `channel` on every `Touch`.
+- `LeadEnrichment.inputJson` / `outputJson`
+- `LeadScore.inputJson` / `outputJson`
+- `AgentRun.inputJson` / `outputJson` + `summary`
+- `Touch` + `TouchEvent` for every send/reply
+- `ExperimentDaily` keyed by `(day, offerId, sendAccountId)`
 
 ## Compliance (non-optional)
 
 - Log `emailSource` + legal notes in enrichment output
 - Honor unsubscribe → `Suppression` + stop
-- Prefer publicly listed company emails / website contact forms over guessed personal inboxes when unsure
-- ORSR/RPO data is public; **email discovery is not automatically “ok to spam”** — keep volume + relevance disciplined
+- Prefer publicly listed company emails over guessed personal inboxes
+- ORSR/RPO data is public; **email discovery is not automatically “ok to spam”**
 
 ## Next infra steps (human)
 
-1. Import `rpo2.sql.gz` into a Postgres reachable by MCP (dedicated DB recommended, not marketing app tables)
-2. Register that DB + Resend mailbox in https://mcp.stredan.sk
-3. Create IMAP folders per offer/channel (e.g. `Leadgen/A-Audit`, `Leadgen/Replies`)
-4. Schedule Cloud Agent daily with playbook: `docs/leadgen/AGENT_PLAYBOOK.md`
-5. `prisma db push` + `npm run seed:leadgen`
+1. Mailboxes 1–5 on https://mcp.stredan.sk (David fills emails)
+2. Map each mailbox key into `/admin/accounts` and set active
+3. IMAP folders `Leadgen/A`…`E`, `Leadgen/Replies`
+4. Schedule Cursor Automation with `docs/leadgen/AGENT_PLAYBOOK.md`
+5. Dry-run 50 firms, no send
 
 ## Non-goals (v1)
 
-- Full custom CRM product in this repo
-- Pixel-perfect open tracking for Gmail (Resend webhooks later)
-- Fully autonomous spend without daily human glance
+- mcp.stredan.sk as an agent dashboard (that is Cursor Automations)
+- Pixel-perfect open tracking for Gmail
+- Fully autonomous spend without a daily glance

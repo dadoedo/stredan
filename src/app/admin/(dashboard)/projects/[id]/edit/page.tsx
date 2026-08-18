@@ -34,8 +34,7 @@ export default async function EditProjectPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen px-6 py-12">
-      <div className="mx-auto max-w-2xl">
+    <div>
         <div className="mb-8">
           <Link
             href="/admin/projects"
@@ -43,9 +42,9 @@ export default async function EditProjectPage({ params }: PageProps) {
           >
             ← Späť na projekty
           </Link>
-          <h1 className="mt-2 font-heading text-2xl font-semibold">
+          <h2 className="mt-2 font-heading text-xl font-semibold">
             Upraviť: {project.titleEn}
-          </h1>
+          </h2>
         </div>
 
         <ProjectForm
@@ -55,7 +54,6 @@ export default async function EditProjectPage({ params }: PageProps) {
           integrations={integrations}
           project={project}
         />
-      </div>
     </div>
   );
 }

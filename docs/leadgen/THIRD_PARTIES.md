@@ -4,11 +4,10 @@
 
 | Item | Why | Action |
 |------|-----|--------|
-| **RPO Postgres** | Source of SK companies | Import `~/Downloads/rpo2.sql.gz` into dedicated DB; register in https://mcp.stredan.sk |
-| **Email MCP: Gmail** | Personal / warmed sending | Add mailbox + IMAP folders `Leadgen/A`…`Leadgen/E`, `Leadgen/Replies` |
-| **Email MCP: Resend** | Volume / transactional domain | Resend account + domain DNS (SPF/DKIM/DMARC) + SMTP or API via MCP SMTP fields |
+| **RPO Postgres** | Source of SK companies | **Done:** DB `rpo` on `stredan-db` (alldevs-hetzner), registered readonly at https://mcp.stredan.sk (key `rpo`, env `prod`). Schema `rpo2`. |
+| **Email MCP: mailboxes 1–5** | Matrix columns | Add accounts in MCP UI, then map keys in `/admin/accounts` |
 | **Sending domain(s)** | Deliverability | Separate domain(s) from `stredan.sk` marketing recommended for cold |
-| **Cursor Cloud Automation** | Daily operator | Schedule playbook `docs/leadgen/AGENT_PLAYBOOK.md` with Postgres+Email MCP tools |
+| **Cursor Cloud Automation** | Daily operator (not mcp.stredan.sk) | Schedule playbook `docs/leadgen/AGENT_PLAYBOOK.md` with Postgres+Email MCP tools |
 
 ## Optional later
 

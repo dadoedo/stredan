@@ -172,6 +172,24 @@ model Offer {
   templates       EmailTemplate[]
   touches         Touch[]
   scores          LeadScore[]
+  experimentDays  ExperimentDaily[]
+}
+
+// Sending identity (matrix columns 1–5). Content is Offer A–E, not this.
+model SendAccount {
+  id              String       @id @default(cuid())
+  code            String       @unique // "1" | "2" | "3" | "4" | "5"
+  name            String
+  mcpAccountKey   String? // Email MCP account key (filled in admin / mcp.stredan.sk)
+  channel         TouchChannel @default(gmail)
+  fromAddress     String?
+  dailyCap        Int          @default(8)
+  active          Boolean      @default(false)
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  touches         Touch[]
+  experimentDays  ExperimentDaily[]
 }
 
 model EmailTemplate {
@@ -179,7 +197,6 @@ model EmailTemplate {
   offerId         String
   offer           Offer        @relation(fields: [offerId], references: [id], onDelete: Cascade)
   key             String // e.g. cold-1, cold-2, bump
-  channel         TouchChannel @default(gmail)
   locale          String       @default("sk")
   subject         String
   bodyText        String
@@ -190,7 +207,7 @@ model EmailTemplate {
   updatedAt       DateTime     @updatedAt
   touches         Touch[]
 
-  @@unique([offerId, key, channel, locale, version])
+  @@unique([offerId, key, locale, version])
   @@index([offerId, active])
 }
 
@@ -302,8 +319,10 @@ model Touch {
   offer           Offer        @relation(fields: [offerId], references: [id], onDelete: Cascade)
   templateId      String?
   template        EmailTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  sendAccountId   String?
+  sendAccount     SendAccount? @relation(fields: [sendAccountId], references: [id], onDelete: SetNull)
   channel         TouchChannel
-  accountKey      String? // MCP email account key
+  accountKey      String? // Email MCP account key (denorm of SendAccount.mcpAccountKey)
   status          TouchStatus  @default(draft)
   subject         String
   bodyText        String
@@ -320,6 +339,8 @@ model Touch {
   @@index([leadId])
   @@index([offerId, status])
   @@index([channel, status])
+  @@index([sendAccountId, status])
+  @@index([offerId, sendAccountId, sentAt])
   @@index([sentAt])
 }
 
@@ -364,17 +385,19 @@ model Suppression {
 }
 
 model ExperimentDaily {
-  id              String   @id @default(cuid())
-  day             DateTime @db.Date
+  id              String      @id @default(cuid())
+  day             DateTime    @db.Date
   offerId         String
-  channel         TouchChannel
-  sent            Int      @default(0)
-  replied         Int      @default(0)
-  interested      Int      @default(0)
-  meetings        Int      @default(0)
+  offer           Offer       @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  sendAccountId   String
+  sendAccount     SendAccount @relation(fields: [sendAccountId], references: [id], onDelete: Cascade)
+  sent            Int         @default(0)
+  replied         Int         @default(0)
+  interested      Int         @default(0)
+  meetings        Int         @default(0)
   notes           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
-  @@unique([day, offerId, channel])
+  @@unique([day, offerId, sendAccountId])
 }

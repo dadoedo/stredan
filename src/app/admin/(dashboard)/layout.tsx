@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE, verifySession } from "@/lib/admin";
+import { AdminShell } from "@/components/admin/AdminShell";
 
 export default async function AdminDashboardLayout({
   children,
@@ -12,5 +13,5 @@ export default async function AdminDashboardLayout({
   if (!token || !verifySession(token)) {
     redirect("/admin/login");
   }
-  return <>{children}</>;
+  return <AdminShell>{children}</AdminShell>;
 }
