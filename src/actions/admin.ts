@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   });
-  redirect("/admin/projects");
+  redirect("/admin/matrix");
 }
 
 export async function logout() {

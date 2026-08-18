@@ -10,8 +10,7 @@ export default async function NewProjectPage() {
   ]);
 
   return (
-    <div className="min-h-screen px-6 py-12">
-      <div className="mx-auto max-w-2xl">
+    <div>
         <div className="mb-8">
           <Link
             href="/admin/projects"
@@ -19,7 +18,7 @@ export default async function NewProjectPage() {
           >
             ← Späť na projekty
           </Link>
-          <h1 className="mt-2 font-heading text-2xl font-semibold">Nový projekt</h1>
+          <h2 className="mt-2 font-heading text-xl font-semibold">Nový projekt</h2>
         </div>
 
         <ProjectForm
@@ -27,7 +26,6 @@ export default async function NewProjectPage() {
           technologies={technologies}
           integrations={integrations}
         />
-      </div>
     </div>
   );
 }

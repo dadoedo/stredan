@@ -8,6 +8,8 @@ Cloud Agents do **not** load laptop `~/.cursor/mcp.json`. They use **Team / pers
 | Postgres MCP | https://postgres.mcp.stredan.sk |
 | Email MCP | https://email.mcp.stredan.sk |
 
+**Not an agent control board.** Scheduling and runs live in Cursor Automations. This dashboard only stores DB + mailbox credentials for MCP tools. Human ops for leadgen is `stredan.sk/admin`.
+
 Hosted on **`stredan-hetzner`** (`/root/agent-mcp`), behind edge-caddy.  
 Deep dive / deploy: [`services/agent-mcp/README.md`](../../services/agent-mcp/README.md).
 

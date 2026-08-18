@@ -1,5 +1,5 @@
 /**
- * Seed A–E offers + cold-1 email templates (gmail + resend).
+ * Seed A–E offers, cold-1 templates (content only), and send accounts 1–5.
  * Run: npx tsx scripts/seed-leadgen-offers.ts
  * Requires: prisma db push (leadgen models) + DATABASE_URL
  */
@@ -176,7 +176,36 @@ Dávid — stredan.sk/offers/custom-ai-app`,
   },
 ] as const;
 
+const sendAccounts = [
+  { code: "1", name: "Mailbox 1", channel: "gmail" as const, dailyCap: 8, notes: "Fill mcpAccountKey after adding mailbox on mcp.stredan.sk" },
+  { code: "2", name: "Mailbox 2", channel: "resend" as const, dailyCap: 8, notes: null },
+  { code: "3", name: "Mailbox 3", channel: "gmail" as const, dailyCap: 8, notes: null },
+  { code: "4", name: "Mailbox 4", channel: "smtp" as const, dailyCap: 8, notes: null },
+  { code: "5", name: "Mailbox 5", channel: "resend" as const, dailyCap: 8, notes: null },
+];
+
 async function main() {
+  for (const account of sendAccounts) {
+    await prisma.sendAccount.upsert({
+      where: { code: account.code },
+      create: {
+        code: account.code,
+        name: account.name,
+        channel: account.channel,
+        dailyCap: account.dailyCap,
+        active: false,
+        notes: account.notes,
+      },
+      update: {
+        name: account.name,
+        channel: account.channel,
+        dailyCap: account.dailyCap,
+        notes: account.notes,
+      },
+    });
+    console.log(`SendAccount ${account.code} ready`);
+  }
+
   for (const o of offers) {
     const offer = await prisma.offer.upsert({
       where: { code: o.code },
@@ -223,7 +252,6 @@ async function main() {
       where: {
         offerId: offer.id,
         key: "cold-1",
-        channel: "gmail",
         locale: "sk",
         version: 1,
       },
@@ -234,32 +262,6 @@ async function main() {
         data: {
           offerId: offer.id,
           key: "cold-1",
-          channel: "gmail",
-          locale: "sk",
-          subject: o.subject,
-          bodyText: o.body,
-          version: 1,
-          active: true,
-        },
-      });
-    }
-
-    // Mirror template for resend channel (same copy v1)
-    const existingResend = await prisma.emailTemplate.findFirst({
-      where: {
-        offerId: offer.id,
-        key: "cold-1",
-        channel: "resend",
-        locale: "sk",
-        version: 1,
-      },
-    });
-    if (!existingResend) {
-      await prisma.emailTemplate.create({
-        data: {
-          offerId: offer.id,
-          key: "cold-1",
-          channel: "resend",
           locale: "sk",
           subject: o.subject,
           bodyText: o.body,

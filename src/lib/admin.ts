@@ -1,4 +1,6 @@
 import { createHash, timingSafeEqual } from "crypto";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const ADMIN_COOKIE = "admin_session";
 const SALT = "stredan_admin_2025";
@@ -27,6 +29,14 @@ export function verifySession(token: string): boolean {
     return timingSafeEqual(Buffer.from(expected, "hex"), Buffer.from(token, "hex"));
   } catch {
     return false;
+  }
+}
+
+export async function requireAdmin() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(ADMIN_COOKIE)?.value;
+  if (!token || !verifySession(token)) {
+    redirect("/admin/login");
   }
 }
 

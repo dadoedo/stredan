@@ -6,7 +6,7 @@ export default async function AdminPage() {
   const cookieStore = await cookies();
   const token = cookieStore.get(ADMIN_COOKIE)?.value;
   if (token && verifySession(token)) {
-    redirect("/admin/projects");
+    redirect("/admin/matrix");
   }
   redirect("/admin/login");
 }
