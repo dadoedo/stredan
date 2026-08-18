@@ -68,6 +68,8 @@ CREATE TABLE IF NOT EXISTS email_accounts (
   smtp_host TEXT NOT NULL,
   smtp_port INTEGER NOT NULL DEFAULT 465,
   smtp_secure BOOLEAN NOT NULL DEFAULT true,
+  imap_user TEXT,
+  smtp_user TEXT,
   password_secret_id UUID REFERENCES vault_secrets (id),
   secret_hint TEXT,
   permissions TEXT NOT NULL DEFAULT 'readwrite'

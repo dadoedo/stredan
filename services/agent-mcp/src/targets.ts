@@ -141,6 +141,8 @@ export async function loadEmailConfig(key: ApiKeyRecord): Promise<EmailConfig> {
     smtp_host: string;
     smtp_port: number;
     smtp_secure: boolean;
+    imap_user: string | null;
+    smtp_user: string | null;
     password_secret_id: string | null;
     permissions: string;
     append_to_sent: boolean;
@@ -150,6 +152,7 @@ export async function loadEmailConfig(key: ApiKeyRecord): Promise<EmailConfig> {
       id, key, name, address,
       imap_host, imap_port, imap_secure,
       smtp_host, smtp_port, smtp_secure,
+      imap_user, smtp_user,
       password_secret_id, permissions, append_to_sent, sent_folder
     FROM email_accounts
     WHERE enabled = true
@@ -165,8 +168,18 @@ export async function loadEmailConfig(key: ApiKeyRecord): Promise<EmailConfig> {
       key: row.key,
       name: row.name,
       address: row.address,
-      imap: { host: row.imap_host, port: row.imap_port, secure: row.imap_secure },
-      smtp: { host: row.smtp_host, port: row.smtp_port, secure: row.smtp_secure },
+      imap: {
+        host: row.imap_host,
+        port: row.imap_port,
+        secure: row.imap_secure,
+        user: row.imap_user?.trim() || row.address,
+      },
+      smtp: {
+        host: row.smtp_host,
+        port: row.smtp_port,
+        secure: row.smtp_secure,
+        user: row.smtp_user?.trim() || row.address,
+      },
       password,
       permissions: overlayPermissions(asPermissions(row.permissions), key.readonly),
       sendVia: "smtp",

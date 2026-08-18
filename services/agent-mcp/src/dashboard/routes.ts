@@ -476,7 +476,7 @@ export function dashboardRouter(): Router {
         host: account.imap_host,
         port: account.imap_port,
         secure: account.imap_secure,
-        auth: { user: account.address, pass: password },
+        auth: { user: account.imap_user?.trim() || account.address, pass: password },
         logger: false,
       });
       client.on("error", () => {});
@@ -681,6 +681,10 @@ function emailForm(values: Record<string, unknown>, id?: string): string {
         <div><label>SMTP host</label><input name="smtp_host" required value="${esc(values.smtp_host)}" /></div>
       </div>
       <div class="row">
+        <div><label>IMAP user (blank = address)</label><input name="imap_user" value="${esc(values.imap_user)}" placeholder="defaults to address" /></div>
+        <div><label>SMTP user (blank = address)</label><input name="smtp_user" value="${esc(values.smtp_user)}" placeholder="resend, or leave blank" /></div>
+      </div>
+      <div class="row">
         <div><label>SMTP port</label><input name="smtp_port" type="number" value="${esc(values.smtp_port ?? 465)}" /></div>
         <div>
           <label>Permissions</label>
@@ -753,6 +757,8 @@ async function loadEmail(id: string) {
     smtp_host: string;
     smtp_port: number;
     smtp_secure: boolean;
+    imap_user: string | null;
+    smtp_user: string | null;
     password_secret_id: string | null;
     secret_hint: string | null;
     permissions: string;
@@ -880,6 +886,8 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
     smtp_host: String(req.body.smtp_host ?? "").trim(),
     smtp_port: Number(req.body.smtp_port || 465),
     smtp_secure: bool(req.body.smtp_secure),
+    imap_user: String(req.body.imap_user ?? "").trim() || null,
+    smtp_user: String(req.body.smtp_user ?? "").trim() || null,
     permissions: asPerm(req.body.permissions === "readonly" ? "readonly" : "readwrite"),
     append_to_sent: bool(req.body.append_to_sent),
     sent_folder: String(req.body.sent_folder ?? "Sent") || "Sent",
@@ -890,10 +898,13 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
     const inserted = await sql<{ id: string }[]>`
       INSERT INTO email_accounts (
         key, name, address, imap_host, imap_port, imap_secure, smtp_host, smtp_port, smtp_secure,
+        imap_user, smtp_user,
         password_secret_id, secret_hint, permissions, append_to_sent, sent_folder, notes
       ) VALUES (
         ${fields.key}, ${fields.name}, ${fields.address}, ${fields.imap_host}, ${fields.imap_port}, ${fields.imap_secure},
-        ${fields.smtp_host}, ${fields.smtp_port}, ${fields.smtp_secure}, ${secretId}, ${hint}, ${fields.permissions},
+        ${fields.smtp_host}, ${fields.smtp_port}, ${fields.smtp_secure},
+        ${fields.imap_user}, ${fields.smtp_user},
+        ${secretId}, ${hint}, ${fields.permissions},
         ${fields.append_to_sent}, ${fields.sent_folder}, ${fields.notes}
       ) RETURNING id
     `;
@@ -910,6 +921,8 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
       smtp_host = ${fields.smtp_host},
       smtp_port = ${fields.smtp_port},
       smtp_secure = ${fields.smtp_secure},
+      imap_user = ${fields.imap_user},
+      smtp_user = ${fields.smtp_user},
       password_secret_id = ${secretId},
       secret_hint = ${hint},
       permissions = ${fields.permissions},
