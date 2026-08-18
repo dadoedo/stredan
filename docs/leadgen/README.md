@@ -13,6 +13,7 @@ Outbound lab pre slovenské SME. Predaj AI implementácie (Stredan), nie kúpen�
 | Doc | Purpose |
 |-----|---------|
 | [SYSTEM.md](./SYSTEM.md) | Celý návrh: idea, matrix A–E × 1–5, loop, budúcnosť |
+| [EMAIL.md](./EMAIL.md) | MCP mailboxy: Gmail App Password, Hostcreators, Resend |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Stack, denný loop, logging (EN, kratšie) |
 | [OFFERS.md](./OFFERS.md) | Ponuky A–E |
 | [AGENT_PLAYBOOK.md](./AGENT_PLAYBOOK.md) | Inštrukcie pre denného cloud agenta |

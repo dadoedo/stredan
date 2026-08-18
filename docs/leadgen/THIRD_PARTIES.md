@@ -5,7 +5,7 @@
 | Item | Why | Action |
 |------|-----|--------|
 | **RPO Postgres** | Source of SK companies | **Done:** DB `rpo` on `stredan-db` (alldevs-hetzner), registered readonly at https://mcp.stredan.sk (key `rpo`, env `prod`). Schema `rpo2`. |
-| **Email MCP: mailboxes 1–5** | Matrix columns | Add accounts in MCP UI, then map keys in `/admin/accounts` |
+| **Email MCP: mailboxes** | Send + IMAP | See [EMAIL.md](./EMAIL.md). `stredan-david` + Resend registered; Gmail needs App Password |
 | **Sending domain(s)** | Deliverability | Separate domain(s) from `stredan.sk` marketing recommended for cold |
 | **Cursor Cloud Automation** | Daily operator (not mcp.stredan.sk) | Schedule playbook `docs/leadgen/AGENT_PLAYBOOK.md` with Postgres+Email MCP tools |
 

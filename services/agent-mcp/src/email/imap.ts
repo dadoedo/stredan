@@ -40,7 +40,7 @@ async function getClient(account: ResolvedAccount): Promise<ImapFlow> {
     port: account.imap.port,
     secure: account.imap.secure,
     auth: {
-      user: account.address,
+      user: account.imap.user,
       pass: account.password,
     },
     logger: false,

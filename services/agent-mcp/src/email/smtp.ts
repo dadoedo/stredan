@@ -5,7 +5,7 @@ import { appendMessage } from "./imap.js";
 const transporterPool = new Map<string, Transporter>();
 
 function getTransporter(account: ResolvedAccount): Transporter {
-  const key = `${account.key}:${account.smtp.host}:${account.smtp.port}`;
+  const key = `${account.key}:${account.smtp.host}:${account.smtp.port}:${account.smtp.user}`;
   const existing = transporterPool.get(key);
   if (existing) return existing;
 
@@ -13,8 +13,9 @@ function getTransporter(account: ResolvedAccount): Transporter {
     host: account.smtp.host,
     port: account.smtp.port,
     secure: account.smtp.secure,
+    requireTLS: !account.smtp.secure,
     auth: {
-      user: account.address,
+      user: account.smtp.user,
       pass: account.password,
     },
     pool: true,

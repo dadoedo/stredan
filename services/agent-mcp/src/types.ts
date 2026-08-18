@@ -21,8 +21,8 @@ export interface ResolvedAccount {
   key: string;
   name: string;
   address: string;
-  imap: { host: string; port: number; secure: boolean };
-  smtp: { host: string; port: number; secure: boolean };
+  imap: { host: string; port: number; secure: boolean; user: string };
+  smtp: { host: string; port: number; secure: boolean; user: string };
   password: string;
   permissions: Permissions;
   sendVia: "smtp";
