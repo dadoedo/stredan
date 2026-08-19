@@ -17,6 +17,8 @@ Outbound lab pre slovenské SME. Predaj AI implementácie (Stredan), nie kúpen�
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Stack, denný loop, logging (EN, kratšie) |
 | [OFFERS.md](./OFFERS.md) | Ponuky A–E |
 | [AGENT_PLAYBOOK.md](./AGENT_PLAYBOOK.md) | Inštrukcie pre denného cloud agenta |
+| [AUTOMATION_PROMPT.md](./AUTOMATION_PROMPT.md) | Čo dať do Cursor UI (stub) + operator prompt |
+| [ENRICHMENT_JSON.md](./ENRICHMENT_JSON.md) | JSON → SQL writer |
 | [THIRD_PARTIES.md](./THIRD_PARTIES.md) | Resend, Gmail, RPO, MCP checklist |
 | [COST.md](./COST.md) | Agent vs deterministic cost |
 | [RPO.md](./RPO.md) | Register právnických osôb |

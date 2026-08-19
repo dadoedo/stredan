@@ -78,7 +78,7 @@ ORDER BY score DESC, rpo_id
 LIMIT 50;
 ```
 
-Pool is s.r.o. in **non-IT** NACE, **Bratislava ranked first**. Active = current konateľ + current address (not profit). Rebuild:
+Pool is s.r.o. in **non-IT** NACE, **Bratislava ranked first**. Active = current konateľ + current address (not profit). Names matching likvidácia/konkurz/zrušená are excluded. Rebuild:
 
 ```bash
 ssh alldevs-hetzner 'docker exec -i stredan-db psql -U stredan -d rpo' \

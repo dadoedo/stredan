@@ -69,19 +69,16 @@ function buildLeadsWhere(params: {
     const skip = params.skip.trim();
     and.push({
       OR: [
+        { skipReason: skip },
         { notes: { equals: skip } },
+        { notes: { contains: `skip_reason=${skip}` } },
         {
-          AND: [
-            { OR: [{ notes: null }, { notes: "" }] },
-            {
-              enrichments: {
-                some: {
-                  kind: "website",
-                  outputJson: { path: ["skip_reason"], equals: skip },
-                },
-              },
+          enrichments: {
+            some: {
+              kind: "website",
+              outputJson: { path: ["skip_reason"], equals: skip },
             },
-          ],
+          },
         },
       ],
     });
@@ -136,6 +133,11 @@ export default async function AdminLeadsPage({
       <h2 className="font-heading text-xl font-semibold">Leady</h2>
       <p className="mt-1 mb-6 text-sm text-muted">
         Enrichment píše automatizácia priamo do DB cez Postgres MCP (nie HTTP API).
+        Hotový beh = status na{" "}
+        <Link href="/admin/runs" className="underline">
+          behaniach
+        </Link>
+        , nie Cursor agent list.
       </p>
 
       <LeadsToolbar q={q} status={status} skip={skip} contact={contact} sort={sort} dir={dir} />

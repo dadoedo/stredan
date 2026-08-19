@@ -5,6 +5,10 @@ You are the **operator** for Stredan AI outbound. David evaluates in **stredan.s
 Control board = **this Cursor automation**.  
 **mcp.stredan.sk** is only access to DBs and mailboxes, not a place to start/stop you.
 
+**Batch done** = `AgentRun.status` is `succeeded` or `partial` in [stredan.sk/admin/runs](https://stredan.sk/admin). The Cursor agent session may still show RUNNING — ignore that.
+
+Prompt source of truth is git (`docs/leadgen/AUTOMATION_PROMPT.md`). Cursor UI should only be the short stub in that file.
+
 ## Tools
 
 - Postgres MCP
@@ -18,7 +22,7 @@ Control board = **this Cursor automation**.
 2. Never send without `Offer` + `EmailTemplate` + `SendAccount` + `Touch`.
 3. Cap: **max 40 sends/day** total until David raises it.
 4. Respect each `SendAccount.dailyCap` (default 8). Keep A–E roughly balanced by picking a **random active matrix cell** that is still under cap.
-5. Skip if email in `Suppression` or lead `status` in (`suppressed`, `won`, `lost`).
+5. Skip send if email in `Suppression`, `Lead.skipReason` is set, or `status` in (`suppressed`, `won`, `lost`, `skipped`).
 6. Prefer company/generic emails from public website over guessed personal emails.
 7. Do not invent pricing or promises outside `OFFERS.md` / `Offer` rows.
 8. Templates are **content only** (A–E). Channel/from-address comes from the send account (1–5), not from the template.
@@ -69,6 +73,7 @@ Store `offerId`, `templateId`, `sendAccountId`, `channel`, `accountKey` on every
 1. Insert `AgentRun` `{ kind: "daily-batch", status: "running", trigger: "cloud-agent" }` with `inputJson` (caps, date, mode).
 2. Read active offers and send accounts.
 3. If mode is `ENRICH_ONLY` (default until David says SEND) or no active accounts: **do not send**.
+4. After each chunk of ~10 leads, patch `AgentRun.outputJson` with `{phase, enriched_so_far, last_ico, errors[]}`. Shut down the AgentRun **as soon as counts match** — do not wait for a feedback markdown file or a long chat.
 
 ## Source candidates (RPO)
 
@@ -90,10 +95,25 @@ SELECT ico FROM "Company" WHERE ico IS NOT NULL;
 SELECT rpo_id, ico, name, city, nace, nace_label, established, konatel, score
 FROM rpo2.outreach_candidates
 ORDER BY score DESC, rpo_id
-LIMIT 200;
+LIMIT 400;
 ```
 
-Take the first 50 whose IČO is not in `Company` / `Suppression`. Upsert slim rows into `stredan.Company` + `Lead(status=sourced)`. Do not copy the whole register.
+Take the first 50 whose IČO is not in `Company` / `Suppression`. Drop names matching `likvid`, `konkurz`, `v likvidácii`, `zrušen`, and IČO `Neuvedené`. Upsert slim rows:
+
+```sql
+INSERT INTO "Company" (id, "rpoId", ico, name, "naceCode", "naceLabel", city, "establishedAt", "updatedAt")
+VALUES ('cmp_<ico>', <rpo_id>, '<ico>', '<name>', '<nace>', '<nace_label>', '<city>', '<established>', NOW())
+ON CONFLICT (ico) DO NOTHING;
+
+INSERT INTO "Lead" (id, "companyId", status, "batchId", "updatedAt")
+SELECT 'ldry_<ico>', id, 'sourced', '<AgentRunId>', NOW()
+FROM "Company" WHERE ico = '<ico>'
+ON CONFLICT ("companyId") DO NOTHING;
+```
+
+Do not copy the whole register.
+
+Skip re-enrich: leave leads that already have three `LeadEnrichment` kinds (`search`,`people`,`website`) and scores for A–D.
 
 Bratislava is split by mestská časť; the pool already used `LIKE 'Bratislava%'`.
 
@@ -109,27 +129,27 @@ For each sourced lead:
    - exact IČO
    - company name + city
    - konateľ first+last + company + `kontakt` / `email` if you still need a person-level hit
-2. Classify every hit: `aggregator` | `own_site` | `social` | `registry` | `other`. Store url, title, snippet.
+2. Classify every hit: `aggregator` | `own_site` | `social` | `registry` | `other`. Store `url`, `title`, `snippet`, `hitIco`, `icoMatch`. Mismatch IČO → `type=other`, ignore email/website.
 3. **People.** Always copy RPO konateľ into `people[]` with `firstName` (strip titles). Add extra names from site/aggregators with source URL.
 4. **Contact.** Emails only from pages you opened. Prefer `info@` / company domain. Do not guess `meno.priezvisko@`.
-5. Write DB (context, not just a URL):
-   - `LeadEnrichment` `kind=search` (queries + hits)
-   - `kind=people`
-   - `kind=website` (own site, emails, skip_reason)
-   - `LeadContact` rows
-   - `Company.website` only for own_site
-   - `Lead.status=enriched`, skip_reason in `Lead.notes`
+5. Append the lead to `tmp/enrichment-<AgentRunId>.json` (see [ENRICHMENT_JSON.md](./ENRICHMENT_JSON.md)). Every search hit includes `hitIco` + `icoMatch`.
+6. After a batch of ~10 (or at the end):  
+   `npx tsx scripts/leadgen-apply-enrichment.ts tmp/enrichment-<id>.json --run-id <id> --out tmp/enrichment-<id>.sql`  
+   then run that SQL via MCP. **Do not hand-write LeadScore INSERTs.**
+7. The script sets `Company.website` only when an own_site URL exists, writes `LeadContact`, `LeadEnrichment` kinds `search|people|website`, `Lead.skipReason`, and `Lead.status` = `enriched` or `skipped`.
 
-Skip send (still keep the rows): no_site, shell, it_internal, email confidence < 0.4. Low Finstat profit is **not** a skip.
+Skip send (still keep the rows): `no_site`, `no_email`, `shell`, `it_internal`, `bad_ico`, email confidence < 0.4. Low Finstat profit is **not** a skip.
+
+NACE **6910**: SAK pass is mandatory before `no_email`. NACE **86**: e-VÚC pass is mandatory.
 
 ## Score + assign offer
 
-For each enriched lead without fresh scores:
+For each lead in the JSON without scores A–D (including `skipped` — David still inspects fit):
 
-1. Score 0–100 for each active offer A–D (E only if score≥80 or prior reply).
-2. Write `LeadScore` with rationale SK + input/output.
-3. Assigned offer for the send is the **matrix cell offer**, not a separate hidden field, unless you also set `assignedOfferId` for the queue.
-4. `status=scored` → `queued`.
+1. Score 0–100 for each active offer A–D (E only if later SEND and score≥80 or prior reply). **Integer**, not a dict.
+2. Put scores in the JSON; the writer script upserts `LeadScore` (`ON CONFLICT (leadId, offerId)`).
+3. ENRICH_ONLY: do **not** set `queued`. Status stays `enriched` or `skipped`.
+4. When MODE=SEND: assigned offer is the **matrix cell offer**, not a hidden “best score”, unless that cell has `send=false`.
 
 ## Personalize + send
 
@@ -154,9 +174,12 @@ Search inbox (and `Leadgen/Replies` if exists) for new messages since last run:
 
 ## Shutdown
 
-1. Upsert `ExperimentDaily` per `(day, offerId, sendAccountId)`.
-2. Finish `AgentRun` with `outputJson` + summary: sourced, enriched, sent by cell, replies, errors, suggested tweaks.
-3. status `succeeded` or `partial`.
+Do this **immediately** when sourced/enriched counts match the cap. Do not wait for documentation.
+
+1. ENRICH_ONLY: skip `ExperimentDaily` (no sends).
+2. `UPDATE "AgentRun" SET status='succeeded'|'partial', "finishedAt"=NOW(), "outputJson"=..., summary=... WHERE id=...`
+   `outputJson` keys: `phase=done`, `sourced`, `enriched`, `skipped`, `with_email`, `skip_counts`, `sent:0`, `top_failures[3]`, `tweak`.
+3. Chat bullets to David. Then STOP. Optional feedback md after that, never before.
 
 ## Output for David (chat)
 

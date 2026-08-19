@@ -237,12 +237,13 @@ model Company {
 
 model Lead {
   id              String     @id @default(cuid())
-  companyId       String
+  companyId       String     @unique
   company         Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
   status          LeadStatus @default(sourced)
   assignedOfferId String?
   batchId         String?
   notes           String?
+  skipReason      String? // no_site | no_email | shell | it_internal | bad_ico
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
   contacts        LeadContact[]
@@ -253,6 +254,7 @@ model Lead {
   @@index([status])
   @@index([batchId])
   @@index([assignedOfferId])
+  @@index([skipReason])
 }
 
 model LeadContact {
@@ -271,6 +273,7 @@ model LeadContact {
   updatedAt       DateTime @updatedAt
   touches         Touch[]
 
+  @@unique([leadId, email])
   @@index([leadId])
   @@index([email])
 }
@@ -281,12 +284,13 @@ model LeadEnrichment {
   lead            Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
   agentRunId      String?
   provider        String // cursor-agent | manual | script
-  kind            String // website | email | decision_maker | firmographics
+  kind            String // search | people | website
   inputJson       Json
   outputJson      Json
   confidence      Float?
   createdAt       DateTime @default(now())
 
+  @@unique([leadId, kind])
   @@index([leadId])
   @@index([agentRunId])
 }
@@ -305,7 +309,7 @@ model LeadScore {
   outputJson      Json?
   createdAt       DateTime @default(now())
 
-  @@index([leadId, offerId])
+  @@unique([leadId, offerId])
   @@index([score])
 }
 

@@ -17,6 +17,9 @@ export default async function AdminRunDetailPage({
         <h2 className="font-heading text-xl font-semibold">
           {run.kind} · {run.status}
         </h2>
+        <p className="mt-1 text-sm text-muted">
+          Cursor agent môže ostať RUNNING aj keď je tento riadok succeeded. Platí tento status.
+        </p>
         <p className="text-sm text-muted">
           {run.trigger} · {run.startedAt.toLocaleString("sk-SK")}
           {run.finishedAt ? ` → ${run.finishedAt.toLocaleString("sk-SK")}` : ""}

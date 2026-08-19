@@ -10,6 +10,7 @@
     "seed:anderro": "tsx scripts/seed-anderro.ts",
     "seed:infinelabs": "tsx scripts/seed-infinelabs-job.ts",
     "seed:leadgen": "tsx scripts/seed-leadgen-offers.ts",
+    "leadgen:sql": "tsx scripts/leadgen-apply-enrichment.ts",
     "db:push": "prisma db push",
     "db:generate": "prisma generate"
   },

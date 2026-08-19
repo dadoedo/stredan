@@ -30,7 +30,9 @@ export default async function AdminLeadDetailPage({
         <h2 className="font-heading text-xl font-semibold">{lead.company.name}</h2>
         <p className="text-sm text-muted">
           {lead.status} · IČO {lead.company.ico ?? "—"} · {lead.company.city ?? "—"}
+          {lead.skipReason ? ` · skip ${lead.skipReason}` : ""}
         </p>
+        {lead.notes && <p className="mt-2 text-sm text-muted">{lead.notes}</p>}
       </div>
 
       <section>

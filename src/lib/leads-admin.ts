@@ -60,11 +60,18 @@ export function formatContact(contact: ContactLike | undefined | null): string {
 }
 
 export function extractSkipReason(lead: {
+  skipReason?: string | null;
   notes?: string | null;
   enrichments?: EnrichmentLike[];
 }): string | null {
+  if (lead.skipReason && SKIP_REASONS.includes(lead.skipReason as SkipReason)) {
+    return lead.skipReason;
+  }
+
   const notes = lead.notes?.trim();
   if (notes && SKIP_REASONS.includes(notes as SkipReason)) return notes;
+  const embedded = notes?.match(/skip_reason=([a-z_]+)/i)?.[1]?.toLowerCase();
+  if (embedded && SKIP_REASONS.includes(embedded as SkipReason)) return embedded;
 
   const website = lead.enrichments?.find((row) => row.kind === "website");
   if (

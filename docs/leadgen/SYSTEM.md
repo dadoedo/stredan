@@ -96,10 +96,11 @@ Dve databázy na tom istom Postgres (`stredan-db` na alldevs-hetzner). Zámerné
 | `EmailTemplate` | Vzor (subject + body), unique `(offer, key, locale, version)` |
 | `SendAccount` | Stĺpce 1–5, `mcpAccountKey`, `dailyCap`, `active` |
 | `Company` | Slim kópia z RPO (IČO, mesto, NACE, `rpoId`) |
-| `Lead` | Stavový stroj: sourced → … → contacted / replied / suppressed |
-| `LeadContact` | Email, zdroj, primary |
-| `LeadEnrichment` | Úsudok agenta: website, email, DM; **input/output JSON** |
-| `LeadScore` | Fit 0–100 × offer; **input/output JSON** |
+| `Lead` | Stavový stroj: sourced → … → contacted / replied / suppressed / skipped |
+| `Lead.skipReason` | Enum: no_site / no_email / shell / it_internal / bad_ico (nielen notes) |
+| `LeadContact` | Email, zdroj, primary; unique `(leadId, email)` |
+| `LeadEnrichment` | Úsudok agenta: search / people / website; unique `(leadId, kind)`; **input/output JSON** |
+| `LeadScore` | Fit 0–100 × offer; unique `(leadId, offerId)`; **input/output JSON** |
 | `Touch` | Konkrétna odoslaná (alebo queued) správa + bunka matrixu |
 | `TouchEvent` | sent / reply / bounce / unsubscribe |
 | `AgentRun` | Jeden beh automatizácie; **input/output JSON** + summary |
@@ -163,7 +164,7 @@ Po logine (`ADMIN_PASSWORD`) default je matrix, nie projekty.
 1. **Mailboxy 1–5** na mcp.stredan.sk (Gmail / Resend / SMTP). IMAP foldre `Leadgen/A`…`E`, `Leadgen/Replies`.
 2. V `/admin/accounts` doplniť `mcpAccountKey` = kľúč z MCP UI, zapnúť.
 3. Sending domain(y) oddelené od marketing `stredan.sk` (deliverabilita).
-4. Cursor Automation: denný schedule, tools Postgres + Email, prompt = tento playbook.
+4. Cursor Automation: denný schedule. **Do UI daj len stub** z [AUTOMATION_PROMPT.md](./AUTOMATION_PROMPT.md) — celý playbook žije v gite, nie v duplicite v Cursor boxe.
 5. Prvý beh: **50 firiem, enrich only, 0 sendov**. Skontrolovať JSON v admine.
 6. Potom warmup sendy pod capmi. Až potom zvyšovať.
 

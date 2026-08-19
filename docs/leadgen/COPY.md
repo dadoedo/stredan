@@ -230,8 +230,13 @@ a) query presne IČO (8 číslic)
 b) query názov firmy + Bratislava (alebo mesto)
 c) ak je konateľ, query "krstné priezvisko" + názov firmy + kontakt/email
 
-Každý hit ulož: url, title, snippet, type.
+Každý hit ulož: url, title, snippet, type, hitIco, icoMatch.
 type = aggregator | own_site | social | registry | other
+hitIco = 8 číslic z toho hit-u, alebo null. icoMatch = hitIco === naše IČO.
+Ak hitIco existuje a NIE JE naše IČO → type=other, z toho hitu neber email ani web.
+
+NACE 6910 (právo): pred skip_reason=no_email MUSÍŠ query `site:sak.sk` + konateľ/firma a own-site /kontakt. website_enrichment.sakChecked=true.
+NACE 86 (zdravie): pred no_email MUSÍŠ e-VÚC / zoznam lekárov. evucChecked=true.
 
 Agregátory / register (nie own_site):
 finstat.sk, foaf.sk, indexpodnikatela.sk, firmy.sk, instat.*, orsr.sk,
@@ -264,15 +269,10 @@ Skip:
 Zápis (stredan):
 - Company.website ak own_site
 - LeadContact: fullName, first name môže byť v fullName, role, email, emailSource, isPrimary
-- LeadEnrichment kind=search
-  inputJson = { ico, name, city, nace, konatel, queries[] }
-  outputJson = { hits: [{url,title,snippet,type}], notes }
-- LeadEnrichment kind=people
-  outputJson = { people: [{fullName, firstName, role, source}] }
-- LeadEnrichment kind=website
-  outputJson = { website, emails: [{email, url, context}], skip_reason }
-- confidence 0–1. Email pod 0.4 = neposielať, záznamy aj tak nechať.
-- Lead.status = enriched. skip_reason do Lead.notes.
+- JSON do tmp/enrichment-<run>.json, SQL cez scripts/leadgen-apply-enrichment.ts (nie ručný INSERT)
+- LeadEnrichment kind=search / people / website (unique per lead+kind)
+- confidence 0–1. Email pod 0.4 = neposielať, skip_reason=no_email ak nemáš lepší.
+- Lead.status = enriched, alebo skipped ak skip_reason. skipReason stĺpec + notes.
 
 Nikdy nevymýšľaj email, telefón, LinkedIn. Ak si stránku neotvoril, daj type z snippetu a confidence nízke.
 ```
@@ -286,16 +286,19 @@ Nikdy nevymýšľaj email, telefón, LinkedIn. Ak si stránku neotvoril, daj typ
 
 ICP áno: SK SME mimo IT, Bratislava priorita (už je v poole), ľudia skôr v Pohode/mailoch/Exceli ako vo vlastnom vývoji. Verejné AI už často skúšali.
 
-ICP nie: software house, digitálna agentúra čo stavia AI, čistý NACE 82 shell, solamente živnosť, firma bez webu.
+ICP nie: software house, digitálna agentúra čo stavia AI, čistý NACE 82 shell, solamente živnosť, firma bez webu, payroll vendor (ADP), Big4 legal ako cold.
 
 Pravidlá:
 - Malý zisk / nízke imanie = 0 bodov. Neni to mŕtva firma.
-- Žiadny web = max 30, neposielať.
-- Účto/právo/zdravie + citlivé dokumenty / súkromné účty: C a A hore.
+- Žiadny web = max 30, neposielať (skip no_site).
+- NACE 6920 účto: **A a C hore** (doklady, DPH, súkromné účty). C nie je len pre advokátov.
+- NACE 6910 právo: **C a A hore**. B/D nižšie, kým nie je jasný workflow.
+- NACE 86 zdravie: C a A hore.
 - Výroba/veľkoobchod/stavba + doklady/sklad: D a B hore.
 - „Chceme AI všade“ na webe bez jedného procesu: B dole.
+- score je JSON integer (78), nikdy objekt / Python dict.
 
-outputJson na každý Offer:
+outputJson na každý Offer A–D:
 {
   "score": 0-100,
   "send": true|false,
@@ -304,9 +307,8 @@ outputJson na každý Offer:
   "risks": ["shell?","it?","no_email"]
 }
 
-LeadScore.score = score, rationaleSk = why_sk.
-send=false pre všetky A–D → Lead.status ostáva scored, nequeue.
-Inak queued. assignedOfferId = ponuka z matrix bunky, nie „najlepší score“, kým bunka má send=true. Ak bunka má send=false, vyber inú bunku alebo skip lead dnes.
+LeadScore.score = score (integer), rationaleSk = why_sk.
+ENRICH_ONLY: nequeue. skip_reason → Lead.status=skipped + skipReason. Inak enriched.
 ```
 
 ---
@@ -370,7 +372,8 @@ Krátky overlay nad `AGENT_PLAYBOOK.md`. Playbook ostáva zdroj pravdy pre SQL a
 ```
 Si denný operátor Stredan outbound. Ľudský UI je stredan.sk/admin. MCP je len Postgres + mail.
 
-Dnes: playbook + docs/leadgen/COPY.md (hlas, maily, prompty enrich/score/triáž).
+Dnes: playbook + docs/leadgen/COPY.md + ENRICHMENT_JSON.md. SQL píš len cez scripts/leadgen-apply-enrichment.ts.
+Hotový beh = AgentRun.status v admine, nie Cursor RUNNING.
 
 Hard:
 - max 40 sendov, dailyCap na účet
