@@ -1,0 +1,998 @@
+[
+  {
+    "lead_id": "aaeae9d7-bda8-4411-a397-ce2d6c79c4c3",
+    "company_id": "c8a5ff2a-842a-4c24-a957-516580c8b286",
+    "ico": "47233427",
+    "name": "Advokátska kancelária KRAJŇÁK & PARTNERS, s. r. o.",
+    "nace": "6910",
+    "konatel": "JUDr. Alexander Krajňak",
+    "search": {
+      "queries": [
+        "47233427",
+        "Advokátska kancelária KRAJŇÁK & PARTNERS, Bratislava",
+        "Alexander Krajňak Advokátska kancelária KRAJŇÁK & PARTNERS, kontakt email",
+        "Krajňak advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/47233427",
+          "type": "registry",
+          "title": "Register Peniaze Krajňák",
+          "snippet": "IČO 47233427, Drieňová 34, JUDr. Alexander Krajňák",
+          "ico_verified": true
+        },
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=203031&P=0",
+          "type": "registry",
+          "title": "ORSR Krajňák",
+          "snippet": "Advokátska kancelária KRAJŇÁK & PARTNERS, IČO 47233427",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Alexander Krajňak",
+        "firstName": "Alexander",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 35,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Advokátska kancelária KRAJŇÁK & PARTNERS,; bez emailu (no_email); SAK pass vykonaný."
+  },
+  {
+    "lead_id": "4869b344-7d5f-4412-afa3-cf879eac3599",
+    "company_id": "00aca790-c733-4b16-9432-34120656f510",
+    "ico": "47728949",
+    "name": "Advokátska kancelária VIS LEGIS s. r. o.",
+    "nace": "6910",
+    "konatel": "JUDr. Janette Prétiová",
+    "search": {
+      "queries": [
+        "47728949",
+        "Advokátska kancelária VIS LEGIS Bratislava",
+        "Janette Prétiová Advokátska kancelária VIS LEGIS kontakt email",
+        "Prétiová advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.vislegis.sk/kontakt",
+          "type": "own_site",
+          "title": "VIS LEGIS kontakt",
+          "snippet": "office@vislegis.sk, Panenská 7",
+          "ico_verified": true
+        },
+        {
+          "url": "https://www.sak.sk/web/en/cms/link/osp/655218/display/event",
+          "type": "registry",
+          "title": "SAK VIS LEGIS",
+          "snippet": "IČO 47728949, office@vislegis.sk",
+          "ico_verified": true
+        },
+        {
+          "url": "https://www.zoznam.sk/firma/2925945/Advokatska-kancelaria-VIS-LEGIS-Bratislava",
+          "type": "aggregator",
+          "title": "Zoznam.sk VIS LEGIS",
+          "snippet": "office@vislegis.sk, IČO 47728949",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Janette Prétiová",
+        "firstName": "Janette",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://www.vislegis.sk",
+      "emails": [
+        {
+          "email": "office@vislegis.sk",
+          "url": "https://www.vislegis.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Janette Prétiová",
+        "role": "konateľ",
+        "email": "office@vislegis.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://www.vislegis.sk",
+    "lead_status": "enriched",
+    "lead_notes": "Advokátska kancelária VIS LEGIS; web www.vislegis.sk; office@vislegis.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "ded372fe-6189-461d-85dd-a7e4f7726509",
+    "company_id": "ff814087-c3e6-4a36-aec2-64c855b7b221",
+    "ico": "46671650",
+    "name": "Anwar s.r.o.",
+    "nace": "6920",
+    "konatel": "Rahime Mohammad Anwar",
+    "search": {
+      "queries": [
+        "46671650",
+        "Anwar Bratislava",
+        "Rahime Anwar Anwar kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-sima-top-s-r-o-1",
+          "type": "aggregator",
+          "title": "Anwar s.r.o. profil",
+          "snippet": "IČO 46671650, Rahime Mohammad Anwar konateľ",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Rahime Mohammad Anwar",
+        "firstName": "Rahime",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Anwar; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "b1bd88e1-61e5-4fad-ba3d-71e4e3ff205a",
+    "company_id": "7255a6bb-ae32-4195-a545-04ee6db0a4d3",
+    "ico": "47248378",
+    "name": "VIP Concierge Services, s. r. o.",
+    "nace": "6910",
+    "konatel": "Karol Silnický",
+    "search": {
+      "queries": [
+        "47248378",
+        "VIP Concierge Services, Bratislava",
+        "Karol Silnický VIP Concierge Services, kontakt email",
+        "Silnický advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=266834&P=1",
+          "type": "registry",
+          "title": "ORSR VIP Concierge",
+          "snippet": "IČO 47248378, bývalá AK Natália Silnická",
+          "ico_verified": true
+        },
+        {
+          "url": "https://finstat.sk/47248378",
+          "type": "aggregator",
+          "title": "Finstat VIP Concierge",
+          "snippet": "Tallerova 4, Bratislava",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Karol Silnický",
+        "firstName": "Karol",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 35,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "VIP Concierge Services,; bez emailu (no_email); SAK pass vykonaný."
+  },
+  {
+    "lead_id": "50b19a41-ac0c-4782-943a-ec691aeda6e7",
+    "company_id": "6d6a5c88-d97c-44ec-abe3-d918610613c3",
+    "ico": "47243252",
+    "name": "minilines+ s. r. o.",
+    "nace": "6910",
+    "konatel": "Marek Bardač",
+    "search": {
+      "queries": [
+        "47243252",
+        "minilines+ Bratislava",
+        "Marek Bardač minilines+ kontakt email",
+        "Bardač advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "http://www.minilines.sk/",
+          "type": "own_site",
+          "title": "minilines autobusová preprava",
+          "snippet": "IČO 47243252, Štefánikova 5, email JS protected",
+          "ico_verified": true
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-bardac-s-r-o",
+          "type": "aggregator",
+          "title": "minilines+ profil",
+          "snippet": "IČO 47243252, Marek Bardač",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Marek Bardač",
+        "firstName": "Marek",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "http://www.minilines.sk",
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 58,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": "http://www.minilines.sk",
+    "lead_status": "enriched",
+    "lead_notes": "minilines+; web www.minilines.sk; bez emailu (no_email); SAK pass vykonaný."
+  },
+  {
+    "lead_id": "b24c23e2-8419-442f-bda3-4340d59acb50",
+    "company_id": "a660024c-f944-4aa2-b76f-2a8caacee30c",
+    "ico": "46854347",
+    "name": "Oliway, s.r.o.",
+    "nace": "6920",
+    "konatel": "Ing. Oľga Vlasková",
+    "search": {
+      "queries": [
+        "46854347",
+        "Oliway, Bratislava",
+        "Oľga Vlasková Oliway, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.edb.eu/en/czech-firm-1318671-oliway-bratislava-mestska-cast-dubravka",
+          "type": "aggregator",
+          "title": "Oliway profil",
+          "snippet": "IČO 46854347, Ľuda Zúbka 13, +421 904 507 385",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Oľga Vlasková",
+        "firstName": "Oľga",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Oliway,; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "78e616b3-f0d5-43b0-bf17-a6258da21306",
+    "company_id": "6a0b4bc5-4015-4f8e-a632-a5137b98f889",
+    "ico": "47249561",
+    "name": "BG Partners, s. r. o.",
+    "nace": "6910",
+    "konatel": "JUDr. Zuzana Benkovská Gašičová",
+    "search": {
+      "queries": [
+        "47249561",
+        "BG Partners, Bratislava",
+        "Zuzana Gašičová BG Partners, kontakt email",
+        "Gašičová advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/620949/display/event",
+          "type": "registry",
+          "title": "SAK BG Partners",
+          "snippet": "IČO 47249561, gasicova@bgpartners.sk",
+          "ico_verified": true
+        },
+        {
+          "url": "https://bgpartners.sk/",
+          "type": "own_site",
+          "title": "BG Partners web",
+          "snippet": "benkovsky@bgpartners.sk, údržba",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Zuzana Benkovská Gašičová",
+        "firstName": "Zuzana",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://bgpartners.sk",
+      "emails": [
+        {
+          "email": "gasicova@bgpartners.sk",
+          "url": "https://bgpartners.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Zuzana Benkovská Gašičová",
+        "role": "konateľ",
+        "email": "gasicova@bgpartners.sk",
+        "emailSource": "registry",
+        "isPrimary": true,
+        "confidence": 0.88
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://bgpartners.sk",
+    "lead_status": "enriched",
+    "lead_notes": "BG Partners,; web bgpartners.sk; gasicova@bgpartners.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "336cac05-c48f-430e-b2e5-15458a47346a",
+    "company_id": "e2e9b9ba-a4e3-4ba9-af0a-8c7b2f5a885c",
+    "ico": "46759875",
+    "name": "Advokátska kancelária Branislava Máčaja, s. r. o.",
+    "nace": "6910",
+    "konatel": "Mgr. Branislav Máčaj",
+    "search": {
+      "queries": [
+        "46759875",
+        "Advokátska kancelária Branislava Máčaja, Bratislava",
+        "Branislav Máčaj Advokátska kancelária Branislava Máčaja, kontakt email",
+        "Máčaj advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://akbm.sk/",
+          "type": "own_site",
+          "title": "AKBM web",
+          "snippet": "info@akbm.sk, IČO 46759875",
+          "ico_verified": true
+        },
+        {
+          "url": "https://www.zlatestranky.sk/firmy/Bratislava/H1605542/",
+          "type": "aggregator",
+          "title": "Zlaté stránky AKBM",
+          "snippet": "info@akbm.sk",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Branislav Máčaj",
+        "firstName": "Branislav",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://akbm.sk",
+      "emails": [
+        {
+          "email": "info@akbm.sk",
+          "url": "https://akbm.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "Mgr. Branislav Máčaj",
+        "role": "konateľ",
+        "email": "info@akbm.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://akbm.sk",
+    "lead_status": "enriched",
+    "lead_notes": "Advokátska kancelária Branislava Máčaja,; web akbm.sk; info@akbm.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "50f2ea77-4d72-4225-ae7f-32edda0cf335",
+    "company_id": "7518f3a1-91f7-4444-9914-134072ebcf59",
+    "ico": "47234547",
+    "name": "Advokátska kancelária JUDr. Marek Czompoly, s. r. o.",
+    "nace": "6910",
+    "konatel": "JUDr. Marek Czompoly",
+    "search": {
+      "queries": [
+        "47234547",
+        "Advokátska kancelária JUDr. Marek Czompoly, Bratislava",
+        "Marek Czompoly Advokátska kancelária JUDr. Marek Czompoly, kontakt email",
+        "Czompoly advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.czompoly.sk/",
+          "type": "own_site",
+          "title": "Czompoly web",
+          "snippet": "office@czompoly.sk, IČO 47234547",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Marek Czompoly",
+        "firstName": "Marek",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://www.czompoly.sk",
+      "emails": [
+        {
+          "email": "office@czompoly.sk",
+          "url": "https://www.czompoly.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Marek Czompoly",
+        "role": "konateľ",
+        "email": "office@czompoly.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://www.czompoly.sk",
+    "lead_status": "enriched",
+    "lead_notes": "Advokátska kancelária JUDr. Marek Czompoly,; web www.czompoly.sk; office@czompoly.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "8c952e51-e20f-4b91-b091-b0cf07f0e8db",
+    "company_id": "4b503b6d-c100-4268-b9c9-800136e5d9bc",
+    "ico": "47231157",
+    "name": "Consilior Iuris s.r.o.",
+    "nace": "6910",
+    "konatel": "JUDr. Robert Hayden, M.B.A.",
+    "search": {
+      "queries": [
+        "47231157",
+        "Consilior Iuris Bratislava",
+        "Robert M.B.A. Consilior Iuris kontakt email",
+        "M.B.A. advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://consilior.eu/",
+          "type": "own_site",
+          "title": "Consilior web",
+          "snippet": "office@consilior.sk, IČO 47231157",
+          "ico_verified": true
+        },
+        {
+          "url": "https://www.zoznam.sk/firma/2991305/Consilior-Iuris-Bratislava",
+          "type": "aggregator",
+          "title": "Zoznam Consilior",
+          "snippet": "IČO 47231157",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Robert Hayden, M.B.A.",
+        "firstName": "Robert",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://consilior.eu",
+      "emails": [
+        {
+          "email": "office@consilior.sk",
+          "url": "https://consilior.eu",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Robert Hayden, M.B.A.",
+        "role": "konateľ",
+        "email": "office@consilior.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://consilior.eu",
+    "lead_status": "enriched",
+    "lead_notes": "Consilior Iuris; web consilior.eu; office@consilior.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "3a1df304-8517-47e3-b5aa-ff4ca015233a",
+    "company_id": "70a5c251-3f87-428d-a52b-60f6cef81c6e",
+    "ico": "36867489",
+    "name": "Advokátska kancelária HPP s. r. o.",
+    "nace": "6910",
+    "konatel": "JUDr. Pavel Haulík",
+    "search": {
+      "queries": [
+        "36867489",
+        "Advokátska kancelária HPP Bratislava",
+        "Pavel Haulík Advokátska kancelária HPP kontakt email",
+        "Haulík advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "http://www.hpp.sk/",
+          "type": "own_site",
+          "title": "HPP web",
+          "snippet": "kancelaria@hpp.sk",
+          "ico_verified": true
+        },
+        {
+          "url": "https://www.zlatestranky.sk/firmy/Bratislava/H1605542/Advok%C3%A1tska+kancel%C3%A1ria+HPP,+s.r.o./",
+          "type": "aggregator",
+          "title": "Zlaté stránky HPP",
+          "snippet": "kancelaria@hpp.sk, IČO 36867489",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Pavel Haulík",
+        "firstName": "Pavel",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://www.hpp.sk",
+      "emails": [
+        {
+          "email": "kancelaria@hpp.sk",
+          "url": "https://www.hpp.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Pavel Haulík",
+        "role": "konateľ",
+        "email": "kancelaria@hpp.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://www.hpp.sk",
+    "lead_status": "enriched",
+    "lead_notes": "Advokátska kancelária HPP; web www.hpp.sk; kancelaria@hpp.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "dd6203da-78b9-4d4c-b719-71c019e6e354",
+    "company_id": "defb00bf-2cc1-4b81-a8cd-57438b4276da",
+    "ico": "46897623",
+    "name": "aMusevity, s. r. o.",
+    "nace": "6920",
+    "konatel": "Adriana Kotorová",
+    "search": {
+      "queries": [
+        "46897623",
+        "aMusevity, Bratislava",
+        "Adriana Kotorová aMusevity, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://amusevity.com/kontakt/",
+          "type": "own_site",
+          "title": "aMusevity kontakt",
+          "snippet": "info@amusevity.com, IČO 46897623",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Adriana Kotorová",
+        "firstName": "Adriana",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://amusevity.com",
+      "emails": [
+        {
+          "email": "info@amusevity.com",
+          "url": "https://amusevity.com",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "Adriana Kotorová",
+        "role": "konateľ",
+        "email": "info@amusevity.com",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 78,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 52,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 35,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": "https://amusevity.com",
+    "lead_status": "enriched",
+    "lead_notes": "aMusevity,; web amusevity.com; info@amusevity.com."
+  },
+  {
+    "lead_id": "63943b4c-eb56-476c-a6a9-91b2e508258c",
+    "company_id": "7eab2554-1df8-4159-9295-525910568b58",
+    "ico": "47451904",
+    "name": "BP TAX, s. r. o.",
+    "nace": "6920",
+    "konatel": "Ing. Jakub Buday",
+    "search": {
+      "queries": [
+        "47451904",
+        "BP TAX, Bratislava",
+        "Jakub Buday BP TAX, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/47451904",
+          "type": "registry",
+          "title": "Register BP TAX",
+          "snippet": "IČO 47451904, Ing. Jakub Buday",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Jakub Buday",
+        "firstName": "Jakub",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "BP TAX,; bez emailu (no_email)."
+  }
+]

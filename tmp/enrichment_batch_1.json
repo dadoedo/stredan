@@ -1,0 +1,884 @@
+[
+  {
+    "lead_id": "9b588ca4-17c6-462c-a92e-423dcf4e4b0d",
+    "company_id": "dd011940-ded2-4fbe-9de1-6e86f25f130c",
+    "ico": "47239077",
+    "name": "STEFANKOVA | law office s.r.o.",
+    "nace": "6910",
+    "konatel": "Mgr. Martina Troják",
+    "search": {
+      "queries": [
+        "47239077",
+        "STEFANKOVA | law office Bratislava",
+        "Martina Troják STEFANKOVA | law office kontakt email",
+        "Troják advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/523497/display/event",
+          "type": "registry",
+          "title": "SAK STEFANKOVA",
+          "snippet": "IČO 47239077, ivana.stefankova@hotmail.com",
+          "ico_verified": true
+        },
+        {
+          "url": "https://www.stefankova.sk/",
+          "type": "own_site",
+          "title": "stefankova.sk",
+          "snippet": "advokátska kancelária",
+          "ico_verified": false
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Martina Troják",
+        "firstName": "Martina",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://www.stefankova.sk",
+      "emails": [
+        {
+          "email": "ivana.stefankova@hotmail.com",
+          "url": "https://www.stefankova.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "Mgr. Martina Troják",
+        "role": "konateľ",
+        "email": "ivana.stefankova@hotmail.com",
+        "emailSource": "registry",
+        "isPrimary": true,
+        "confidence": 0.88
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://www.stefankova.sk",
+    "lead_status": "enriched",
+    "lead_notes": "STEFANKOVA | law office; web www.stefankova.sk; ivana.stefankova@hotmail.com; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "6452ece5-f2e2-449e-9279-c37c965e90a9",
+    "company_id": "10f5f243-c284-482d-96a2-1a789a39c7b6",
+    "ico": "47248386",
+    "name": "AK Martin Jurečko s. r. o.",
+    "nace": "6910",
+    "konatel": "Mgr. Martin Jurečko",
+    "search": {
+      "queries": [
+        "47248386",
+        "AK Martin Jurečko Bratislava",
+        "Martin Jurečko AK Martin Jurečko kontakt email",
+        "Jurečko advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-ak-martin-jurecko-s-r-o",
+          "type": "aggregator",
+          "title": "AK Martin Jurečko",
+          "snippet": "IČO 47248386, Mgr. Martin Jurečko",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Martin Jurečko",
+        "firstName": "Martin",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 35,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "AK Martin Jurečko; bez emailu (no_email); SAK pass vykonaný."
+  },
+  {
+    "lead_id": "d11438eb-0557-4bc7-a10c-ea9157dd5528",
+    "company_id": "508e8993-b05b-4cb9-9018-55bc7b50715d",
+    "ico": "45328501",
+    "name": "Uniconstruct spol. s r. o.",
+    "nace": "6920",
+    "konatel": "Nefedov Dmytro",
+    "search": {
+      "queries": [
+        "45328501",
+        "Uniconstruct Bratislava",
+        "Nefedov Dmytro Uniconstruct kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/45328501",
+          "type": "registry",
+          "title": "Register Uniconstruct",
+          "snippet": "IČO 45328501",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Nefedov Dmytro",
+        "firstName": "Nefedov",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Uniconstruct; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "2f7189e9-3824-46b6-9049-b43cec535a11",
+    "company_id": "dae46770-b5ab-48e4-a1c7-832b8f0b81c1",
+    "ico": "36867535",
+    "name": "Pro Legis s. r. o.",
+    "nace": "6910",
+    "konatel": "Mgr. Michal Huťan",
+    "search": {
+      "queries": [
+        "36867535",
+        "Pro Legis Bratislava",
+        "Michal Huťan Pro Legis kontakt email",
+        "Huťan advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/36867535",
+          "type": "registry",
+          "title": "Register Pro Legis",
+          "snippet": "IČO 36867535, Mgr. Michal Huťan, SAK pass bez emailu",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Michal Huťan",
+        "firstName": "Michal",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 35,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Pro Legis; bez emailu (no_email); SAK pass vykonaný."
+  },
+  {
+    "lead_id": "1f387dbb-dd5c-4e73-a57a-1f9c07ad8531",
+    "company_id": "d83da3fb-85c1-4d24-b97b-1140b17c4b5a",
+    "ico": "46916270",
+    "name": "Robert Janeček s.r.o.",
+    "nace": "6920",
+    "konatel": "Daniela Janečeková",
+    "search": {
+      "queries": [
+        "46916270",
+        "Robert Janeček Bratislava",
+        "Daniela Janečeková Robert Janeček kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/46916270",
+          "type": "aggregator",
+          "title": "Finstat Robert Janeček",
+          "snippet": "IČO 46916270, Haburská 29",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Daniela Janečeková",
+        "firstName": "Daniela",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Robert Janeček; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "f90cdde9-5132-4ec6-922a-5d0d443a189c",
+    "company_id": "b417ded4-74c8-4866-b2a5-3c1d0512c25c",
+    "ico": "47581034",
+    "name": "OSSI, s.r.o.",
+    "nace": "6920",
+    "konatel": "Mgr. Peter Oswald",
+    "search": {
+      "queries": [
+        "47581034",
+        "OSSI, Bratislava",
+        "Peter Oswald OSSI, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-ossi-sro",
+          "type": "aggregator",
+          "title": "OSSI profil",
+          "snippet": "IČO 47581034, Mgr. Peter Oswald",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Peter Oswald",
+        "firstName": "Peter",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "OSSI,; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "0b78d756-5441-4fe6-86c8-480f65eb28a8",
+    "company_id": "bdcbea7a-1dc7-46f1-bd15-e8c57bcc575a",
+    "ico": "47687444",
+    "name": "QuickTech s. r. o.",
+    "nace": "6920",
+    "konatel": "Lukáš Méry",
+    "search": {
+      "queries": [
+        "47687444",
+        "QuickTech Bratislava",
+        "Lukáš Méry QuickTech kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/47687444",
+          "type": "registry",
+          "title": "Register QuickTech",
+          "snippet": "IČO 47687444, Lukáš Méry",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Lukáš Méry",
+        "firstName": "Lukáš",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "QuickTech; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "5bcbdcaa-9d18-47b7-9f97-f6227a98e1cc",
+    "company_id": "d07ed64c-d5e3-4db1-a554-56a102ca4616",
+    "ico": "47649321",
+    "name": "GRANDUM, s.r.o.",
+    "nace": "6920",
+    "konatel": "Ing. Tatiana Semlitsch",
+    "search": {
+      "queries": [
+        "47649321",
+        "GRANDUM, Bratislava",
+        "Tatiana Semlitsch GRANDUM, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-equilibrium-th-sro",
+          "type": "aggregator",
+          "title": "GRANDUM profil",
+          "snippet": "IČO 47649321, Mierová 24",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Tatiana Semlitsch",
+        "firstName": "Tatiana",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "GRANDUM,; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "dd681d5c-5d75-4f52-a5ab-a60d50045efd",
+    "company_id": "8b6c375f-bb4a-419f-be38-1687d9e61604",
+    "ico": "47143649",
+    "name": "TOPLEV, s. r. o.",
+    "nace": "6920",
+    "konatel": "Ing. Martin Vach",
+    "search": {
+      "queries": [
+        "47143649",
+        "TOPLEV, Bratislava",
+        "Martin Vach TOPLEV, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.toplev.sk/kontakt/",
+          "type": "own_site",
+          "title": "TOPLEV kontakt",
+          "snippet": "info@toplev.sk, IČO 47143649",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Martin Vach",
+        "firstName": "Martin",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://www.toplev.sk",
+      "emails": [
+        {
+          "email": "info@toplev.sk",
+          "url": "https://www.toplev.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "Ing. Martin Vach",
+        "role": "konateľ",
+        "email": "info@toplev.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 78,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 52,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 35,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": "https://www.toplev.sk",
+    "lead_status": "enriched",
+    "lead_notes": "TOPLEV,; web www.toplev.sk; info@toplev.sk."
+  },
+  {
+    "lead_id": "07fba83a-09ae-4667-a3dd-7372513310d5",
+    "company_id": "93407904-112e-439a-bedd-26f14da582d9",
+    "ico": "46940561",
+    "name": "JUDr. Alojz Baránik, advokát s.r.o.",
+    "nace": "6910",
+    "konatel": "JUDr. Alojz Baránik",
+    "search": {
+      "queries": [
+        "46940561",
+        "JUDr. Alojz Baránik, advokát Bratislava",
+        "Alojz Baránik JUDr. Alojz Baránik, advokát kontakt email",
+        "Baránik advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://podnikam.sk/zoznam-firiem/judr-alojz-baranik-advokat/",
+          "type": "aggregator",
+          "title": "Podnikam Baránik",
+          "snippet": "al.baranik@baraniklaw.com, IČO 46940561",
+          "ico_verified": true
+        },
+        {
+          "url": "http://www.baraniklaw.com/sk/",
+          "type": "own_site",
+          "title": "Baranik & Co",
+          "snippet": "advokátska kancelária",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Alojz Baránik",
+        "firstName": "Alojz",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "http://www.baraniklaw.com",
+      "emails": [
+        {
+          "email": "al.baranik@baraniklaw.com",
+          "url": "http://www.baraniklaw.com",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Alojz Baránik",
+        "role": "konateľ",
+        "email": "al.baranik@baraniklaw.com",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "http://www.baraniklaw.com",
+    "lead_status": "enriched",
+    "lead_notes": "JUDr. Alojz Baránik, advokát; web www.baraniklaw.com; al.baranik@baraniklaw.com; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "9bc12852-2b0a-498c-a125-f83b7e7ceb3f",
+    "company_id": "8020a3e3-3830-40c7-aaa3-350c2049dda1",
+    "ico": "46767533",
+    "name": "WebTax s. r. o.",
+    "nace": "6920",
+    "konatel": "Ing. Dušan Klimo",
+    "search": {
+      "queries": [
+        "46767533",
+        "WebTax Bratislava",
+        "Dušan Klimo WebTax kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-webtax-s-r-o-1",
+          "type": "aggregator",
+          "title": "WebTax profil",
+          "snippet": "IČO 46767533, Ing. Dušan Klimo",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Dušan Klimo",
+        "firstName": "Dušan",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "WebTax; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "cae96be3-4c9a-4aac-ad52-7fb869822afc",
+    "company_id": "e57cc9d8-5dd2-40ba-9912-1d1d33b93886",
+    "ico": "46494707",
+    "name": "MK Tax Audit Advisory, s. r. o.",
+    "nace": "6920",
+    "konatel": "Ing., PhDr. Michal Kováčik",
+    "search": {
+      "queries": [
+        "46494707",
+        "MK Tax Audit Advisory, Bratislava",
+        "PhDr. Kováčik MK Tax Audit Advisory, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://finstat.sk/46494707",
+          "type": "aggregator",
+          "title": "Finstat MK Tax",
+          "snippet": "IČO 46494707, Cintorínska 12",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing., PhDr. Michal Kováčik",
+        "firstName": "PhDr.",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "MK Tax Audit Advisory,; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "2cfd5005-b607-4e46-adf2-9936e30147bd",
+    "company_id": "da818a24-1310-41b0-8c2e-06efbd2675b1",
+    "ico": "46471227",
+    "name": "ML Technologies s. r. o.",
+    "nace": "6920",
+    "konatel": "László Molnár",
+    "search": {
+      "queries": [
+        "46471227",
+        "ML Technologies Bratislava",
+        "László Molnár ML Technologies kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finreg.sk/subjekt/2820014109",
+          "type": "aggregator",
+          "title": "FinReg ML Technologies",
+          "snippet": "IČO 46471227, bývalý Účtomat",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "László Molnár",
+        "firstName": "László",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "ML Technologies; bez emailu (no_email)."
+  }
+]

@@ -1,0 +1,795 @@
+[
+  {
+    "lead_id": "1252c5d9-6023-4c84-8250-324c1831ac8b",
+    "company_id": "8aeb8a93-c420-4ea6-b390-4b8da9b27375",
+    "ico": "45612447",
+    "name": "FINTAX EU s. r. o.",
+    "nace": "6920",
+    "konatel": "Ing. Michal Plachý",
+    "search": {
+      "queries": [
+        "45612447",
+        "FINTAX EU Bratislava",
+        "Michal Plachý FINTAX EU kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://fintax.sk/kontakt/",
+          "type": "own_site",
+          "title": "FinTax kontakt",
+          "snippet": "info@fintax.sk, IČO 45612447",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Michal Plachý",
+        "firstName": "Michal",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://fintax.sk",
+      "emails": [
+        {
+          "email": "info@fintax.sk",
+          "url": "https://fintax.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "Ing. Michal Plachý",
+        "role": "konateľ",
+        "email": "info@fintax.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 78,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 52,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 35,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": "https://fintax.sk",
+    "lead_status": "enriched",
+    "lead_notes": "FINTAX EU; web fintax.sk; info@fintax.sk."
+  },
+  {
+    "lead_id": "44ec54e4-2cf2-4198-bdd4-2530a51ce81c",
+    "company_id": "5338021b-4551-4831-b2fb-e4b675304937",
+    "ico": "47249013",
+    "name": "Falbová, s. r. o.",
+    "nace": "6910",
+    "konatel": "JUDr. Lucia Falbová",
+    "search": {
+      "queries": [
+        "47249013",
+        "Falbová, Bratislava",
+        "Lucia Falbová Falbová, kontakt email",
+        "Falbová advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://mstpartners.eu/?page_id=93",
+          "type": "own_site",
+          "title": "MST Partners Falbová",
+          "snippet": "lucia.falbova@mstpartners.sk, IČO 47249013",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Lucia Falbová",
+        "firstName": "Lucia",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://mstpartners.eu",
+      "emails": [
+        {
+          "email": "lucia.falbova@mstpartners.sk",
+          "url": "https://mstpartners.eu",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Lucia Falbová",
+        "role": "konateľ",
+        "email": "lucia.falbova@mstpartners.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://mstpartners.eu",
+    "lead_status": "enriched",
+    "lead_notes": "Falbová,; web mstpartners.eu; lucia.falbova@mstpartners.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "28bd9c52-d65d-446f-9ccc-2da7ac089684",
+    "company_id": "d56c149e-ce8e-4ef7-ab2b-2c5ed5ad3982",
+    "ico": "46014586",
+    "name": "squalen, s. r. o.",
+    "nace": "6920",
+    "konatel": "Juraj Liener",
+    "search": {
+      "queries": [
+        "46014586",
+        "squalen, Bratislava",
+        "Juraj Liener squalen, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finreg.sk/subjekt/2023227690",
+          "type": "aggregator",
+          "title": "FinReg squalen",
+          "snippet": "IČO 46014586, Košická 52/A",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Juraj Liener",
+        "firstName": "Juraj",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "squalen,; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "b167c49d-4a19-4056-93ed-e725f2f999cb",
+    "company_id": "68420dc8-4cf1-450f-929d-14710432c09f",
+    "ico": "47207639",
+    "name": "Balsero s.r.o.",
+    "nace": "6920",
+    "konatel": "Zoltán Fajkusz",
+    "search": {
+      "queries": [
+        "47207639",
+        "Balsero Bratislava",
+        "Zoltán Fajkusz Balsero kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/47207639",
+          "type": "registry",
+          "title": "Register Balsero",
+          "snippet": "IČO 47207639",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Zoltán Fajkusz",
+        "firstName": "Zoltán",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Balsero; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "186a606f-317a-465e-83c3-146b5fd6be8c",
+    "company_id": "e845476f-805c-49e4-ac14-8b412bc415eb",
+    "ico": "46571124",
+    "name": "účtovníctvo ESPO, s. r. o.",
+    "nace": "6920",
+    "konatel": "Ing. Gabriel Kovács",
+    "search": {
+      "queries": [
+        "46571124",
+        "účtovníctvo ESPO, Bratislava",
+        "Gabriel Kovács účtovníctvo ESPO, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/ing-jarmila-kovacsova-1",
+          "type": "aggregator",
+          "title": "účtovníctvo ESPO",
+          "snippet": "IČO 46571124, office@espo.sk je iná firma (35890771)",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Gabriel Kovács",
+        "firstName": "Gabriel",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "účtovníctvo ESPO,; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "7395884c-938a-4929-a929-b46d1fd2573b",
+    "company_id": "a483444a-8127-4e5b-8775-706d25faf8e0",
+    "ico": "46530894",
+    "name": "BURDA LEGAL s.r.o.",
+    "nace": "6910",
+    "konatel": "JUDr. Dominik Burda",
+    "search": {
+      "queries": [
+        "46530894",
+        "BURDA LEGAL Bratislava",
+        "Dominik Burda BURDA LEGAL kontakt email",
+        "Burda advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.burdalegal.sk/tim",
+          "type": "own_site",
+          "title": "BURDA LEGAL tím",
+          "snippet": "burda@burdalegal.sk, IČO 46530894",
+          "ico_verified": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/811393/display/event",
+          "type": "registry",
+          "title": "SAK BURDA LEGAL",
+          "snippet": "burda@burdalegal.sk",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Dominik Burda",
+        "firstName": "Dominik",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://www.burdalegal.sk",
+      "emails": [
+        {
+          "email": "burda@burdalegal.sk",
+          "url": "https://www.burdalegal.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Dominik Burda",
+        "role": "konateľ",
+        "email": "burda@burdalegal.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 88,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "why_sk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    },
+    "company_website": "https://www.burdalegal.sk",
+    "lead_status": "enriched",
+    "lead_notes": "BURDA LEGAL; web www.burdalegal.sk; burda@burdalegal.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "d6272bad-4918-468d-b29d-09e99eba7423",
+    "company_id": "ef4453e6-a5be-4511-85bf-0c43f661b2bd",
+    "ico": "46488766",
+    "name": "Converse Account s. r. o.",
+    "nace": "6920",
+    "konatel": "Mgr. Vladimíra Herichová",
+    "search": {
+      "queries": [
+        "46488766",
+        "Converse Account Bratislava",
+        "Vladimíra Herichová Converse Account kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.converseaccount.sk/kontakt/",
+          "type": "own_site",
+          "title": "Converse Account kontakt",
+          "snippet": "vherichova@gmail.com, IČO 46488766",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Vladimíra Herichová",
+        "firstName": "Vladimíra",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://www.converseaccount.sk",
+      "emails": [
+        {
+          "email": "vherichova@gmail.com",
+          "url": "https://www.converseaccount.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "Mgr. Vladimíra Herichová",
+        "role": "konateľ",
+        "email": "vherichova@gmail.com",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 78,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 52,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 35,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": "https://www.converseaccount.sk",
+    "lead_status": "enriched",
+    "lead_notes": "Converse Account; web www.converseaccount.sk; vherichova@gmail.com."
+  },
+  {
+    "lead_id": "d5027868-79da-4090-adaf-cd7bab0a59d5",
+    "company_id": "ba579d52-aece-408f-a8e2-64018d50c2a8",
+    "ico": "47233516",
+    "name": "Advokátska kancelária JUDr. Andrea Cviková, s. r. o.",
+    "nace": "6910",
+    "konatel": "JUDr. Andrea Cviková",
+    "search": {
+      "queries": [
+        "47233516",
+        "Advokátska kancelária JUDr. Andrea Cviková, Bratislava",
+        "Andrea Cviková Advokátska kancelária JUDr. Andrea Cviková, kontakt email",
+        "Cviková advokát site:sak.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.epravo.sk/top/adresar/advokati/?pg=67",
+          "type": "aggregator",
+          "title": "epravo Cviková",
+          "snippet": "cvikova@kclegal.sk, Kubániho 16, IČO 47233516",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Andrea Cviková",
+        "firstName": "Andrea",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [
+        {
+          "email": "cvikova@kclegal.sk",
+          "url": "https://www.epravo.sk/top/adresar/advokati/?pg=67",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Andrea Cviková",
+        "role": "konateľ",
+        "email": "cvikova@kclegal.sk",
+        "emailSource": "aggregator",
+        "isPrimary": true,
+        "confidence": 0.75
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 10,
+        "why_sk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Obmedzený fit pre mzdy a HR procesy."
+      },
+      "C": {
+        "score": 78,
+        "why_sk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "why_sk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Advokátska kancelária JUDr. Andrea Cviková,; cvikova@kclegal.sk; SAK pass vykonaný."
+  },
+  {
+    "lead_id": "9db83071-8582-40e4-8597-c85d592da5fe",
+    "company_id": "d461a812-c1b7-414f-9e3e-24c3e3148f32",
+    "ico": "47325712",
+    "name": "Garu SK, s.r.o.",
+    "nace": "6920",
+    "konatel": "Avexandru Gozgar",
+    "search": {
+      "queries": [
+        "47325712",
+        "Garu SK, Bratislava",
+        "Avexandru Gozgar Garu SK, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-xebok-spol-s-r-o",
+          "type": "aggregator",
+          "title": "Garu SK profil",
+          "snippet": "IČO 47325712, Dunajská 8",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Avexandru Gozgar",
+        "firstName": "Avexandru",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "Garu SK,; bez emailu (no_email)."
+  },
+  {
+    "lead_id": "a51db860-ada3-4c03-8452-c12b6830820a",
+    "company_id": "fe6b5f61-a4c8-4b90-a89d-5974021205b0",
+    "ico": "46275118",
+    "name": "E&L Consulting s. r. o.",
+    "nace": "6920",
+    "konatel": "Ing. Hilda Regulová Gajdošová",
+    "search": {
+      "queries": [
+        "46275118",
+        "E&L Consulting Bratislava",
+        "Hilda Gajdošová E&L Consulting kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.elconsulting.sk/gdpr",
+          "type": "own_site",
+          "title": "E&L Consulting GDPR",
+          "snippet": "info@elconsulting.sk, IČO 46275118",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Hilda Regulová Gajdošová",
+        "firstName": "Hilda",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": "https://www.elconsulting.sk",
+      "emails": [
+        {
+          "email": "info@elconsulting.sk",
+          "url": "https://www.elconsulting.sk",
+          "context": "overený kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "contacts": [
+      {
+        "fullName": "Ing. Hilda Regulová Gajdošová",
+        "role": "konateľ",
+        "email": "info@elconsulting.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 78,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 52,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 35,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": "https://www.elconsulting.sk",
+    "lead_status": "enriched",
+    "lead_notes": "E&L Consulting; web www.elconsulting.sk; info@elconsulting.sk."
+  },
+  {
+    "lead_id": "180c36e7-c226-4dcf-a902-1900dc096d88",
+    "company_id": "4f1e03b0-5c50-42f9-9a0a-d0c2cfabd583",
+    "ico": "45702870",
+    "name": "GAVAP, s. r. o.",
+    "nace": "6920",
+    "konatel": "Ing Jana Jóbbová",
+    "search": {
+      "queries": [
+        "45702870",
+        "GAVAP, Bratislava",
+        "Ing Jóbbová GAVAP, kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-gavap-s-r-o-1",
+          "type": "aggregator",
+          "title": "GAVAP profil",
+          "snippet": "IČO 45702870, Kukučínova 48",
+          "ico_verified": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing Jana Jóbbová",
+        "firstName": "Ing",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email"
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 30,
+        "why_sk": "Účtovnícka firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 18,
+        "why_sk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 8,
+        "why_sk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 12,
+        "why_sk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "why_sk": "Nie je warm lead."
+      }
+    },
+    "company_website": null,
+    "lead_status": "enriched",
+    "lead_notes": "GAVAP,; bez emailu (no_email)."
+  }
+]
