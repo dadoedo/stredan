@@ -25,7 +25,7 @@ export default async function AdminRunDetailPage({
       </div>
       {run.summary && <p className="text-sm">{run.summary}</p>}
       {run.error && (
-        <p className="rounded border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm">
+        <p className="rounded border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm">
           {run.error}
         </p>
       )}

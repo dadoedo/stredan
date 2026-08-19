@@ -26,7 +26,7 @@ export default async function AdminProjectsPage() {
           <FetchAllLogosButton />
           <Link
             href="/admin/projects/new"
-            className="rounded border border-border px-4 py-2 text-sm transition-colors hover:border-zinc-500"
+            className="rounded border border-border px-4 py-2 text-sm transition-colors hover:border-foreground/20 hover:bg-surface-2/60"
           >
             + Nový projekt
           </Link>
@@ -58,7 +58,7 @@ export default async function AdminProjectsPage() {
               <div className="flex gap-2">
                 <Link
                   href={`/admin/projects/${project.id}/edit`}
-                  className="rounded border border-border px-3 py-1 text-sm transition-colors hover:border-zinc-500"
+                  className="rounded border border-border px-3 py-1 text-sm transition-colors hover:border-foreground/20 hover:bg-surface-2/60"
                 >
                   Upraviť
                 </Link>
@@ -66,7 +66,7 @@ export default async function AdminProjectsPage() {
                   href={`/projects/${project.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded border border-border px-3 py-1 text-sm transition-colors hover:border-zinc-500"
+                  className="rounded border border-border px-3 py-1 text-sm transition-colors hover:border-foreground/20 hover:bg-surface-2/60"
                 >
                   Zobraziť
                 </Link>

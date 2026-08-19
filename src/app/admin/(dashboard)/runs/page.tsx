@@ -18,7 +18,7 @@ export default async function AdminRunsPage() {
           <Link
             key={run.id}
             href={`/admin/runs/${run.id}`}
-            className="block rounded border border-border p-4 hover:border-zinc-500"
+            className="block rounded border border-border p-4 hover:border-foreground/20 hover:bg-surface-2/60"
           >
             <p className="font-medium">
               {run.kind} · {run.status} · {run.trigger}

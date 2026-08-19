@@ -20,7 +20,7 @@ export function FetchAllLogosButton() {
             if (r.results.length > 0) window.location.reload();
           });
         }}
-        className="rounded border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-zinc-500 hover:text-foreground disabled:opacity-50"
+        className="rounded border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-foreground/20 hover:bg-surface-2/60 hover:text-foreground disabled:opacity-50"
       >
         {isPending ? "Sťahujem..." : "Stiahnuť logá všetkých"}
       </button>

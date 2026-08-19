@@ -89,7 +89,7 @@ export default async function AdminAccountsPage() {
             <div>
               <button
                 type="submit"
-                className="rounded border border-border px-4 py-2 text-sm hover:border-zinc-500"
+                className="rounded border border-border px-4 py-2 text-sm hover:border-foreground/20 hover:bg-surface-2/60"
               >
                 Uložiť {account.code}
               </button>

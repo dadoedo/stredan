@@ -66,7 +66,7 @@ export default async function AdminTemplatesPage() {
         <div className="md:col-span-2">
           <button
             type="submit"
-            className="rounded border border-border px-4 py-2 text-sm hover:border-zinc-500"
+            className="rounded border border-border px-4 py-2 text-sm hover:border-foreground/20 hover:bg-surface-2/60"
           >
             Pridať
           </button>
@@ -88,7 +88,7 @@ export default async function AdminTemplatesPage() {
             </div>
             <Link
               href={`/admin/templates/${template.id}`}
-              className="rounded border border-border px-3 py-1 text-sm hover:border-zinc-500"
+              className="rounded border border-border px-3 py-1 text-sm hover:border-foreground/20 hover:bg-surface-2/60"
             >
               Upraviť
             </Link>

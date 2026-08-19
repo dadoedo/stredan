@@ -2,6 +2,16 @@
 
 import { useActionState } from "react";
 import { login } from "@/actions/admin";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function LoginForm() {
   const [state, formAction] = useActionState(
@@ -10,37 +20,43 @@ export function LoginForm() {
   );
 
   return (
-    <form action={formAction} className="w-full max-w-sm space-y-6">
-      <h1 className="font-heading text-2xl font-semibold">Admin prihlásenie</h1>
-      {state?.error && (
-        <p
-          id="login-error"
-          role="alert"
-          className="rounded border border-red-500/50 bg-red-500/10 px-4 py-2 text-sm text-red-300"
-        >
-          {state.error}
-        </p>
-      )}
-      <div>
-        <label htmlFor="password" className="block text-sm text-muted">
-          Heslo
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          aria-invalid={Boolean(state?.error)}
-          aria-describedby={state?.error ? "login-error" : undefined}
-          className="mt-1 w-full rounded border border-border bg-background px-3 py-2 text-foreground focus-visible:border-zinc-400"
-        />
-      </div>
-      <button
-        type="submit"
-        className="min-h-11 w-full rounded bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-zinc-300"
-      >
-        Prihlásiť
-      </button>
-    </form>
+    <Card className="w-full max-w-sm border-border shadow-md">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl font-semibold tracking-tight">
+          Admin prihlásenie
+        </CardTitle>
+        <CardDescription>
+          Zadaj heslo pre prístup do administrácie.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form action={formAction} className="space-y-4">
+          {state?.error && (
+            <p
+              id="login-error"
+              role="alert"
+              className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+            >
+              {state.error}
+            </p>
+          )}
+          <div className="space-y-2">
+            <Label htmlFor="password">Heslo</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autoComplete="current-password"
+              aria-invalid={Boolean(state?.error)}
+              aria-describedby={state?.error ? "login-error" : undefined}
+            />
+          </div>
+          <Button type="submit" className="min-h-11 w-full">
+            Prihlásiť
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

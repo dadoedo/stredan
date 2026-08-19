@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 const SENT_STATUSES = ["sent", "delivered", "opened", "replied"] as const;
 
 function cellClass(sent: number, replied: number) {
-  if (replied > 0) return "border-accent/60 bg-accent/10";
-  if (sent > 0) return "border-border bg-surface";
-  return "border-border/60 bg-transparent text-muted";
+  if (replied > 0) return "border-accent/40 bg-accent/10 text-foreground";
+  if (sent > 0) return "border-border bg-surface-2 text-foreground";
+  return "border-border/70 bg-transparent text-muted";
 }
 
 export default async function AdminMatrixPage() {

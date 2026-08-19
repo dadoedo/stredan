@@ -63,7 +63,7 @@ export function ProjectForm({
     <form action={formAction} className="space-y-6">
       {project?.id && <input type="hidden" name="id" value={project.id} />}
       {state?.error && (
-        <p className="rounded border border-red-500/50 bg-red-500/10 px-4 py-2 text-sm text-red-400">
+        <p className="rounded border border-destructive/40 bg-destructive/10 px-4 py-2 text-sm text-destructive">
           {state.error}
         </p>
       )}
@@ -180,7 +180,7 @@ export function ProjectForm({
                     if (result.success) window.location.reload();
                   });
                 }}
-                className="shrink-0 rounded border border-border px-3 py-2 text-sm text-muted transition-colors hover:border-zinc-500 hover:text-foreground disabled:opacity-50"
+                className="shrink-0 rounded border border-border px-3 py-2 text-sm text-muted transition-colors hover:border-foreground/20 hover:bg-surface-2/60 hover:text-foreground disabled:opacity-50"
               >
                 {isPending ? "..." : "Stiahnuť logo"}
               </button>
@@ -197,7 +197,7 @@ export function ProjectForm({
             </div>
           )}
           {logoState?.error && (
-            <p className="mt-1 text-sm text-red-400">{logoState.error}</p>
+            <p className="mt-1 text-sm text-destructive">{logoState.error}</p>
           )}
         </div>
         <div>
@@ -320,7 +320,7 @@ export function ProjectForm({
         {project && (
           <a
             href="/admin/projects"
-            className="rounded border border-border px-4 py-2 text-sm transition-colors hover:border-zinc-500"
+            className="rounded border border-border px-4 py-2 text-sm transition-colors hover:border-foreground/20 hover:bg-surface-2/60"
           >
             Zrušiť
           </a>
