@@ -55,10 +55,10 @@ export function LeadsToolbar({ q, status, skip, contact, sort, dir }: LeadsToolb
 
   const buildQuery = useCallback(
     (patch: Record<string, string | undefined>) => ({
-      q: patch.q !== undefined ? patch.q : q,
-      status: patch.status !== undefined ? patch.status : status,
-      skip: patch.skip !== undefined ? patch.skip : skip,
-      contact: patch.contact !== undefined ? patch.contact : contact,
+      q: "q" in patch ? patch.q || undefined : q,
+      status: "status" in patch ? patch.status || undefined : status,
+      skip: "skip" in patch ? patch.skip || undefined : skip,
+      contact: "contact" in patch ? patch.contact || undefined : contact,
       sort: sort !== DEFAULT_SORT ? sort : undefined,
       dir: dir !== DEFAULT_SORT_DIR ? dir : undefined,
     }),
