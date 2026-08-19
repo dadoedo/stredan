@@ -199,9 +199,15 @@ function statementsForLead(lead: LeadIn, runId: string | null): string[] {
   const hits = lead.search?.hits ?? [];
   const people = lead.people ?? [];
   const emails = lead.website_enrichment?.emails ?? [];
-  const ownSiteHit = hits.find((hit) => hit.type === "own_site");
+  const ownSiteHit = hits.find((hit) => {
+    if (hit.type !== "own_site") return false;
+    if (hit.icoMatch === false) return false;
+    if (hit.hitIco && hit.hitIco !== ico) return false;
+    return true;
+  });
   const website = ownSiteHit?.url ?? null;
   const stmts: string[] = [];
+  const early = `status IN ('sourced','enriching','enriched','skipped')`;
 
   stmts.push(`-- ${ico} ${lead.name ?? ""}`.trim());
 
@@ -212,8 +218,13 @@ function statementsForLead(lead: LeadIn, runId: string | null): string[] {
   }
 
   const notesAssign =
-    notes === undefined ? `"notes" = "notes"` : `notes = ${sqlNullStr(notes)}`;
-  const early = `status IN ('sourced','enriching','enriched','skipped')`;
+    notes === undefined
+      ? `"notes" = "notes"`
+      : `"notes" = CASE
+    WHEN ${early} THEN ${sqlNullStr(notes)}
+    WHEN status = 'scored' AND ${skip ? "TRUE" : "FALSE"} THEN ${sqlNullStr(notes)}
+    ELSE "notes"
+  END`;
   stmts.push(
     `UPDATE "Lead" l SET
   status = CASE
