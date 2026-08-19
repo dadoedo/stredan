@@ -10,8 +10,8 @@ Status: active for outbound testing. Each offer has a landing at `landingPath`.
 | One-liner | Za 14 dní zmapujeme vaše procesy a dostanete písomný plán: čo automatizovať AI, v akom poradí a za aký budget. |
 | CTA | Objednať AI audit |
 | Price hint | od 990 € (fix) |
-| ICP | 10–80 ľudí, B2B/služby, majiteľ cíti chaos v admin/obchode |
-| Not for | Solo živnosť bez procesov; firmy čo chcú len „ChatGPT školenie“ |
+| ICP | 10–80 ľudí, B2B/služby/výroba, chaos v admin/obchode. **Nie IT software house** (tie si AI často riešia interne). |
+| Not for | Solo živnosť; firmy čo chcú len „ChatGPT školenie“; software / IT firmy s vlastným vývojom |
 
 ## B — Pilot AI Agent
 
@@ -29,7 +29,7 @@ Status: active for outbound testing. Each offer has a landing at `landingPath`.
 | Field | SK |
 |-------|----|
 | Slug | `shadow-ai` |
-| One-liner | Ľudia už ChatGPT používajú. Nastavíme firemné AI s pravidlami, logmi a napojením na vaše dokumenty — bez úniku dát. |
+| One-liner | Ľudia už verejné AI používajú. Nastavíme firemné AI s pravidlami, logmi a napojením na vaše dokumenty. Bez úniku dát. |
 | CTA | Zabezpečiť firemné AI |
 | Price hint | od 2 900 € setup |
 | ICP | Advokáti, účtovníci, zdravotníctvo-adj., IT/MSP s citlivými dátami |

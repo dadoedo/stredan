@@ -84,6 +84,7 @@ Dve databázy na tom istom Postgres (`stredan-db` na alldevs-hetzner). Zámerné
 
 - ~380k aktívnych s.r.o. / a.s. / k.s. / v.o.s. / družstiev.
 - Schema `rpo2.organizations`, JSONB `data`.
+- Ranked pool `rpo2.outreach_candidates`: SME mimo IT (výroba, obchod, stavba, účto, logistika, …). NACE 62/63 sú von. **Bratislava first**. Aktívna firma = aktuálny konateľ + aktuálna adresa, nie zisk (SK daňová optimalizácia).
 - Nie je to lead list. Je to register. Do `stredan` kopírujeme len firmy, ktoré reálne zaradíme do frontu.
 - Detail: [RPO.md](./RPO.md). Import filter: `scripts/rpo-import-filter.py`.
 
@@ -114,7 +115,8 @@ Ponuky A–E: [OFFERS.md](./OFFERS.md). Landingy žijú na webe; seed `npm run s
 Playbook pre agenta: [AGENT_PLAYBOOK.md](./AGENT_PLAYBOOK.md).
 
 ```text
-RPO (readonly SQL)
+RPO ranked pool (rpo2.outreach_candidates, ORDER BY score)
+    → skip IČO already in stredan.Company / Suppression
     → Company + Lead(sourced)
     → enrich (browse, verejný web) → LeadEnrichment
     → score A–E → LeadScore

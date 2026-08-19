@@ -66,39 +66,61 @@ Store `offerId`, `templateId`, `sendAccountId`, `channel`, `accountKey` on every
 
 ## Startup
 
-1. Insert `AgentRun` `{ kind: "daily-batch", status: "running", trigger: "cloud-agent" }` with `inputJson` (caps, date).
+1. Insert `AgentRun` `{ kind: "daily-batch", status: "running", trigger: "cloud-agent" }` with `inputJson` (caps, date, mode).
 2. Read active offers and send accounts.
-3. Read today’s `Touch` counts. If no active accounts, **do not send**; enrich only and note it in the run summary.
+3. If mode is `ENRICH_ONLY` (default until David says SEND) or no active accounts: **do not send**.
 
 ## Source candidates (RPO)
 
-Database key **`rpo`**, schema **`rpo2`**:
+Do **not** scan `rpo2.organizations` with `ORDER BY id`. MCP cannot JOIN `rpo` + `stredan` in one query.
+
+Ranked pool (already built): table `rpo2.outreach_candidates`. Non-technical SK SMEs. **Bratislava first** (city bonus). **NACE 62/63 IT excluded**. Active = current konateľ + current address + not flagged inconsistent. Do **not** treat low profit / 5k basic capital as dead (SK tax-opt.). Rebuild: `scripts/rpo-outreach-candidates.sql`.
+
+Daily pull:
+
+1. Postgres `stredan`: IČOs we already have
 
 ```sql
-SELECT id,
-       data->'identifiers'->0->>'value' AS ico,
-       data->'fullNames'->0->>'value' AS name,
-       data->'addresses'->0->'municipality'->>'value' AS city,
-       data->'statisticalCodes'->'mainActivity'->>'code' AS nace
-FROM rpo2.organizations
-WHERE data->'legalForms'->0->'value'->>'code' = '112'
-  AND data->'statisticalCodes'->'mainActivity'->>'code' LIKE '62%'
-ORDER BY id
-LIMIT 100;
+SELECT ico FROM "Company" WHERE ico IS NOT NULL;
 ```
 
-Bratislava is split by mestská časť: `LIKE 'Bratislava%'`.
+2. Postgres `rpo`: next unscored firms (filter known IČOs in the agent, or `<> ALL` if the list is small)
 
-Upsert into `stredan.Company` + `Lead` (`status=sourced`) for new IČOs. Do not copy the whole register.
+```sql
+SELECT rpo_id, ico, name, city, nace, nace_label, established, konatel, score
+FROM rpo2.outreach_candidates
+ORDER BY score DESC, rpo_id
+LIMIT 200;
+```
+
+Take the first 50 whose IČO is not in `Company` / `Suppression`. Upsert slim rows into `stredan.Company` + `Lead(status=sourced)`. Do not copy the whole register.
+
+Bratislava is split by mestská časť; the pool already used `LIKE 'Bratislava%'`.
 
 ## Enrich (agent judgment)
 
-For up to 50 leads needing enrich:
+ENRICH_ONLY until David says SEND. Cap this run at **50** firms (first 8-firm proof is already in admin, batch `dryrun-20260819`).
 
-1. Find website (record confidence).
-2. Extract contact emails from public pages.
-3. Note decision maker if public.
-4. Write `LeadEnrichment` per kind (`inputJson` / `outputJson`); set lead `status=enriched`.
+RPO already has the current **konateľ** name. Finstat / FOAF / Index podnikateľa are public mirrors: keep them as context, never as `Company.website`.
+
+For each sourced lead:
+
+1. **Search.** Google (or web search) in this order:
+   - exact IČO
+   - company name + city
+   - konateľ first+last + company + `kontakt` / `email` if you still need a person-level hit
+2. Classify every hit: `aggregator` | `own_site` | `social` | `registry` | `other`. Store url, title, snippet.
+3. **People.** Always copy RPO konateľ into `people[]` with `firstName` (strip titles). Add extra names from site/aggregators with source URL.
+4. **Contact.** Emails only from pages you opened. Prefer `info@` / company domain. Do not guess `meno.priezvisko@`.
+5. Write DB (context, not just a URL):
+   - `LeadEnrichment` `kind=search` (queries + hits)
+   - `kind=people`
+   - `kind=website` (own site, emails, skip_reason)
+   - `LeadContact` rows
+   - `Company.website` only for own_site
+   - `Lead.status=enriched`, skip_reason in `Lead.notes`
+
+Skip send (still keep the rows): no_site, shell, it_internal, email confidence < 0.4. Low Finstat profit is **not** a skip.
 
 ## Score + assign offer
 
@@ -112,7 +134,8 @@ For each enriched lead without fresh scores:
 ## Personalize + send
 
 1. Load active `EmailTemplate` for the chosen offer (`key=cold-1`, locale=sk).
-2. Fill only allowed placeholders: `{{company}}`, `{{city}}`, `{{contact_name}}`, `{{nace}}`, `{{one_liner}}`.
+2. Fill only allowed placeholders: `{{salutation}}`, `{{company}}`, `{{hook}}`, `{{landing}}`.
+   Salutation is `Dobrý deň,` or `Dobrý deň, {firstName},` (given name only, vykanie in the body). Never ChatGPT/Claude/Gemini in copy.
 3. Create `Touch` draft with `sendAccountId` + `accountKey` + `channel`.
 4. Send via Email MCP `send_message` using that account key.
 5. Update `Touch` with `providerMessageId`, `sentAt`, `status=sent`.

@@ -69,17 +69,20 @@ Indexes on the loaded table:
 
 Example pull for a daily batch:
 
+Do not `ORDER BY id` on the raw register. Use the ranked pool:
+
 ```sql
-SELECT id,
-       data->'identifiers'->0->>'value' AS ico,
-       data->'fullNames'->0->>'value' AS name,
-       data->'addresses'->0->'municipality'->>'value' AS city,
-       data->'statisticalCodes'->'mainActivity'->>'code' AS nace
-FROM rpo2.organizations
-WHERE data->'legalForms'->0->'value'->>'code' = '112'
-  AND data->'statisticalCodes'->'mainActivity'->>'code' LIKE '62%'  -- IT, tune
-ORDER BY id
+SELECT rpo_id, ico, name, city, nace, nace_label, established, konatel, score
+FROM rpo2.outreach_candidates
+ORDER BY score DESC, rpo_id
 LIMIT 50;
+```
+
+Pool is s.r.o. in **non-IT** NACE, **Bratislava ranked first**. Active = current konateľ + current address (not profit). Rebuild:
+
+```bash
+ssh alldevs-hetzner 'docker exec -i stredan-db psql -U stredan -d rpo' \
+  < scripts/rpo-outreach-candidates.sql
 ```
 
 Upsert slim rows into `stredan.Company` / `Lead` only for firms you actually queue. Do not copy the whole register into the app DB.

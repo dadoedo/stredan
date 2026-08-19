@@ -37,22 +37,19 @@ const offers = [
     notForEn: "Solo freelancers; ChatGPT training only",
     landingPath: "/offers/ai-audit",
     sortOrder: 1,
-    subject: "AI plán pre {{company}} — bez buzzwordov",
-    body: `Dobrý deň{{contact_name}},
+    subject: "Jeden proces vo {{company}}, nie workshop",
+    body: `{{salutation}}
 
-pomáham slovenským firmám prejsť z „skúšame ChatGPT“ na konkrétne AI workflow s merateľným výsledkom.
+väčšina firiem už verejné AI skúša. Málokto vie, ktorý proces sa oplatí dať do prevádzky ako prvý.
 
-Pre {{company}} viem v rámci krátkeho AI auditu (fixná cena) spísať:
-– 3 procesy s najvyšším ROI
-– čo kúpiť vs. čo postaviť
-– 90-dňový plán
+{{hook}}
 
-Má zmysel 20-minútový hovor, alebo rovno audit?
+Pre {{company}} viem za 14 dní spísať krátky plán: tri procesy, poradie, čo kúpiť a čo nestavať. Fixná cena, písomne.
 
-{{one_liner}}
+Ak to nie je téma, stačí jedno „nie“. Ak áno, odpíšte „audit“ a pošlem, ako to prebieha.
 
 Dávid Stredánsky
-stredan.sk/offers/ai-audit`,
+https://stredan.sk/offers/ai-audit`,
   },
   {
     code: "B",
@@ -73,16 +70,17 @@ stredan.sk/offers/ai-audit`,
     notForEn: "AI everywhere with no single use case",
     landingPath: "/offers/pilot-agent",
     sortOrder: 2,
-    subject: "Jeden AI agent pre {{company}} (4–6 týždňov)",
-    body: `Dobrý deň{{contact_name}},
+    subject: "Jeden agent vo {{company}}, nie prezentácia",
+    body: `{{salutation}}
 
-namiesto ďalšieho workshopu vieme nasadiť jedného AI agenta na konkrétny proces vo {{company}} — leady, podpora alebo doklady.
+neposielam workshop. Ide o jedného agenta na jeden opakovaný proces: maily, doklady, dopyty alebo podpora.
 
-Cieľ: produkcia za 4–6 týždňov, nie PowerPoint.
+{{hook}}
 
-Ak máte jeden proces, ktorý vás žerie každý týždeň, ozvite sa — pošlem krátky scope.
+Cieľ je prevádzka za 4 až 6 týždňov, nie slidy. Ak vo {{company}} taký proces máte, odpíšte jedným slovom, ktorý to je. Ak nie, dajte „nie“ a už vás nebudem ťahať.
 
-Dávid — stredan.sk/offers/pilot-agent`,
+Dávid Stredánsky
+https://stredan.sk/offers/pilot-agent`,
   },
   {
     code: "C",
@@ -90,7 +88,7 @@ Dávid — stredan.sk/offers/pilot-agent`,
     nameSk: "Firemné AI pod kontrolou",
     nameEn: "Company AI under control",
     oneLinerSk:
-      "Nastavíme firemné AI s pravidlami a napojením na vaše dokumenty. Bez úniku dát do verejného ChatGPT.",
+      "Nastavíme firemné AI s pravidlami a napojením na vaše dokumenty. Bez úniku dát do verejných nástrojov.",
     oneLinerEn:
       "We set up company AI with rules and your documents, without leaking data into public ChatGPT.",
     ctaSk: "Zabezpečiť firemné AI",
@@ -103,16 +101,19 @@ Dávid — stredan.sk/offers/pilot-agent`,
     notForEn: "No digital footprint",
     landingPath: "/offers/shadow-ai",
     sortOrder: 3,
-    subject: "ChatGPT vo firme {{company}} — pod kontrolou?",
-    body: `Dobrý deň{{contact_name}},
+    subject: "Firemné AI, nie súkromné účty",
+    body: `{{salutation}}
 
-vo väčšine firiem ľudia už ChatGPT používajú — často s internými dátami, bez pravidiel.
+ľudia už verejné AI používajú. Často so zmluvami, faktúrami alebo spismi, bez pravidiel a bez stopy, čo odišlo von.
 
-Pre {{company}} vieme nastaviť firemné AI: prístupy, logy, napojenie na dokumenty, jasné „čo smie / nesmie“.
+{{hook}}
 
-Ak je to téma, odpíšte „áno“ a navrhnem krátky call.
+Pre {{company}} vieme nastaviť firemné AI: vaše dokumenty, prístupy, logy, jasné čo smie a čo nesmie.
 
-Dávid — stredan.sk/offers/shadow-ai`,
+Ak to riešite, odpíšte „áno“. Ak nie, stačí „nie“.
+
+Dávid Stredánsky
+https://stredan.sk/offers/shadow-ai`,
   },
   {
     code: "D",
@@ -133,16 +134,19 @@ Dávid — stredan.sk/offers/shadow-ai`,
     notForEn: "Greenfield from scratch",
     landingPath: "/offers/ai-integration",
     sortOrder: 4,
-    subject: "AI priamo do systémov {{company}}",
-    body: `Dobrý deň{{contact_name}},
+    subject: "AI do toho, čo už {{company}} má",
+    body: `{{salutation}}
 
-ak už máte CRM/ERP a problém je manuálna práca medzi systémami, netreba novú platformu — treba AI napojenie.
+nový softvér väčšinou netreba. Treba, aby to, čo už beží, prestalo žrať ruky.
 
-Typicky: triáž mailov, drafty ponúk, klasifikácia dokladov, reporty z dát.
+{{hook}}
 
-Má {{company}} jeden systém, kde by to hneď uľavilo?
+Typicky: triáž mailov, drafty, doklady do Pohody alebo report z dát, ktoré už máte.
 
-Dávid — stredan.sk/offers/ai-integration`,
+Má {{company}} jeden systém, kde by to hneď uľavilo? Odpíšte ním. Alebo „nie“.
+
+Dávid Stredánsky
+https://stredan.sk/offers/ai-integration`,
   },
   {
     code: "E",
@@ -163,16 +167,15 @@ Dávid — stredan.sk/offers/ai-integration`,
     notForEn: "Primary cold CTA",
     landingPath: "/offers/custom-ai-app",
     sortOrder: 5,
-    subject: "Custom AI systém pre {{company}}?",
-    body: `Dobrý deň{{contact_name}},
+    subject: "Vlastný systém? Len ak to má zmysel",
+    body: `{{salutation}}
 
-ak off-the-shelf nástroje nestačia, staviame custom aplikácie s AI vnútri (CRM, portály, vyhodnocovanie dát).
+ak hotové nástroje nestačia, staviam systém okolo vášho procesu. Nie naopak.
 
-Toto nie je cold „kúpte si veľký projekt“ — skôr zistenie, či máte use-case, ktorý sa oplatí stavať.
+Najprv treba vedieť, čo sa má pohnúť v číslach. Ak to viete pomenovať, navrhnem, či to stavať, kúpiť, alebo nechať tak.
 
-Ak áno, navrhnem krátky discovery call.
-
-Dávid — stredan.sk/offers/custom-ai-app`,
+Dávid Stredánsky
+https://stredan.sk/offers/custom-ai-app`,
   },
 ] as const;
 
@@ -257,7 +260,12 @@ async function main() {
       },
     });
 
-    if (!existing) {
+    if (existing) {
+      await prisma.emailTemplate.update({
+        where: { id: existing.id },
+        data: { subject: o.subject, bodyText: o.body, active: o.code !== "E" },
+      });
+    } else {
       await prisma.emailTemplate.create({
         data: {
           offerId: offer.id,
@@ -266,7 +274,7 @@ async function main() {
           subject: o.subject,
           bodyText: o.body,
           version: 1,
-          active: true,
+          active: o.code !== "E",
         },
       });
     }
