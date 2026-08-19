@@ -10,7 +10,7 @@ export default async function AdminLoginPage() {
     redirect("/admin/matrix");
   }
   return (
-    <div className="flex min-h-screen items-center justify-center px-6">
+    <div className="admin flex min-h-screen items-center justify-center bg-background px-6 py-12">
       <LoginForm />
     </div>
   );

@@ -24,7 +24,7 @@ export default async function AdminLeadsPage() {
           <Link
             key={lead.id}
             href={`/admin/leads/${lead.id}`}
-            className="block rounded border border-border p-4 transition-colors hover:border-zinc-500"
+            className="block rounded border border-border p-4 transition-colors hover:border-foreground/20 hover:bg-surface-2/60"
           >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <p className="font-medium">{lead.company.name}</p>

@@ -5,12 +5,134 @@
   --color-foreground: #f4f1ea;
   --color-muted: #9a9388;
   --color-border: #2a2723;
-  --color-accent: #e11d2e;
-  --color-accent-dim: #8a6a48;
+  --color-brand: #e11d2e;
+  --color-brand-dim: #8a6a48;
   --color-surface: #141210;
   --color-surface-2: #1c1916;
+  --color-sidebar: #f7f7f8;
+  --color-sidebar-border: #e8e8ea;
+  --color-sidebar-hover: #efeff1;
+  --color-sidebar-active: #e8e8ec;
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
   --font-sans: var(--font-dm-sans);
   --font-heading: var(--font-dm-sans);
+}
+
+:root {
+  --background: 0 0% 4%;
+  --foreground: 40 20% 95%;
+  --card: 0 0% 6%;
+  --card-foreground: 40 20% 95%;
+  --popover: 0 0% 6%;
+  --popover-foreground: 40 20% 95%;
+  --primary: 40 20% 95%;
+  --primary-foreground: 0 0% 4%;
+  --secondary: 0 0% 12%;
+  --secondary-foreground: 40 20% 95%;
+  --muted-foreground: 35 8% 58%;
+  --accent: 0 0% 12%;
+  --accent-foreground: 40 20% 95%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --input: 0 0% 16%;
+  --ring: 355 78% 50%;
+  --brand: 355 78% 50%;
+  --brand-dim: 25 30% 41%;
+  --radius: 0.5rem;
+}
+
+/* ─── Admin (light, high-contrast, Cursor-inspired) ─── */
+
+.admin {
+  --background: 0 0% 98%;
+  --foreground: 240 10% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 4%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 4%;
+  --primary: 240 6% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 5% 96%;
+  --secondary-foreground: 240 6% 10%;
+  --muted-foreground: 240 4% 38%;
+  --accent: 240 5% 96%;
+  --accent-foreground: 240 6% 10%;
+  --destructive: 0 72% 45%;
+  --destructive-foreground: 0 0% 98%;
+  --input: 240 6% 90%;
+  --ring: 240 6% 10%;
+  --brand: 0 72% 45%;
+  --brand-dim: 0 60% 35%;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-muted: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--input));
+  --color-accent: hsl(var(--accent));
+  --color-brand: hsl(var(--brand));
+  --color-brand-dim: hsl(var(--brand-dim));
+  --color-surface: hsl(var(--card));
+  --color-surface-2: hsl(var(--secondary));
+  --color-sidebar: #f7f7f8;
+  --color-sidebar-border: #e4e4e7;
+  --color-sidebar-hover: #ececee;
+  --color-sidebar-active: #e4e4e9;
+
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.admin select,
+.admin textarea,
+.admin input:not([type="checkbox"]):not([type="radio"]):not([data-slot="input"]) {
+  background-color: var(--color-surface);
+  color: var(--color-foreground);
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--radius) - 2px);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+}
+
+.admin select:focus-visible,
+.admin textarea:focus-visible,
+.admin input:not([type="checkbox"]):not([type="radio"]):not([data-slot="input"]):focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-color: hsl(var(--ring));
+}
+
+.admin table th,
+.admin table td {
+  border-color: var(--color-border);
+}
+
+.admin table thead th {
+  background: var(--color-surface-2);
+  color: var(--color-foreground);
+  font-weight: 600;
+}
+
+.admin code {
+  border-radius: 0.25rem;
+  background: var(--color-surface-2);
+  padding: 0.125rem 0.375rem;
+  font-size: 0.875em;
 }
 
 @keyframes slide-in-from-right {
@@ -79,7 +201,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-brand);
   outline-offset: 2px;
 }
 

@@ -20,7 +20,7 @@ export function DeleteButton({ projectId, projectTitle }: Props) {
       <input type="hidden" name="id" value={projectId} />
       <button
         type="submit"
-        className="rounded border border-red-500/50 px-3 py-1 text-sm text-red-400 transition-colors hover:border-red-500 hover:bg-red-500/10"
+        className="rounded border border-destructive/40 px-3 py-1 text-sm text-destructive transition-colors hover:border-destructive hover:bg-destructive/10"
       >
         Zmazať
       </button>
