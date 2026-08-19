@@ -176,9 +176,16 @@ function normalizeLead(raw: LeadIn, index: number): LeadIn {
   };
 }
 
+function leadCompanyJoin(): string {
+  return `"Lead" l JOIN "Company" c ON c.id = l."companyId"`;
+}
+
+function icoPred(ico: string): string {
+  return `c.ico = ${sqlStr(ico)}`;
+}
+
 function statementsForLead(lead: LeadIn, runId: string | null): string[] {
-  const leadId = requireId(lead.leadId!, "leadId");
-  const companyId = requireId(lead.companyId!, "companyId");
+  const ico = lead.ico;
   const skip = lead.skip_reason ?? null;
   const notes = lead.notes
     ? skip && !lead.notes.includes("skip_reason=")
@@ -188,41 +195,45 @@ function statementsForLead(lead: LeadIn, runId: string | null): string[] {
       ? `skip_reason=${skip}`
       : undefined;
   const status = skip ? "skipped" : "enriched";
-  const website = lead.website_enrichment?.website ?? lead.website ?? null;
-  const ownSite = Boolean(website);
   const queries = lead.search?.queries ?? [];
   const hits = lead.search?.hits ?? [];
   const people = lead.people ?? [];
   const emails = lead.website_enrichment?.emails ?? [];
+  const ownSiteHit = hits.find((hit) => hit.type === "own_site");
+  const website = ownSiteHit?.url ?? null;
   const stmts: string[] = [];
 
-  stmts.push(`-- ${lead.ico} ${lead.name ?? ""}`.trim());
+  stmts.push(`-- ${ico} ${lead.name ?? ""}`.trim());
 
-  if (ownSite) {
+  if (website) {
     stmts.push(
-      `UPDATE "Company" SET website = ${sqlStr(website!)}, "updatedAt" = NOW() WHERE id = ${sqlStr(companyId)} AND website IS DISTINCT FROM ${sqlStr(website!)};`,
+      `UPDATE "Company" SET website = ${sqlStr(website)}, "updatedAt" = NOW() WHERE ico = ${sqlStr(ico)} AND website IS DISTINCT FROM ${sqlStr(website)};`,
     );
   }
 
   const notesAssign =
     notes === undefined ? `"notes" = "notes"` : `notes = ${sqlNullStr(notes)}`;
+  const early = `status IN ('sourced','enriching','enriched','skipped')`;
   stmts.push(
-    `UPDATE "Lead" SET
+    `UPDATE "Lead" l SET
   status = CASE
-    WHEN status IN ('sourced','enriching','enriched','skipped','scored') THEN ${sqlStr(status)}
+    WHEN ${early} THEN ${sqlStr(status)}
+    WHEN status = 'scored' AND ${skip ? "TRUE" : "FALSE"} THEN 'skipped'
     ELSE status
   END,
   ${notesAssign},
   "skipReason" = CASE
-    WHEN status IN ('sourced','enriching','enriched','skipped','scored') THEN ${sqlNullStr(skip)}
+    WHEN ${early} THEN ${sqlNullStr(skip)}
+    WHEN status = 'scored' AND ${skip ? "TRUE" : "FALSE"} THEN ${sqlNullStr(skip)}
     ELSE "skipReason"
   END,
   "updatedAt" = NOW()
-WHERE id = ${sqlStr(leadId)};`,
+FROM "Company" c
+WHERE l."companyId" = c.id AND c.ico = ${sqlStr(ico)};`,
   );
 
   const searchInput = {
-    ico: lead.ico,
+    ico,
     name: lead.name ?? null,
     city: lead.city ?? null,
     nace: lead.nace ?? null,
@@ -232,7 +243,9 @@ WHERE id = ${sqlStr(leadId)};`,
   const searchOutput = { hits, notes: lead.notes ?? null };
   stmts.push(
     `INSERT INTO "LeadEnrichment" (id, "leadId", "agentRunId", provider, kind, "inputJson", "outputJson", confidence)
-VALUES (${sqlStr(`enr_${leadId}_search`)}, ${sqlStr(leadId)}, ${sqlNullStr(runId)}, 'cursor-agent', 'search', ${sqlJson(searchInput)}, ${sqlJson(searchOutput)}, NULL)
+SELECT 'enr_' || l.id || '_search', l.id, ${sqlNullStr(runId)}, 'cursor-agent', 'search', ${sqlJson(searchInput)}, ${sqlJson(searchOutput)}, NULL
+FROM ${leadCompanyJoin()}
+WHERE ${icoPred(ico)}
 ON CONFLICT ("leadId", kind) DO UPDATE SET
   "agentRunId" = EXCLUDED."agentRunId",
   "inputJson" = EXCLUDED."inputJson",
@@ -241,7 +254,9 @@ ON CONFLICT ("leadId", kind) DO UPDATE SET
 
   stmts.push(
     `INSERT INTO "LeadEnrichment" (id, "leadId", "agentRunId", provider, kind, "inputJson", "outputJson", confidence)
-VALUES (${sqlStr(`enr_${leadId}_people`)}, ${sqlStr(leadId)}, ${sqlNullStr(runId)}, 'cursor-agent', 'people', ${sqlJson({ konatel: lead.konatel ?? null })}, ${sqlJson({ people })}, NULL)
+SELECT 'enr_' || l.id || '_people', l.id, ${sqlNullStr(runId)}, 'cursor-agent', 'people', ${sqlJson({ konatel: lead.konatel ?? null })}, ${sqlJson({ people })}, NULL
+FROM ${leadCompanyJoin()}
+WHERE ${icoPred(ico)}
 ON CONFLICT ("leadId", kind) DO UPDATE SET
   "agentRunId" = EXCLUDED."agentRunId",
   "inputJson" = EXCLUDED."inputJson",
@@ -263,7 +278,9 @@ ON CONFLICT ("leadId", kind) DO UPDATE SET
 
   stmts.push(
     `INSERT INTO "LeadEnrichment" (id, "leadId", "agentRunId", provider, kind, "inputJson", "outputJson", confidence)
-VALUES (${sqlStr(`enr_${leadId}_website`)}, ${sqlStr(leadId)}, ${sqlNullStr(runId)}, 'cursor-agent', 'website', ${sqlJson({ ico: lead.ico })}, ${sqlJson(websiteOutput)}, ${emailConfidence ?? "NULL"})
+SELECT 'enr_' || l.id || '_website', l.id, ${sqlNullStr(runId)}, 'cursor-agent', 'website', ${sqlJson({ ico })}, ${sqlJson(websiteOutput)}, ${emailConfidence ?? "NULL"}
+FROM ${leadCompanyJoin()}
+WHERE ${icoPred(ico)}
 ON CONFLICT ("leadId", kind) DO UPDATE SET
   "agentRunId" = EXCLUDED."agentRunId",
   "inputJson" = EXCLUDED."inputJson",
@@ -275,11 +292,13 @@ ON CONFLICT ("leadId", kind) DO UPDATE SET
     const email = contact.email?.trim() || null;
     const fullName = contact.fullName?.trim() || "";
     if (!email && !fullName) continue;
-    const id = requireId(contactId(leadId, email, fullName || lead.ico), "contactId");
+    const id = requireId(contactId(ico, email, fullName || ico), "contactId");
     if (email) {
       stmts.push(
         `INSERT INTO "LeadContact" (id, "leadId", "fullName", role, email, "emailSource", "isPrimary", "createdAt", "updatedAt")
-VALUES (${sqlStr(id)}, ${sqlStr(leadId)}, ${sqlNullStr(fullName || null)}, ${sqlNullStr(contact.role ?? null)}, ${sqlStr(email.toLowerCase())}, ${sqlNullStr(contact.emailSource ?? null)}, ${contact.isPrimary ? "TRUE" : "FALSE"}, NOW(), NOW())
+SELECT ${sqlStr(id)}, l.id, ${sqlNullStr(fullName || null)}, ${sqlNullStr(contact.role ?? null)}, ${sqlStr(email.toLowerCase())}, ${sqlNullStr(contact.emailSource ?? null)}, ${contact.isPrimary ? "TRUE" : "FALSE"}, NOW(), NOW()
+FROM ${leadCompanyJoin()}
+WHERE ${icoPred(ico)}
 ON CONFLICT ("leadId", email) DO UPDATE SET
   "fullName" = COALESCE(EXCLUDED."fullName", "LeadContact"."fullName"),
   role = COALESCE(EXCLUDED.role, "LeadContact".role),
@@ -290,9 +309,12 @@ ON CONFLICT ("leadId", email) DO UPDATE SET
     } else {
       stmts.push(
         `INSERT INTO "LeadContact" (id, "leadId", "fullName", role, email, "emailSource", "isPrimary", "createdAt", "updatedAt")
-SELECT ${sqlStr(id)}, ${sqlStr(leadId)}, ${sqlStr(fullName)}, ${sqlNullStr(contact.role ?? null)}, NULL, ${sqlNullStr(contact.emailSource ?? null)}, ${contact.isPrimary ? "TRUE" : "FALSE"}, NOW(), NOW()
-WHERE NOT EXISTS (
-  SELECT 1 FROM "LeadContact" c WHERE c."leadId" = ${sqlStr(leadId)} AND c."fullName" = ${sqlStr(fullName)} AND c.email IS NULL
+SELECT ${sqlStr(id)}, l.id, ${sqlStr(fullName)}, ${sqlNullStr(contact.role ?? null)}, NULL, ${sqlNullStr(contact.emailSource ?? null)}, ${contact.isPrimary ? "TRUE" : "FALSE"}, NOW(), NOW()
+FROM ${leadCompanyJoin()}
+WHERE ${icoPred(ico)}
+AND NOT EXISTS (
+  SELECT 1 FROM "LeadContact" existing
+  WHERE existing."leadId" = l.id AND existing."fullName" = ${sqlStr(fullName)} AND existing.email IS NULL
 );`,
       );
     }
@@ -302,7 +324,7 @@ WHERE NOT EXISTS (
   for (const code of OFFER_CODES) {
     const row = scores[code];
     if (!row) continue;
-    const score = asIntScore(row.score, code, lead.ico);
+    const score = asIntScore(row.score, code, ico);
     const why = row.why_sk ?? row.rationaleSk ?? null;
     const output = {
       score,
@@ -313,8 +335,10 @@ WHERE NOT EXISTS (
     };
     stmts.push(
       `INSERT INTO "LeadScore" (id, "leadId", "offerId", "agentRunId", score, "rationaleSk", "inputJson", "outputJson")
-SELECT ${sqlStr(`scr_${leadId}_${code}`)}, ${sqlStr(leadId)}, o.id, ${sqlNullStr(runId)}, ${score}, ${sqlNullStr(why)}, ${sqlJson({ ico: lead.ico, nace: lead.nace ?? null, skip_reason: skip })}, ${sqlJson(output)}
-FROM "Offer" o WHERE o.code = ${sqlStr(code)}
+SELECT 'scr_' || l.id || ${sqlStr(`_${code}`)}, l.id, o.id, ${sqlNullStr(runId)}, ${score}, ${sqlNullStr(why)}, ${sqlJson({ ico, nace: lead.nace ?? null, skip_reason: skip })}, ${sqlJson(output)}
+FROM ${leadCompanyJoin()}
+JOIN "Offer" o ON o.code = ${sqlStr(code)}
+WHERE ${icoPred(ico)}
 ON CONFLICT ("leadId", "offerId") DO UPDATE SET
   "agentRunId" = EXCLUDED."agentRunId",
   score = EXCLUDED.score,

@@ -24,7 +24,9 @@ SELECT DISTINCT ON ("companyId") id AS keep_id, "companyId"
 FROM "Lead"
 ORDER BY "companyId",
   CASE status
-    WHEN 'won' THEN 10
+    WHEN 'won' THEN 12
+    WHEN 'suppressed' THEN 11
+    WHEN 'lost' THEN 11
     WHEN 'meeting' THEN 9
     WHEN 'replied' THEN 8
     WHEN 'contacted' THEN 7
@@ -82,12 +84,19 @@ DELETE FROM "LeadContact" a
 WHERE a.email IS NOT NULL
   AND a.id NOT IN (
     SELECT id FROM (
-      SELECT DISTINCT ON ("leadId", email) id
+      SELECT DISTINCT ON ("leadId", lower(email)) id
       FROM "LeadContact"
       WHERE email IS NOT NULL
-      ORDER BY "leadId", email, "isPrimary" DESC, "createdAt" DESC, id DESC
+      ORDER BY "leadId", lower(email),
+        (email = lower(email)) DESC,
+        "isPrimary" DESC,
+        "createdAt" DESC,
+        id DESC
     ) kept
   );
+
+UPDATE "LeadContact" SET email = lower(email)
+WHERE email IS NOT NULL AND email <> lower(email);
 
 DO $$
 BEGIN
