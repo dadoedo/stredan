@@ -40,7 +40,8 @@ Admin (`/admin/matrix`) shows volume and replies per cell. Templates are edited 
 | Website / email / DM discover | Agent (browse + heuristics) | Judgment; write `LeadEnrichment` |
 | Score fit × offer A–E | Agent | Soft criteria; log rationale |
 | Pick cell (offer × account) | Agent, random among active under cap | Experiment |
-| Render template + send | Agent via Email MCP | Channel comes from `SendAccount` |
+| Render template | Agent; `scripts/leadgen-apply-drafts.ts` writes `Touch(draft)` | No send until MODE=SEND |
+| Send | Agent via Email MCP | Channel comes from `SendAccount`; not enabled yet |
 | Reply triage | Agent | Classify intent → lead + suppression |
 | Daily eval | Agent writes `AgentRun` + `ExperimentDaily` | You read in admin |
 
@@ -49,18 +50,20 @@ When volume grows past ~200–500 enrichments/day, add cheap deterministic helpe
 ## Daily loop
 
 ```text
-00  AgentRun(kind=daily-batch) start
-01  SQL: next N companies from RPO (active s.r.o., NACE, city, not suppressed)
-02  Upsert Company + Lead(status=sourced)
-03  For each lead (cap N):
-      enrich → LeadEnrichment (inputJson / outputJson)
-      score per active offers → LeadScore
-      pick random active matrix cell under caps
-      render template → Touch(queued|sent) with offerId + sendAccountId
-04  Send via Email MCP (account = SendAccount.mcpAccountKey)
-05  Triage new replies
-06  Roll ExperimentDaily + AgentRun summary
-07  STOP — human reviews /admin/matrix in the morning
+00  AgentRun(kind=daily-batch) start — branch on MODE
+ENRICH_ONLY:
+  01  SQL: next N companies from RPO
+  02  Upsert Company + Lead(status=sourced)
+  03  Enrich + score A–D. No Touch. STOP
+DRAFT_ONLY:
+  01  SQL: sendable leads already in stredan (scripts/leadgen-sendable.sql)
+  02  If 0 rows: STOP (do not enrich)
+  03  Cap 40. Pick random active cell per lead. Render cold-1
+  04  Writer → Touch(draft). Lead queued. STOP (no Email MCP)
+SEND (not enabled):
+  05  Email MCP send → Touch(sent) + TouchEvent
+  06  Triage replies → ExperimentDaily
+07  STOP — human reviews /admin in the morning
 ```
 
 ## Logging (source of truth = DB)
@@ -88,6 +91,7 @@ Agents **do not** need a custom HTTP API. They insert/update via Postgres MCP:
 3. IMAP folders `Leadgen/A`…`E`, `Leadgen/Replies`
 4. Schedule Cursor Automation with the **stub** in `docs/leadgen/AUTOMATION_PROMPT.md` (git is the playbook; do not paste the full prompt into the UI).
 5. Dry-run 50 firms, no send. Writer: `scripts/leadgen-apply-enrichment.ts`.
+6. Draft already-enriched sendable leads (`MODE=DRAFT_ONLY`). Writer: `scripts/leadgen-apply-drafts.ts`. Still no send.
 
 ## Non-goals (v1)
 

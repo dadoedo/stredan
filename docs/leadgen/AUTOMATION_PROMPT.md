@@ -8,10 +8,10 @@ Cursor Automations **cannot be a git file**. The UI holds a string; this repo ho
 Read and follow docs/leadgen/AUTOMATION_PROMPT.md in this repo exactly.
 Then read the files it names (AGENT_PLAYBOOK.md, COPY.md, OFFERS.md).
 Do not invent a parallel playbook in this instruction box.
-MODE=ENRICH_ONLY until David says SEND.
+MODE=DRAFT_ONLY until David says SEND.
 ```
 
-After you merge playbook/COPY changes, the **next cron** picks them up. You only edit the Cursor automation if this stub itself changes.
+After you merge playbook/COPY changes, the **next cron** picks them up. You only edit the Cursor automation if this stub itself changes. An in-flight run does **not** re-read git mid-session.
 
 ---
 
@@ -30,94 +30,77 @@ Read first (this repo):
 - docs/leadgen/AGENT_PLAYBOOK.md  (SQL, caps, loop, idempotent writes)
 - docs/leadgen/COPY.md            (enrich/score/render/triage prompts, voice)
 - docs/leadgen/OFFERS.md          (A–E; E is not cold)
-- docs/leadgen/ENRICHMENT_JSON.md (JSON shape for the writer script)
+- docs/leadgen/DRAFT_JSON.md      (JSON shape for draft writer)
+- docs/leadgen/ENRICHMENT_JSON.md (JSON shape if MODE=ENRICH_ONLY)
 
-MODE=ENRICH_ONLY
-- Enrich up to 50 new firms.
-- Score them (LeadScore A–D) so we can inspect fit.
-- Do NOT send email. Do NOT create Touch. Do NOT call Email MCP send_message.
+Modes (do exactly one; do not mix in the same run)
+- ENRICH_ONLY: pull up to 50 new RPO firms, enrich + score A–D. No Touch. No send.
+- DRAFT_ONLY: draft already-enriched sendable leads in stredan. No RPO pull. No new enrich. No send.
+- SEND: not enabled. Never Email MCP send_message.
+
+MODE=DRAFT_ONLY
+- Query sendable leads already in stredan (scripts/leadgen-sendable.sql). Cap 40.
+- If that query returns 0 rows: STOP. Tell David. Do NOT start ENRICH_ONLY. Do NOT pull RPO.
+- Render cold-1 for a random active A–D × account cell where that offer is sendable for the lead.
+- Save Touch.status=draft via scripts/leadgen-apply-drafts.ts. Lead → queued from early statuses only.
+- Do NOT send email. Do NOT call Email MCP send_message. Do NOT create TouchEvent sent.
 - Inbox triage: skip unless MODE later becomes SEND.
+- Leftover sendable leads wait for the next DRAFT_ONLY run.
 
 Postgres MCP
 - stredan / prod = readwrite (quoted Prisma names: "Company", "Lead", "LeadContact", "LeadEnrichment", "LeadScore", "AgentRun", "Offer", "EmailTemplate", "SendAccount", "Touch", "Suppression")
-- rpo / prod = readonly, schema rpo2. Pool: rpo2.outreach_candidates (Bratislava-first, IT 62/63 out).
-- You cannot JOIN the two databases. Pull IČOs from stredan, then filter rpo in the agent.
+- rpo / prod = readonly, schema rpo2. DRAFT_ONLY does not query RPO.
+- You cannot JOIN the two databases.
 
 Write path (mandatory — do not invent SQL)
-1. Research into one JSON array. Schema: docs/leadgen/ENRICHMENT_JSON.md.
-2. Save to tmp/enrichment-<AgentRunId>.json (workspace, not /tmp).
-3. Run: npx tsx scripts/leadgen-apply-enrichment.ts tmp/enrichment-<AgentRunId>.json --run-id <AgentRunId> --out tmp/enrichment-<AgentRunId>.sql --check first if unsure.
-4. Execute the generated SQL via Postgres MCP in the printed MCP CHUNKs (~10 leads). Never hand-write INSERT for LeadScore/LeadEnrichment.
-5. Scores MUST be JSON numbers (78) not Python dicts. The script rejects non-integers.
+1. SELECT sendable rows (copy scripts/leadgen-sendable.sql). Save the list.
+2. For each lead: pick one sendable offer A–D at random among that lead's sendable_offers that are active. Pick one active SendAccount (mcpAccountKey set) still under dailyCap counting today's draft+sent Touches. Skip offer E.
+3. Load EmailTemplate key=cold-1 locale=sk for that offer. Fill only {{salutation}} {{company}} {{hook}} {{landing}} from COPY.md. Drop the hook paragraph if hook is null.
+4. Write one JSON array. Schema: docs/leadgen/DRAFT_JSON.md.
+5. Save to tmp/drafts-<AgentRunId>.json (workspace, not /tmp).
+6. Run: npx tsx scripts/leadgen-apply-drafts.ts tmp/drafts-<AgentRunId>.json --check
+   then: npx tsx scripts/leadgen-apply-drafts.ts tmp/drafts-<AgentRunId>.json --out tmp/drafts-<AgentRunId>.sql
+7. Execute the generated SQL via Postgres MCP in the printed MCP CHUNKs. Never hand-write INSERT for Touch.
 
-Ids (deterministic, rerunnable)
-- Company.id = cmp_<ico>
-- Lead.id = ldry_<ico>
-- Unique: Company.ico, Lead.companyId, LeadEnrichment (leadId, kind), LeadScore (leadId, offerId), LeadContact (leadId, email)
-- ON CONFLICT is in the generated SQL. Reruns update, they do not duplicate.
+Ids
+- Touch.id = tch_<ico>_<offerCode>_cold-1
+- One cold Touch per lead: INSERT uses NOT EXISTS any Touch. Reruns skip leads that already have a Touch.
 
 Startup
-1. INSERT "AgentRun" kind=daily-batch, status=running, trigger=cloud-agent, inputJson={mode:ENRICH_ONLY, date, cap:50, phase:startup}.
-2. SELECT ico FROM "Company"; SELECT ico FROM "Suppression" WHERE ico IS NOT NULL.
-3. SELECT rpo_id, ico, name, city, nace, nace_label, established, konatel, score
-   FROM rpo2.outreach_candidates
-   ORDER BY score DESC, rpo_id
-   LIMIT 400;
-4. Take the first 50 IČOs not already in Company/Suppression.
-   Drop: IČO 'Neuvedené' / not 8 digits; name ILIKE '%likvid%' OR '%konkurz%' OR '%v likvidácii%' OR '%zrušen%'.
-5. INSERT slim "Company" + "Lead"(status=sourced, batchId=this run id)
-   ON CONFLICT (ico) / ("companyId") DO NOTHING.
-6. Skip re-enrich: if a lead already has search+people+website enrichments AND scores for A–D, leave it. Only research status=sourced (or missing kinds).
+1. INSERT "AgentRun" kind=daily-batch, status=running, trigger=cloud-agent, inputJson={mode:DRAFT_ONLY, date, cap:40, phase:startup}.
+2. Run scripts/leadgen-sendable.sql.
+3. If 0 rows: UPDATE AgentRun status=succeeded, finishedAt=now(), outputJson={phase:done, sendable:0, drafted:0, sent:0, reason:no_sendable}. Chat David. STOP.
+4. SELECT active Offer A–D + EmailTemplate cold-1. SELECT active SendAccount with mcpAccountKey. If no account: same STOP (do not enrich).
 
-Enrich each lead (COPY.md §8). Write context, not just a URL.
+Render each draft (COPY.md §10)
+- Salutation: "Dobrý deň," or "Dobrý deň, {firstName}," (given name only). Never p. / pani / priezvisko.
+- Landing: https://stredan.sk + Offer.landingPath
+- Hook from COPY.md knižnica matching NACE / hook_id; else omit the paragraph.
+- From identity is SendAccount — do not invent a name. Reply-To later is david@stredan.sk (not used until SEND).
+- No ChatGPT / Claude / Gemini. No em dash. No leftover {{tokens}}.
 
-Search in this order (web search / Google):
-a) exact 8-digit IČO
-b) company name + city
-c) konateľ first+last + company + kontakt/email if still no person/email
-
-Classify every hit: aggregator | own_site | social | registry | other.
-Every hit MUST include hitIco (8 digits or null) and icoMatch (true|false|null).
-If hitIco is present and ≠ our IČO → type=other, ignore that email/website.
-
-Aggregators/registry (never Company.website): finstat.sk, foaf.sk, indexpodnikatela.sk, firmy.sk, valida.sk, uvostat.sk, orsr.sk, rpo.gov.sk, zoznam.sk, azet.sk, instat, sak.sk (keep as people/email source), rpvs.gov.sk, e-vuc.sk.
-
-Known failure modes:
-- Generic names ("Váš účtovník") collide with unrelated brands. IČO mismatch → ignore.
-- Finstat/FOAF come up first. Store them. Low profit / 5k capital is NOT inactivity (SK tax-opt.).
-- RPO already has current konateľ. Always copy into people[] with firstName (strip Ing., Mgr., JUDr., MUDr., Bc., PhD., LL.M., Dr., doc., Arch.).
-- NACE 6910 (law): MUST search SAK (site:sak.sk konateľ OR firma) AND own-site /kontakt before skip_reason=no_email. Set sakChecked=true in website_enrichment.
-- NACE 86: MUST try e-VÚC / zoznam lekárov before no_email. Set evucChecked=true.
-- Website that is an IT shop / payroll vendor (ADP, “sme IT”) → skip_reason=it_internal even if NACE is 69.
-
-skip_reason values: no_site | no_email | shell | it_internal | bad_ico
-Never invent emails. Never guess meno.priezvisko@. Confidence < 0.4 on email → keep rows, skip_reason=no_email if no better address.
-
-Parallelism
-- Split the 50 into 2×25 non-overlapping IČO lists for research.
-- Merge into ONE JSON file, then ONE script run, then SQL chunks. Do not have two writers hitting the same lead.
-
-Progress (every 10 leads or after each SQL chunk)
+Progress (every SQL chunk)
 UPDATE "AgentRun"
 SET "outputJson" = COALESCE("outputJson", '{}'::jsonb) || jsonb_build_object(
-  'phase', 'enrich',
-  'enriched_so_far', <int>,
+  'phase', 'draft',
+  'drafted_so_far', <int>,
   'last_ico', '<ico>',
   'errors', <json array>
 )
 WHERE id = '<runId>';
 Do this BEFORE writing a feedback markdown file.
 
-Shutdown (as soon as counts match — do not wait for docs/chat)
-- sourced ≈ cap, every new lead is enriched or skipped, scores A–D exist (or skip_reason=bad_ico).
-- UPDATE AgentRun: status succeeded|partial, finishedAt=now(), outputJson {phase:done, sourced, enriched, skipped, with_email, skip_counts, sent:0, top_failures[3], tweak}, short summary.
-- Then chat to David: bullets only. sourced / enriched / skipped / with_email / skip reasons / 3 failures / 1 prompt tweak. No send counts.
-- Optional after shutdown: docs/leadgen/automation_run_feedback/YYYY-MM-DD-*.md. Do not keep the session open for that.
-- Do not edit src/, prisma/, or playbooks. Do not raise caps. You may write tmp/enrichment-*.json and the optional feedback md.
+Shutdown (as soon as SQL is applied — do not wait for docs/chat)
+- UPDATE AgentRun: status succeeded|partial, finishedAt=now(), outputJson {phase:done, sendable, drafted, skipped_already_touched, by_cell, sent:0, top_failures[3], tweak}, short summary.
+- Then chat to David: bullets only. sendable found / drafted / leftovers / cells / 3 failures / 1 prompt tweak. No send counts.
+- Optional after shutdown: docs/leadgen/automation_run_feedback/YYYY-MM-DD-*.md.
+- Do not edit src/, prisma/, or playbooks. Do not raise caps. You may write tmp/drafts-*.json and the optional feedback md.
 
 Hard
-- Not IT software houses (NACE 62/63 already out of pool; still skip if the website is an IT shop).
-- No ChatGPT / Claude / Gemini in any copy you might draft.
-- Vykáme. Salutation later = "Dobrý deň," or "Dobrý deň, {firstName},". Never p. / pani / priezvisko.
-- Offer E is not cold. Do not insert LeadScore for E in ENRICH_ONLY.
+- DRAFT_ONLY never pulls rpo2.outreach_candidates.
+- DRAFT_ONLY never enriches a new IČO.
+- Not IT software houses.
+- No ChatGPT / Claude / Gemini in copy.
+- Vykáme. Offer E is not cold.
+- If David later sets MODE=ENRICH_ONLY, follow AGENT_PLAYBOOK.md enrich path and ENRICHMENT_JSON.md instead of this draft path. Still no send.
 ```
