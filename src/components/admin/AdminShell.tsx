@@ -51,15 +51,15 @@ function NavLink({
       className={cn(
         "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
         active
-          ? "bg-sidebar-active text-foreground shadow-sm"
-          : "text-muted hover:bg-sidebar-hover hover:text-foreground",
+          ? "bg-sidebar-active text-zinc-900 shadow-sm"
+          : "text-zinc-600 hover:bg-sidebar-hover hover:text-zinc-900",
       )}
       aria-current={active ? "page" : undefined}
     >
       <Icon
         className={cn(
           "size-4 shrink-0",
-          active ? "text-foreground" : "text-muted group-hover:text-foreground",
+          active ? "text-zinc-900" : "text-zinc-500 group-hover:text-zinc-900",
         )}
         aria-hidden
       />
@@ -79,8 +79,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           S
         </div>
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold leading-none">stredan.sk</p>
-          <p className="truncate text-xs text-muted">Admin</p>
+          <p className="truncate text-sm font-semibold leading-none text-zinc-900">
+            stredan.sk
+          </p>
+          <p className="truncate text-xs text-zinc-500">Admin</p>
         </div>
       </div>
 
@@ -106,7 +108,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <Button
             type="submit"
             variant="ghost"
-            className="w-full justify-start gap-3 text-muted hover:text-foreground"
+            className="w-full justify-start gap-3 text-zinc-600 hover:bg-sidebar-hover hover:text-zinc-900"
           >
             <LogOut className="size-4" aria-hidden />
             Odhlásiť
@@ -145,7 +147,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background/90 px-4 backdrop-blur-md md:px-6">
+        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur-md md:hidden">
           <Button
             type="button"
             variant="ghost"
