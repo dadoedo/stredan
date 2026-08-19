@@ -1,0 +1,735 @@
+[
+  {
+    "ico": "47253983",
+    "leadId": "ldry_47253983",
+    "companyId": "cmp_47253983",
+    "name": "Jurek, advokátska kancelária, s.r.o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "JUDr. Pavel Jurek",
+    "notes": "AK Páričkova 15 / pracovisko Mostová 2; jurek@jurek.sk v SAK a účtovnej závierke; web bep.sk (Carlton Savoy).",
+    "skip_reason": null,
+    "website": "https://www.bep.sk",
+    "search": {
+      "queries": [
+        "47253983",
+        "Jurek advokátska kancelária Bratislava",
+        "JUDr. Pavel Jurek advokát kontakt email",
+        "site:sak.sk Jurek advokátska kancelária 47253983"
+      ],
+      "hits": [
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/640386/display/event",
+          "type": "registry",
+          "title": "SAK – Jurek, advokátska kancelária, s.r.o.",
+          "snippet": "IČO 47253983, e-mail jurek@jurek.sk, Páričkova 15",
+          "hitIco": "47253983",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/adv/2659/display/display",
+          "type": "registry",
+          "title": "SAK – JUDr. Pavel Jurek",
+          "snippet": "jurek@jurek.sk, spoločnosť Jurek, advokátska kancelária, s.r.o.",
+          "hitIco": "47253983",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.registeruz.sk/cruz-public/domain/financialreport/attachment/11845527",
+          "type": "registry",
+          "title": "Register účtovných závierok – Jurek AK",
+          "snippet": "IČO 47253983, e-mail jurek@jurek.sk",
+          "hitIco": "47253983",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.bep.sk/kontaktujte-nas/",
+          "type": "own_site",
+          "title": "BEP – kontakt JUDr. Pavel Jurek",
+          "snippet": "Jurek, advokátska kancelária, s.r.o., jurek@jurek.sk",
+          "hitIco": "47253983",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.finstat.sk/47253983",
+          "type": "aggregator",
+          "title": "Finstat – Jurek, advokátska kancelária",
+          "snippet": "IČO 47253983, právne služby Bratislava",
+          "hitIco": "47253983",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.zoznam.sk/firma/2926404/Jurek-advokatska-kancelaria-Bratislava",
+          "type": "aggregator",
+          "title": "Zoznam.sk – Jurek AK",
+          "snippet": "IČO 47253983, Mostová 2, tel. 02 5922 8151",
+          "hitIco": "47253983",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Pavel Jurek",
+        "firstName": "Pavel",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.bep.sk",
+      "emails": [
+        {
+          "email": "jurek@jurek.sk",
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/640386/display/event",
+          "context": "SAK register spoločnosti"
+        },
+        {
+          "email": "jurek@jurek.sk",
+          "url": "https://www.bep.sk/kontaktujte-nas/",
+          "context": "kontakt na webe BEP"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Pavel Jurek",
+        "role": "konateľ",
+        "email": "jurek@jurek.sk",
+        "emailSource": "registry",
+        "isPrimary": true,
+        "confidence": 0.95
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 82,
+        "send": true,
+        "why_sk": "Advokátska kancelária – citlivé zmluvy a klientske dokumenty.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "B": {
+        "score": 38,
+        "send": false,
+        "why_sk": "Nie je jasný jeden opakovaný HR/mzdový workflow."
+      },
+      "C": {
+        "score": 85,
+        "send": true,
+        "why_sk": "Právna prax – ľudia skúšajú verejné AI na zmluvách a korešpondencii.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "D": {
+        "score": 42,
+        "send": false,
+        "why_sk": "Stack kancelárie neznámy, sekundárny fit."
+      }
+    }
+  },
+  {
+    "ico": "47257059",
+    "leadId": "ldry_47257059",
+    "companyId": "cmp_47257059",
+    "name": "Hrušovský Legal, s.r.o.",
+    "city": "Bratislava - mestská časť Ružinov",
+    "nace": "6910",
+    "konatel": "JUDr. Peter Hrušovský",
+    "notes": "AK Metodova 1; web hplegal.sk; info@hplegal.sk na kontakte; Peter Hrušovský v SAK zozname advokátov.",
+    "skip_reason": null,
+    "website": "http://www.hplegal.sk",
+    "search": {
+      "queries": [
+        "47257059",
+        "Hrušovský Legal Bratislava",
+        "JUDr. Peter Hrušovský advokát kontakt email",
+        "site:sak.sk Hrušovský Legal 47257059"
+      ],
+      "hits": [
+        {
+          "url": "http://www.hplegal.sk/kontakt/",
+          "type": "own_site",
+          "title": "HP Legal – kontakt",
+          "snippet": "info@hplegal.sk, Metodova 1, IČO 47257059",
+          "hitIco": "47257059",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.epravo.sk/top/adresar/advokati/?pg=179",
+          "type": "aggregator",
+          "title": "ePravo – HRUŠOVSKÝ Peter JUDr.",
+          "snippet": "info@hplegal.sk, Metodova 1, www.hplegal.sk",
+          "hitIco": "47257059",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/lawyer/bpp/proxy/list/form/footer/pickers/picker/event/page/5043",
+          "type": "registry",
+          "title": "SAK – zoznam advokátov",
+          "snippet": "HRUŠOVSKÝ Peter JUDr., Bratislava Ružinov, reg. 6627",
+          "hitIco": null,
+          "icoMatch": false
+        },
+        {
+          "url": "https://finstat.sk/47257059",
+          "type": "aggregator",
+          "title": "Finstat – Hrušovský Legal",
+          "snippet": "IČO 47257059, Metodova 1, právne činnosti",
+          "hitIco": "47257059",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.uvostat.sk/subjekt/47257059",
+          "type": "aggregator",
+          "title": "UVOstat – Hrušovský Legal",
+          "snippet": "IČO 47257059, Metodova 1, Bratislava Ružinov",
+          "hitIco": "47257059",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Peter Hrušovský",
+        "firstName": "Peter",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "http://www.hplegal.sk",
+      "emails": [
+        {
+          "email": "info@hplegal.sk",
+          "url": "http://www.hplegal.sk/kontakt/",
+          "context": "kontakt na webe kancelárie"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Peter Hrušovský",
+        "role": "konateľ",
+        "email": "info@hplegal.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.93
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 80,
+        "send": true,
+        "why_sk": "Menšia advokátska kancelária – dokumenty a zmluvy pod NDA.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "B": {
+        "score": 35,
+        "send": false,
+        "why_sk": "Bez zjavného opakovaného interného HR procesu."
+      },
+      "C": {
+        "score": 83,
+        "send": true,
+        "why_sk": "Právna prax – riziko použitia verejného AI na klientske spisy.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "D": {
+        "score": 40,
+        "send": false,
+        "why_sk": "Všeobecný digitálny stack neoverený."
+      }
+    }
+  },
+  {
+    "ico": "47325712",
+    "leadId": "ldry_47325712",
+    "companyId": "cmp_47325712",
+    "name": "Garu SK, s.r.o.",
+    "city": "Bratislava - mestská časť Staré Mesto",
+    "nace": "6920",
+    "konatel": "Avexandru Gozgar",
+    "notes": "Býv. XEBOK; Dunajská 8; NACE účto ale profil skôr obchod; bez webu a e-mailu.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "47325712",
+        "Garu SK Bratislava",
+        "Avexandru Gozgar Garu SK kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-xebok-spol-s-r-o",
+          "type": "aggregator",
+          "title": "Garu SK – profil ORSR",
+          "snippet": "IČO 47325712, Dunajská 8, Avexandru Gozgar",
+          "hitIco": "47325712",
+          "icoMatch": true
+        },
+        {
+          "url": "https://finstat.sk/47325712",
+          "type": "aggregator",
+          "title": "Finstat – Garu SK",
+          "snippet": "IČO 47325712, historicky XEBOK, obchod",
+          "hitIco": "47325712",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Avexandru Gozgar",
+        "firstName": "Avexandru",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 22,
+        "send": false,
+        "why_sk": "Účtovná firma v NACE, ale bez webu a kontaktu.",
+        "risks": ["no_site", "shell?"]
+      },
+      "B": {
+        "score": 15,
+        "send": false,
+        "why_sk": "Bez digitálnej stopy nie je zmysel pre workflow ponuku."
+      },
+      "C": {
+        "score": 18,
+        "send": false,
+        "why_sk": "Bez e-mailu a webu – nedá sa osloviť."
+      },
+      "D": {
+        "score": 12,
+        "send": false,
+        "why_sk": "Žiadny overený firemný kanál."
+      }
+    }
+  },
+  {
+    "ico": "47451904",
+    "leadId": "ldry_47451904",
+    "companyId": "cmp_47451904",
+    "name": "BP TAX, s. r. o.",
+    "city": "Bratislava - mestská časť Petržalka",
+    "nace": "6920",
+    "konatel": "Ing. Jakub Buday",
+    "notes": "Účto/dane; býv. SIMK; Námestie hraničiarov 23 Petržalka; bez webu a verejného e-mailu.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "47451904",
+        "BP TAX Bratislava",
+        "Ing. Jakub Buday BP TAX kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://finstat.sk/47451904",
+          "type": "aggregator",
+          "title": "Finstat – BP TAX",
+          "snippet": "IČO 47451904, účtovníctvo, tržby ~48k€ 2025",
+          "hitIco": "47451904",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=304564&P=1",
+          "type": "registry",
+          "title": "ORSR – BP TAX",
+          "snippet": "Ing. Jakub Buday konateľ, účtovnícke činnosti",
+          "hitIco": "47451904",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Jakub Buday",
+        "firstName": "Jakub",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 28,
+        "send": false,
+        "why_sk": "Účtovná firma, ale chýba web aj kontakt.",
+        "risks": ["no_site", "no_email"]
+      },
+      "B": {
+        "score": 18,
+        "send": false,
+        "why_sk": "Bez overiteľného kanálu."
+      },
+      "C": {
+        "score": 25,
+        "send": false,
+        "why_sk": "Potenciál na doklady, no bez e-mailu neodosielať."
+      },
+      "D": {
+        "score": 15,
+        "send": false,
+        "why_sk": "Stack neznámy."
+      }
+    }
+  },
+  {
+    "ico": "47581034",
+    "leadId": "ldry_47581034",
+    "companyId": "cmp_47581034",
+    "name": "OSSI, s.r.o.",
+    "city": "Bratislava",
+    "nace": "6920",
+    "konatel": "Mgr. Peter Oswald",
+    "notes": "Janka Alexyho 11 Dúbravka; NACE účto; bez webu a verejného e-mailu.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "47581034",
+        "OSSI s.r.o. Bratislava",
+        "Mgr. Peter Oswald OSSI kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=293317&P=1",
+          "type": "registry",
+          "title": "ORSR – OSSI",
+          "snippet": "IČO 47581034, Mgr. Peter Oswald konateľ",
+          "hitIco": "47581034",
+          "icoMatch": true
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-ossi-sro",
+          "type": "aggregator",
+          "title": "OSSI – profil firmy",
+          "snippet": "IČO 47581034, Janka Alexyho 11, bez e-mailu",
+          "hitIco": "47581034",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Peter Oswald",
+        "firstName": "Peter",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 24,
+        "send": false,
+        "why_sk": "Účtovná firma bez digitálnej prítomnosti.",
+        "risks": ["no_site", "no_email"]
+      },
+      "B": {
+        "score": 16,
+        "send": false,
+        "why_sk": "Nedá sa overiť workflow."
+      },
+      "C": {
+        "score": 20,
+        "send": false,
+        "why_sk": "Chýba kontakt na oslovenie."
+      },
+      "D": {
+        "score": 14,
+        "send": false,
+        "why_sk": "Bez webu nízky fit."
+      }
+    }
+  },
+  {
+    "ico": "47649321",
+    "leadId": "ldry_47649321",
+    "companyId": "cmp_47649321",
+    "name": "GRANDUM, s.r.o.",
+    "city": "Bratislava - mestská časť Ružinov",
+    "nace": "6920",
+    "konatel": "Ing. Tatiana Semlitsch",
+    "notes": "Býv. twenTHy; Mierová 24; účto NACE; bez webu; konateľka v sieti firiem Semlitsch.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "47649321",
+        "GRANDUM s.r.o. Bratislava",
+        "Ing. Tatiana Semlitsch GRANDUM kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://finstat.sk/47649321",
+          "type": "aggregator",
+          "title": "Finstat – GRANDUM",
+          "snippet": "IČO 47649321, účtovníctvo, Mierová 24",
+          "hitIco": "47649321",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=304564&P=1",
+          "type": "registry",
+          "title": "ORSR – GRANDUM",
+          "snippet": "Ing. Tatiana Semlitsch konateľ, vedenie účtovníctva",
+          "hitIco": "47649321",
+          "icoMatch": true
+        },
+        {
+          "url": "https://register.peniaze.sk/osoba/tatiana-semlitsch",
+          "type": "aggregator",
+          "title": "Peniaze.sk – Tatiana Semlitsch",
+          "snippet": "GRANDUM IČO 47649321, viacero súvisiacich firiem",
+          "hitIco": "47649321",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Tatiana Semlitsch",
+        "firstName": "Tatiana",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 26,
+        "send": false,
+        "why_sk": "Účtovná firma, ale bez webu a kontaktu.",
+        "risks": ["no_site", "shell?"]
+      },
+      "B": {
+        "score": 14,
+        "send": false,
+        "why_sk": "Nie je overiteľný proces."
+      },
+      "C": {
+        "score": 22,
+        "send": false,
+        "why_sk": "Teoretický fit na doklady, no bez e-mailu."
+      },
+      "D": {
+        "score": 16,
+        "send": false,
+        "why_sk": "Chýba firemný web."
+      }
+    }
+  },
+  {
+    "ico": "47687444",
+    "leadId": "ldry_47687444",
+    "companyId": "cmp_47687444",
+    "name": "QuickTech s. r. o.",
+    "city": "Bratislava",
+    "nace": "6920",
+    "konatel": "Lukáš Méry",
+    "notes": "Býv. FINZEN; Bratislavská 47; názov evokuje IT, NACE účto; bez webu a e-mailu pre SK IČO.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "47687444",
+        "QuickTech s.r.o. Bratislava",
+        "Lukáš Méry QuickTech kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://finstat.sk/47687444",
+          "type": "aggregator",
+          "title": "Finstat – QuickTech",
+          "snippet": "IČO 47687444, býv. FINZEN, Bratislavská 47",
+          "hitIco": "47687444",
+          "icoMatch": true
+        },
+        {
+          "url": "https://quicktech.cz/",
+          "type": "other",
+          "title": "QuickTech.cz – IT služby",
+          "snippet": "Česká IT firma, iný subjekt než SK IČO 47687444",
+          "hitIco": "22172521",
+          "icoMatch": false
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Lukáš Méry",
+        "firstName": "Lukáš",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 20,
+        "send": false,
+        "why_sk": "NACE účto, ale bez webu; názov môže znamenať IT.",
+        "risks": ["no_site", "it?"]
+      },
+      "B": {
+        "score": 12,
+        "send": false,
+        "why_sk": "Bez kontaktu."
+      },
+      "C": {
+        "score": 18,
+        "send": false,
+        "why_sk": "Nedá sa overiť prax."
+      },
+      "D": {
+        "score": 10,
+        "send": false,
+        "why_sk": "Pravdepodobne mimo ICP bez overenia."
+      }
+    }
+  },
+  {
+    "ico": "47998334",
+    "leadId": "ldry_47998334",
+    "companyId": "cmp_47998334",
+    "name": "KTH SK s. r. o.",
+    "city": "Bratislava",
+    "nace": "6920",
+    "konatel": "Tatiana Hlinková",
+    "notes": "Účtáreň kth.sk; info@kth.sk na webe; účto, mzdy, poradenstvo.",
+    "skip_reason": null,
+    "website": "https://www.kth.sk",
+    "search": {
+      "queries": [
+        "47998334",
+        "KTH SK Bratislava",
+        "kth.sk info@kth.sk Tatiana Hlinková"
+      ],
+      "hits": [
+        {
+          "url": "https://www.kth.sk/cennik",
+          "type": "own_site",
+          "title": "KTH SK – cenník",
+          "snippet": "KTH SK s.r.o., info@kth.sk, +421 948 526 048",
+          "hitIco": "47998334",
+          "icoMatch": true
+        },
+        {
+          "url": "https://finstat.sk/47998334",
+          "type": "aggregator",
+          "title": "Finstat – KTH SK",
+          "snippet": "IČO 47998334, účtovníctvo Bratislava",
+          "hitIco": "47998334",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Tatiana Hlinková",
+        "firstName": "Tatiana",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.kth.sk",
+      "emails": [
+        {
+          "email": "info@kth.sk",
+          "url": "https://www.kth.sk/cennik",
+          "context": "pätička / kontakt prevádzkovateľa"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "Tatiana Hlinková",
+        "role": "konateľ",
+        "email": "info@kth.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.9
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 76,
+        "send": true,
+        "why_sk": "Účtovná firma – citlivé doklady a DPH klientov.",
+        "hook_id": "69-ucto",
+        "risks": []
+      },
+      "B": {
+        "score": 42,
+        "send": false,
+        "why_sk": "Mzdový workflow nie je primárny na webe."
+      },
+      "C": {
+        "score": 72,
+        "send": true,
+        "why_sk": "Účto – ľudia skúšajú verejné AI na dokladoch a výkazoch.",
+        "hook_id": "69-ucto",
+        "risks": []
+      },
+      "D": {
+        "score": 38,
+        "send": false,
+        "why_sk": "Stack neznámy, sekundárny fit."
+      }
+    }
+  }
+]
