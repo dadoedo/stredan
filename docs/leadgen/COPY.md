@@ -313,7 +313,11 @@ ENRICH_ONLY: nequeue. skip_reason → Lead.status=skipped + skipReason. Inak enr
 
 ---
 
-## 10. Prompt: render + send
+## 10. Prompt: render (draft) + send
+
+`MODE=DRAFT_ONLY`: vyplň šablónu a **ulož** `Touch.status=draft` cez `scripts/leadgen-apply-drafts.ts`. **Neposielaj.** Žiadny Email MCP `send_message`. Žiadny nový RPO pull — len už enrichnuté leady v `stredan`.
+
+`MODE=SEND` (zatiaľ vypnuté): až potom `send_message`, `Touch.status=sent`, `TouchEvent`, `Lead.contacted`.
 
 ```
 Vezmi aktívny EmailTemplate (key=cold-1, locale=sk) pre ponuku z matrix bunky.
@@ -330,11 +334,12 @@ Nesmieš:
 - dať cenu
 - použiť em dash
 - poslať E cold
-- poslať na skip_reason, Suppression, alebo score send=false
+- poslať na skip_reason, Suppression, alebo keď žiadne A–D nemá send=true ani score≥50
+- nechať {{token}} v subjecte / tele
 
-From = SendAccount. Reply-To = david@stredan.sk.
-Pred sendom: INSERT Touch draft (subject, bodyText, offerId, templateId, sendAccountId, accountKey, channel, personalization JSON s vyplnenými tokenmi).
-Po sende: status=sent, TouchEvent sent, Lead.status=contacted.
+From = SendAccount. Reply-To = david@stredan.sk (použije sa až pri SEND).
+DRAFT_ONLY: JSON → scripts/leadgen-apply-drafts.ts → INSERT Touch draft. Lead queued z early statusov. STOP.
+SEND: až potom status=sent, TouchEvent sent, Lead.status=contacted.
 ```
 
 ---
@@ -372,7 +377,8 @@ Krátky overlay nad `AGENT_PLAYBOOK.md`. Playbook ostáva zdroj pravdy pre SQL a
 ```
 Si denný operátor Stredan outbound. Ľudský UI je stredan.sk/admin. MCP je len Postgres + mail.
 
-Dnes: playbook + docs/leadgen/COPY.md + ENRICHMENT_JSON.md. SQL píš len cez scripts/leadgen-apply-enrichment.ts.
+Dnes: playbook + docs/leadgen/COPY.md + DRAFT_JSON.md (DRAFT_ONLY) / ENRICHMENT_JSON.md (ENRICH_ONLY).
+SQL: drafts cez scripts/leadgen-apply-drafts.ts, enrich cez scripts/leadgen-apply-enrichment.ts.
 Hotový beh = AgentRun.status v admine, nie Cursor RUNNING.
 
 Hard:
@@ -389,7 +395,8 @@ Hard:
 - odpovede nenaosobne neodosielaj
 - search hity (aj Finstat/FOAF) zapisuj do LeadEnrichment kind=search
 
-Default tento beh: ENRICH_ONLY (0 sendov), kým David nepovie SEND.
+Default tento beh: DRAFT_ONLY (draft už enrichnutých, 0 sendov, žiadny nový RPO pull), kým David nepovie SEND.
+ENRICH_ONLY ostáva ako flip, keď treba ďalších 50 firiem — stále 0 sendov.
 
 Na konci: krátky bullet report (bunky, interested, 3 fail, 1 tweak).
 ```

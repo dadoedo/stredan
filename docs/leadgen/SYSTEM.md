@@ -58,11 +58,13 @@ offer E        …                                         E×5
 
 Šablóna **nie je** viazaná na Gmail vs Resend. Obsah je A–E. Kanál a from-address berie send účet.
 
-Každý send:
+Každý send (až MODE=SEND):
 
 1. Vyberie **náhodnú aktívnu bunku**, ktorá je ešte pod capom.
 2. Zapíše `Touch` s `offerId` + `sendAccountId` + `templateId` + `accountKey`.
 3. Pošle cez Email MCP tým účtom.
+
+`MODE=DRAFT_ONLY` robí kroky 1–2 a **zastaví** na `Touch.status=draft`. Neposiela. Neťahá nové firmy z RPO — ide len cez leady, ktoré už sú v `stredan`.
 
 V admine `/admin/matrix` vidíš volume a odpovede po bunkách. Neskôr vieme pridať dimenzie (denná doba, subject variant, ICP segment) ako ďalšiu os; v1 je 2D.
 
@@ -72,7 +74,15 @@ V admine `/admin/matrix` vidíš volume a odpovede po bunkách. Neskôr vieme pr
 - Max `SendAccount.dailyCap` na účet (default **8**).
 - Offer E nie je primárny cold CTA; až po interest / vysokom skóre.
 
-Kým mailboxy 1–5 nie sú zapojené, agent **neposiela**. Môže enrichovať a logovať.
+Kým mailboxy 1–5 nie sú zapojené, agent **neposiela**. Môže enrichovať, skórovať a v `DRAFT_ONLY` ukladať drafty.
+
+Módy (jeden na beh, nemiešať):
+
+| Mode | Čo robí |
+|------|---------|
+| `ENRICH_ONLY` | Ďalších až 50 firiem z RPO + skóre A–D. Žiadny Touch. |
+| `DRAFT_ONLY` | Draft z **už enrichnutých** sendable leadov v `stredan`. Žiadny RPO pull. Cap 40. Ak je sendable = 0, STOP (nezačne enrich). |
+| `SEND` | Email MCP. Zatiaľ vypnuté. |
 
 ---
 
@@ -116,17 +126,17 @@ Ponuky A–E: [OFFERS.md](./OFFERS.md). Landingy žijú na webe; seed `npm run s
 Playbook pre agenta: [AGENT_PLAYBOOK.md](./AGENT_PLAYBOOK.md).
 
 ```text
-RPO ranked pool (rpo2.outreach_candidates, ORDER BY score)
-    → skip IČO already in stredan.Company / Suppression
-    → Company + Lead(sourced)
-    → enrich (browse, verejný web) → LeadEnrichment
-    → score A–E → LeadScore
+MODE=ENRICH_ONLY:
+  RPO ranked pool → Company + Lead(sourced) → enrich → score A–D → STOP (no Touch)
+
+MODE=DRAFT_ONLY (default teraz):
+  sendable leads už v stredan (email, no skip, no Touch, A–D sendable)
     → náhodná bunka pod capom
-    → render EmailTemplate → Touch
-    → Email MCP send
-    → triáž inboxu → ReplyIntent / Suppression
-    → ExperimentDaily + AgentRun.summary
-    → STOP
+    → render EmailTemplate → Touch(draft)
+    → STOP (no Email MCP)
+
+MODE=SEND (vypnuté):
+  Touch(draft) → Email MCP send → triáž inboxu → ExperimentDaily
 ```
 
 Ty ráno:
@@ -166,7 +176,8 @@ Po logine (`ADMIN_PASSWORD`) default je matrix, nie projekty.
 3. Sending domain(y) oddelené od marketing `stredan.sk` (deliverabilita).
 4. Cursor Automation: denný schedule. **Do UI daj len stub** z [AUTOMATION_PROMPT.md](./AUTOMATION_PROMPT.md) — celý playbook žije v gite, nie v duplicite v Cursor boxe.
 5. Prvý beh: **50 firiem, enrich only, 0 sendov**. Skontrolovať JSON v admine.
-6. Potom warmup sendy pod capmi. Až potom zvyšovať.
+6. Potom `DRAFT_ONLY` na tých istých leadov (Touch draft, 0 sendov). Writer: `scripts/leadgen-apply-drafts.ts`.
+7. Až potom warmup sendy pod capmi.
 
 Checklist treťostrán: [THIRD_PARTIES.md](./THIRD_PARTIES.md).
 

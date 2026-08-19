@@ -1,0 +1,18 @@
+[
+  {
+    "ico": "45389551",
+    "email": "bratislava@anssk.sk",
+    "offerCode": "C",
+    "accountCode": "1",
+    "templateKey": "cold-1",
+    "subject": "Firemné AI, nie súkromné účty",
+    "bodyText": "Dobrý deň, Milan,\n\nľudia už verejné AI používajú. Vo vašom odbore to zvyčajne začína pri faktúrach, DPH a pretáčaní dokladov z mailu do Pohody.\n\nPre ANS Accounting vieme nastaviť firemné AI: vaše dokumenty, prístupy, logy, jasné čo smie a čo nesmie.\n\nAk to nie je téma, stačí jedno „nie“.\n\nDávid Stredánsky\nhttps://stredan.sk/offers/shadow-ai\n",
+    "personalization": {
+      "salutation": "Dobrý deň, Milan,",
+      "company": "ANS Accounting",
+      "hook": "Vo vašom odbore to zvyčajne začína pri faktúrach, DPH a pretáčaní dokladov z mailu do Pohody.",
+      "landing": "https://stredan.sk/offers/shadow-ai",
+      "firstName": "Milan"
+    }
+  }
+]
