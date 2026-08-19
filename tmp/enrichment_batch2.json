@@ -1,0 +1,2716 @@
+[
+  {
+    "ico": "45389551",
+    "leadId": "ldry_45389551",
+    "companyId": "cmp_45389551",
+    "notes": "Účtovníctvo Na Lánoch 4; web anssk.sk; nízke tržby 2024 ale aktívna.",
+    "skip_reason": null,
+    "website": "https://www.anssk.sk",
+    "contacts": [
+      {
+        "fullName": "Ing. Milan Šaran",
+        "role": "konateľ",
+        "email": "bratislava@anssk.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "search": {
+      "queries": [
+        "45389551",
+        "ANS Accounting Bratislava",
+        "Milan Šaran ANS kontakt"
+      ],
+      "hits": [
+        {
+          "url": "https://podnikam.sk/zoznam-firiem/ans-accounting-s-r-o/",
+          "type": "aggregator",
+          "title": "ANS Accounting Podnikam",
+          "snippet": "bratislava@anssk.sk, www.anssk.sk"
+        },
+        {
+          "url": "https://finstat.sk/45389551",
+          "type": "aggregator",
+          "title": "Finstat 45389551",
+          "snippet": "Na Lánoch 4, účtovníctvo"
+        },
+        {
+          "url": "https://www.anssk.sk",
+          "type": "own_site",
+          "title": "ANS SK",
+          "snippet": "účtovníctvo Bratislava"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Milan Šaran",
+        "firstName": "Milan",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.anssk.sk",
+      "emails": [
+        {
+          "email": "bratislava@anssk.sk",
+          "url": "https://www.anssk.sk",
+          "context": "kontakt firmy"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 78,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 48,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 32,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "45400270",
+    "leadId": "ldry_45400270",
+    "companyId": "cmp_45400270",
+    "notes": "Účtovníctvo Hattalova 12/C; konateľ Ing. Peter Lempeľ (od 2/2025); tržby 2025 ~98k€; bez webu/emailu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "45400270",
+        "INTERFORTE Bratislava",
+        "Peter Lempeľ INTERFORTE kontakt"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/45400270-interforte-s-r-o",
+          "type": "registry",
+          "title": "INTERFORTE RPO",
+          "snippet": "Peter Lempeľ konateľ, vedenie účtovníctva"
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-interforte-s-r-o-1",
+          "type": "aggregator",
+          "title": "INTERFORTE profil",
+          "snippet": "IČO 45400270, Hattalova"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Peter Lempeľ",
+        "firstName": "Peter",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 44,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 28,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 18,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "45557829",
+    "leadId": "ldry_45557829",
+    "companyId": "cmp_45557829",
+    "notes": "Účtovníctvo Karpatské nám. 10/A; Ing. Silvia Drotárová; tržby ~4k€, strata; bez webu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "45557829",
+        "WalCorp Bratislava",
+        "Silvia Drotárová WalCorp"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/45557829-walcorp-s-r-o",
+          "type": "registry",
+          "title": "WalCorp RPO",
+          "snippet": "Ing. Silvia Drotárová, účtovníctvo"
+        },
+        {
+          "url": "https://finstat.sk/45557829",
+          "type": "aggregator",
+          "title": "WalCorp Finstat",
+          "snippet": "IČO 45557829"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Silvia Drotárová",
+        "firstName": "Silvia",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "45697256",
+    "leadId": "ldry_45697256",
+    "companyId": "cmp_45697256",
+    "notes": "NACE 69200 účtovníctvo; Madáchova 14A; Ing. Marta Herzánová; bez webu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "45697256",
+        "MI MEDICAL Bratislava",
+        "Marta Herzánová MI MEDICAL"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finreg.sk/subjekt/2023104974",
+          "type": "registry",
+          "title": "MI MEDICAL FinReg",
+          "snippet": "69200, IČO 45697256"
+        },
+        {
+          "url": "https://m.dlznik.zoznam.sk/socialna-siet/mi-medical-s-r-o-1",
+          "type": "aggregator",
+          "title": "MI MEDICAL ORSR",
+          "snippet": "Ing. Marta Herzánová"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Marta Herzánová",
+        "firstName": "Marta",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "45859272",
+    "leadId": "ldry_45859272",
+    "companyId": "cmp_45859272",
+    "notes": "AK Palisády 729/36; JUDr. Ing. Dáša Lenčešová PhD.; bez vlastného webu; gmail cez partnera.",
+    "skip_reason": null,
+    "website": null,
+    "contacts": [
+      {
+        "fullName": "JUDr. Ing. Dáša Lenčešová PhD.",
+        "role": "konateľ",
+        "email": "ak.lencesova@gmail.com",
+        "emailSource": "other",
+        "isPrimary": true,
+        "confidence": 0.7
+      }
+    ],
+    "search": {
+      "queries": [
+        "45859272",
+        "DL Droit Bratislava",
+        "Dáša Lenčešová kontakt"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finreg.sk/subjekt/2023119769",
+          "type": "registry",
+          "title": "DL Droit FinReg",
+          "snippet": "právne činnosti"
+        },
+        {
+          "url": "https://www.bakalike.sk/pravne-sluzby",
+          "type": "other",
+          "title": "Bakalike partner",
+          "snippet": "ak.lencesova@gmail.com"
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-dae-droit-s-r-o-1",
+          "type": "aggregator",
+          "title": "DL Droit ORSR",
+          "snippet": "Lenčešová konateľ"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Ing. Dáša Lenčešová PhD.",
+        "firstName": "Dáša",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [
+        {
+          "email": "ak.lencesova@gmail.com",
+          "url": "https://www.bakalike.sk/pravne-sluzby",
+          "context": "partner referencia"
+        }
+      ],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 55,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 20,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46045171",
+    "leadId": "ldry_46045171",
+    "companyId": "cmp_46045171",
+    "notes": "Účtovníctvo Chladná 5 Rača; info@emmu.sk v SK-NIC/backorder; konateľ v registri Mgr. Jozef Macák (lead uvádza Elena Roková).",
+    "skip_reason": null,
+    "website": null,
+    "contacts": [
+      {
+        "fullName": "Ing. Elena Roková",
+        "role": "konateľ (lead)",
+        "email": "info@emmu.sk",
+        "emailSource": "other",
+        "isPrimary": true,
+        "confidence": 0.55
+      }
+    ],
+    "search": {
+      "queries": [
+        "46045171",
+        "EMMU Bratislava Rača",
+        "EMMU info@emmu.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.backorder.sk/subjekt/EMMU-0001",
+          "type": "other",
+          "title": "Backorder EMMU",
+          "snippet": "info@emmu.sk, IČO 46045171"
+        },
+        {
+          "url": "https://e-creditreform.sk/EMMU-S-R-O/46045171",
+          "type": "other",
+          "title": "EMMU credit report",
+          "snippet": "Chladná 5, účtovníctvo"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Jozef Macák",
+        "firstName": "Jozef",
+        "role": "konateľ",
+        "source": "RPO/backorder"
+      },
+      {
+        "fullName": "Ing. Elena Roková",
+        "firstName": "Elena",
+        "role": "lead contact",
+        "source": "lead list"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [
+        {
+          "email": "info@emmu.sk",
+          "url": "https://www.backorder.sk/subjekt/EMMU-0001",
+          "context": "doménový/register kontakt, bez overeného webu"
+        }
+      ],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 58,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 48,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 18,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46075976",
+    "leadId": "ldry_46075976",
+    "companyId": "cmp_46075976",
+    "notes": "PROTECTA Group Jamnického 6; široký predmet podnikania; Ing. Rudolf Bíro; bez webu/emailu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46075976",
+        "PROTECTA Group Bratislava",
+        "Rudolf Bíro PROTECTA"
+      ],
+      "hits": [
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=205485&P=0",
+          "type": "registry",
+          "title": "ORSR PROTECTA Group",
+          "snippet": "Ing. Rudolf Bíro konateľ"
+        },
+        {
+          "url": "https://vestnikonline.sk/records/detail/2385966",
+          "type": "registry",
+          "title": "Obchodný vestník",
+          "snippet": "IČO 46075976"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Rudolf Bíro",
+        "firstName": "Rudolf",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46177671",
+    "leadId": "ldry_46177671",
+    "companyId": "cmp_46177671",
+    "notes": "SLOVAKIA HOLDING zrušená 11/2025 (MS BA III); István Dénes Takács; bez webu.",
+    "skip_reason": "shell",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46177671",
+        "SLOVAKIA HOLDING Bratislava",
+        "István Takács"
+      ],
+      "hits": [
+        {
+          "url": "https://www.uvostat.sk/subjekt/46177671",
+          "type": "aggregator",
+          "title": "UVOstat",
+          "snippet": "zrušená 4.11.2025"
+        },
+        {
+          "url": "https://m.dlznik.zoznam.sk/socialna-siet/spolocnost-slovakia-holding-s-r-o-1",
+          "type": "aggregator",
+          "title": "SLOVAKIA HOLDING profil",
+          "snippet": "Jelenia 1"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "István Dénes Takács",
+        "firstName": "István",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "B": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "C": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "D": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      }
+    }
+  },
+  {
+    "ico": "46213279",
+    "leadId": "ldry_46213279",
+    "companyId": "cmp_46213279",
+    "notes": "MGS Solutions Znievska 40; strata -580€, 0 tržby 2024; Ivan Petrovič; bez webu.",
+    "skip_reason": "shell",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46213279",
+        "MGS Solutions Bratislava",
+        "Ivan Petrovič MGS"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/46213279-mgs-solutions-s-r-o",
+          "type": "registry",
+          "title": "MGS Solutions RPO",
+          "snippet": "Ivan Petrovič, 0 tržby 2024"
+        },
+        {
+          "url": "https://finstat.sk/46213279",
+          "type": "aggregator",
+          "title": "MGS Solutions Finstat",
+          "snippet": "strata, shell profil"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ivan Petrovič",
+        "firstName": "Ivan",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "B": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "C": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "D": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      }
+    }
+  },
+  {
+    "ico": "46403191",
+    "leadId": "ldry_46403191",
+    "companyId": "cmp_46403191",
+    "notes": "Daňový/účtovný poradca; Štefánikova 19; tržby ~270k€ 2024; web + office email.",
+    "skip_reason": null,
+    "website": "https://lukacikpartners.sk",
+    "contacts": [
+      {
+        "fullName": "Mgr. Pavol Lukáčik",
+        "role": "konateľ, daňový poradca",
+        "email": "office@lukacikpartners.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.95
+      }
+    ],
+    "search": {
+      "queries": [
+        "46403191",
+        "Lukáčik Partners Bratislava",
+        "Pavol Lukáčik kontakt"
+      ],
+      "hits": [
+        {
+          "url": "https://lukacikpartners.sk/kontakt",
+          "type": "own_site",
+          "title": "Kontakt Lukáčik",
+          "snippet": "office@lukacikpartners.sk"
+        },
+        {
+          "url": "https://finstat.sk/46403191",
+          "type": "aggregator",
+          "title": "Finstat Lukáčik",
+          "snippet": "tržby 269k 2024"
+        },
+        {
+          "url": "https://podnikam.sk/zoznam-firiem/lukacik-partners-s-r-o/",
+          "type": "aggregator",
+          "title": "Podnikam",
+          "snippet": "účtovníctvo Bratislava"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Pavol Lukáčik",
+        "firstName": "Pavol",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://lukacikpartners.sk",
+      "emails": [
+        {
+          "email": "office@lukacikpartners.sk",
+          "url": "https://lukacikpartners.sk/kontakt",
+          "context": "kontaktná stránka"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 84,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 48,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 32,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 85,
+        "rationaleSk": "Silný účtovnícky lead s webom a emailom."
+      }
+    }
+  },
+  {
+    "ico": "46403353",
+    "leadId": "ldry_46403353",
+    "companyId": "cmp_46403353",
+    "notes": "kkamila Ožvoldíkova 4 Dúbravka; Kamila Kováčová konateľka; bez webu/emailu (iná Kamila Kováčová = mini-jasle).",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46403353",
+        "kkamila Bratislava",
+        "Kamila Kováčová kkamila"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/osoba/kamila-kovacova",
+          "type": "registry",
+          "title": "Kamila Kováčová RPO",
+          "snippet": "kkamila 46403353 konateľ"
+        },
+        {
+          "url": "https://mini-jasle-kamila-kovacova-bratislava.katalog-skol.sk/",
+          "type": "other",
+          "title": "Mini-jasle (iná osoba)",
+          "snippet": "IČO 41805542 – kolízia mena"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Kamila Kováčová",
+        "firstName": "Kamila",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46444076",
+    "leadId": "ldry_46444076",
+    "companyId": "cmp_46444076",
+    "notes": "Účtovníctvo REMCO; Šalviová 52 Ružinov; web remco.sk; info@remco.sk.",
+    "skip_reason": null,
+    "website": "https://remco.sk",
+    "contacts": [
+      {
+        "fullName": "Ing. Eva Manáková",
+        "role": "konateľ (lead)",
+        "email": "info@remco.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.9
+      }
+    ],
+    "search": {
+      "queries": [
+        "46444076",
+        "REMCO Bratislava Ružinov",
+        "REMCO info@remco.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://remco.sk/en/",
+          "type": "own_site",
+          "title": "REMCO accounting",
+          "snippet": "info@remco.sk, Šalviová 52"
+        },
+        {
+          "url": "https://remco.sk/kontakt/",
+          "type": "own_site",
+          "title": "REMCO kontakt",
+          "snippet": "REMCO s.r.o. Bratislava"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Eva Manáková",
+        "firstName": "Eva",
+        "role": "konateľ",
+        "source": "lead/RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://remco.sk",
+      "emails": [
+        {
+          "email": "info@remco.sk",
+          "url": "https://remco.sk/en/",
+          "context": "kontakt na webe"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 78,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 48,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 32,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46478418",
+    "leadId": "ldry_46478418",
+    "companyId": "cmp_46478418",
+    "notes": "AKAVA GROUP Hraničná 18; Mgr. Marek Toman; bez webu/emailu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46478418",
+        "AKAVA GROUP Bratislava",
+        "Marek Toman AKAVA"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-akava-group-s-r-o-1",
+          "type": "aggregator",
+          "title": "AKAVA GROUP profil",
+          "snippet": "Mgr. Marek Toman, IČO 46478418"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Marek Toman",
+        "firstName": "Marek",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46634282",
+    "leadId": "ldry_46634282",
+    "companyId": "cmp_46634282",
+    "notes": "Účtovníctvo-ekonomika Saratovská 5 Dúbravka; Mgr. Jana Korecká; telefón v EDB, bez webu/emailu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46634282",
+        "Účtovníctvo-ekonomika Bratislava",
+        "Jana Korecká"
+      ],
+      "hits": [
+        {
+          "url": "https://www.edb.eu/en/czech-firm-1345122-uctovnictvo-ekonomika-bratislava-mestska-cast-dubravka",
+          "type": "other",
+          "title": "EDB profil",
+          "snippet": "Saratovská 5, +421903831222, IČO 46634282"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Jana Korecká",
+        "firstName": "Jana",
+        "role": "konateľ",
+        "source": "RPO/EDB"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46681957",
+    "leadId": "ldry_46681957",
+    "companyId": "cmp_46681957",
+    "notes": "ZOM – internetový predaj bižutérie (nie účtovníctvo); Kalištná 11; Ing. Zuzana Rimková; bez webu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46681957",
+        "ZOM Bratislava Rimková",
+        "ZOM bižutéria"
+      ],
+      "hits": [
+        {
+          "url": "https://www.zoznam.sk/firma/3381879/ZOM-Bratislava",
+          "type": "aggregator",
+          "title": "ZOM Zoznam",
+          "snippet": "bižutéria, IČO 46681957"
+        },
+        {
+          "url": "https://databazafiriem.com/zom---ing-zuzana-rimkova.html",
+          "type": "other",
+          "title": "Z.O.M. iná živnosť",
+          "snippet": "kolízia – duchovné služby 37127446"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Zuzana Rimková",
+        "firstName": "Zuzana",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 8,
+        "rationaleSk": "Mimo účtovnícky ICP."
+      },
+      "B": {
+        "score": 8,
+        "rationaleSk": "Mimo payroll ICP."
+      },
+      "C": {
+        "score": 10,
+        "rationaleSk": "Nie je právna kancelária."
+      },
+      "D": {
+        "score": 15,
+        "rationaleSk": "Slabý všeobecný fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46747354",
+    "leadId": "ldry_46747354",
+    "companyId": "cmp_46747354",
+    "notes": "MJ audit & consulting Karpatské nám. 10A; Ing. Miroslava Jakubcová; bez webu (mjaudit.sk = iná firma 31356931).",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46747354",
+        "MJ audit consulting Bratislava",
+        "Miroslava Jakubcová MJ audit"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finreg.sk/subjekt/2023578414",
+          "type": "registry",
+          "title": "MJ audit FinReg",
+          "snippet": "69200, Karpatské nám. 10A"
+        },
+        {
+          "url": "https://mjaudit.sk/",
+          "type": "other",
+          "title": "mjaudit.sk – iná entita",
+          "snippet": "MJ Audit s.r.o. Matúš Juričkov – iné IČO"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Miroslava Jakubcová",
+        "firstName": "Miroslava",
+        "role": "konateľ",
+        "source": "lead/RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46865969",
+    "leadId": "ldry_46865969",
+    "companyId": "cmp_46865969",
+    "notes": "ECO SPEED Seberíniho 1; Ján Prosba (historicky); 0 tržby 2020; bez webu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46865969",
+        "ECO SPEED Bratislava",
+        "Ján Prosba ECO SPEED"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/46865969-eco-speed-s-r-o",
+          "type": "registry",
+          "title": "ECO SPEED RPO",
+          "snippet": "Ján Prosba konateľ, 0 výnosov 2020"
+        },
+        {
+          "url": "https://www.finreg.sk/subjekt/2120995140",
+          "type": "other",
+          "title": "Eko Speed iná firma",
+          "snippet": "52315240 – kolízia názvu"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ján Prosba",
+        "firstName": "Ján",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46893105",
+    "leadId": "ldry_46893105",
+    "companyId": "cmp_46893105",
+    "notes": "A.H. Consulting Trnavská cesta 50/B; Andrea Hengericsová; tržby ~33k€; Transparex: bez webu/emailu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46893105",
+        "A.H. Consulting Bratislava",
+        "Andrea Hengericsová"
+      ],
+      "hits": [
+        {
+          "url": "https://www.transparex.sk/organization/sk/46893105/profile",
+          "type": "aggregator",
+          "title": "Transparex A.H. Consulting",
+          "snippet": "bez webu a emailu"
+        },
+        {
+          "url": "https://www.finstat.sk/46893105",
+          "type": "aggregator",
+          "title": "Finstat",
+          "snippet": "tržby 32 908€ 2024"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Andrea Hengericsová",
+        "firstName": "Andrea",
+        "role": "konateľ",
+        "source": "lead/RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 38,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 28,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 18,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46903542",
+    "leadId": "ldry_46903542",
+    "companyId": "cmp_46903542",
+    "notes": "Netro Dynamics Vlastenecké nám. 1186/9; Lukáš Nerád; tržby ~19k€; bez webu/emailu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46903542",
+        "Netro Dynamics Bratislava",
+        "Lukáš Nerád Netro"
+      ],
+      "hits": [
+        {
+          "url": "https://finstat.sk/46903542",
+          "type": "aggregator",
+          "title": "Netro Dynamics Finstat",
+          "snippet": "poradenstvo/účtovníctvo, 1 zamestnanec"
+        },
+        {
+          "url": "https://www.finreg.sk/subjekt/2023939819",
+          "type": "other",
+          "title": "Netro s.r.o. iná firma",
+          "snippet": "47540397 – kolízia"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Lukáš Nerád",
+        "firstName": "Lukáš",
+        "role": "konateľ",
+        "source": "lead/RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 38,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 28,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 18,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "46978836",
+    "leadId": "ldry_46978836",
+    "companyId": "cmp_46978836",
+    "notes": "M – EFEKT DNV; Ingrid Obrancová; tržby ~27k€; bez webu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "46978836",
+        "M EFEKT Bratislava",
+        "Ingrid Obrancová M-EFEKT"
+      ],
+      "hits": [
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=256549&P=0",
+          "type": "registry",
+          "title": "ORSR M-EFEKT",
+          "snippet": "Ingrid Obrancová, Bučiča 7474/6"
+        },
+        {
+          "url": "https://www.finstat.sk/46978836",
+          "type": "aggregator",
+          "title": "Finstat M-EFEKT",
+          "snippet": "zisk 11 321€ 2024"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ingrid Obrancová",
+        "firstName": "Ingrid",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 38,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 28,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 18,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47207027",
+    "leadId": "ldry_47207027",
+    "companyId": "cmp_47207027",
+    "notes": "Bandie Herlianska 4; Andrea Bednáriková; mikro firma ~5.7k€ tržby; bez webu; Bednáriková aktívna v NGO.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "47207027",
+        "Bandie Bratislava",
+        "Andrea Bednáriková Bandie"
+      ],
+      "hits": [
+        {
+          "url": "https://finstat.sk/47207027",
+          "type": "aggregator",
+          "title": "Bandie Finstat",
+          "snippet": "Herlianska 4, strata"
+        },
+        {
+          "url": "https://press.news/sk/article/144304-clovek-za-clovekom-andrea-bednarikova",
+          "type": "other",
+          "title": "Andrea Bednáriková NGO",
+          "snippet": "Človek v ohrození – nie firemný kontakt"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Andrea Bednáriková",
+        "firstName": "Andrea",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47232366",
+    "leadId": "ldry_47232366",
+    "companyId": "cmp_47232366",
+    "notes": "AK Beňová Blumentálska 8; Mgr. Martina Beňová; web akbenova.sk.",
+    "skip_reason": null,
+    "website": "https://www.akbenova.sk",
+    "contacts": [
+      {
+        "fullName": "Mgr. Martina Beňová",
+        "role": "konateľ",
+        "email": "advokat@akbenova.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.95
+      }
+    ],
+    "search": {
+      "queries": [
+        "47232366",
+        "Advokátska kancelária Beňová Bratislava",
+        "Martina Beňová email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.akbenova.sk/kontakt",
+          "type": "own_site",
+          "title": "AK Beňová kontakt",
+          "snippet": "advokat@akbenova.sk"
+        },
+        {
+          "url": "https://podnikam.sk/zoznam-firiem/advokatska-kancelaria-benova-s-r-o/",
+          "type": "aggregator",
+          "title": "Podnikam",
+          "snippet": "47232366"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Martina Beňová",
+        "firstName": "Martina",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.akbenova.sk",
+      "emails": [
+        {
+          "email": "advokat@akbenova.sk",
+          "url": "https://www.akbenova.sk/",
+          "context": "kontakt advokátka"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 82,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "rationaleSk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    }
+  },
+  {
+    "ico": "47237031",
+    "leadId": "ldry_47237031",
+    "companyId": "cmp_47237031",
+    "notes": "Fiľo & Partners Štúrova 11; Mgr. Július Fiľo; SAK office@akfp.sk; tržby ~162k€.",
+    "skip_reason": null,
+    "website": "https://www.akfp.sk",
+    "contacts": [
+      {
+        "fullName": "Mgr. Július Fiľo",
+        "role": "konateľ",
+        "email": "office@akfp.sk",
+        "emailSource": "registry",
+        "isPrimary": true,
+        "confidence": 0.93
+      }
+    ],
+    "search": {
+      "queries": [
+        "47237031",
+        "Fiľo Partners Bratislava",
+        "Július Fiľo office@akfp.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.akfp.sk/sk/o-nas.html",
+          "type": "own_site",
+          "title": "Fiľo & Partners",
+          "snippet": "realitné a obchodné právo"
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/507957/display/event",
+          "type": "registry",
+          "title": "SAK Fiľo & Partners",
+          "snippet": "office@akfp.sk, IČO 47237031"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Július Fiľo",
+        "firstName": "Július",
+        "role": "konateľ",
+        "source": "RPO/SAK"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.akfp.sk",
+      "emails": [
+        {
+          "email": "office@akfp.sk",
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/507957/display/event",
+          "context": "SAK register + akfp.sk"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 87,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "rationaleSk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    }
+  },
+  {
+    "ico": "47238232",
+    "leadId": "ldry_47238232",
+    "companyId": "cmp_47238232",
+    "notes": "ŠKODLER & PARTNERS Dobšinského 12; JUDr. Ondrej Škodler; skodler.sk; bratislava@skodler.sk.",
+    "skip_reason": null,
+    "website": "https://skodler.sk",
+    "contacts": [
+      {
+        "fullName": "JUDr. Ondrej Škodler",
+        "role": "konateľ",
+        "email": "bratislava@skodler.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.94
+      }
+    ],
+    "search": {
+      "queries": [
+        "47238232",
+        "ŠKODLER PARTNERS Bratislava",
+        "Ondrej Škodler email"
+      ],
+      "hits": [
+        {
+          "url": "https://skodler.sk/",
+          "type": "own_site",
+          "title": "Škodler & Partners",
+          "snippet": "bratislava@skodler.sk"
+        },
+        {
+          "url": "https://www.finstat.sk/47238232",
+          "type": "aggregator",
+          "title": "Finstat ŠKODLER",
+          "snippet": "tržby ~200k 2024"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Ondrej Škodler",
+        "firstName": "Ondrej",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://skodler.sk",
+      "emails": [
+        {
+          "email": "bratislava@skodler.sk",
+          "url": "https://skodler.sk/",
+          "context": "kontakt na webe"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 87,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "rationaleSk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    }
+  },
+  {
+    "ico": "47241063",
+    "leadId": "ldry_47241063",
+    "companyId": "cmp_47241063",
+    "notes": "NOVÁK & PARTNERS Kamzík 5A; JUDr. Anton Novák; novak@novak-partners.com (adresár); bez vlastného webu.",
+    "skip_reason": null,
+    "website": null,
+    "contacts": [
+      {
+        "fullName": "JUDr. Anton Novák",
+        "role": "konateľ",
+        "email": "novak@novak-partners.com",
+        "emailSource": "other",
+        "isPrimary": true,
+        "confidence": 0.75
+      }
+    ],
+    "search": {
+      "queries": [
+        "47241063",
+        "NOVÁK PARTNERS Bratislava",
+        "Anton Novák email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.uvostat.sk/subjekt/47241063",
+          "type": "aggregator",
+          "title": "UVOstat NOVÁK",
+          "snippet": "Anton Novák konateľ"
+        },
+        {
+          "url": "https://pravnikov-sk.com/bratislava/uslugi/poradenstvo-pri-riadeni-konfliktov/",
+          "type": "other",
+          "title": "Právnikov SK",
+          "snippet": "novak@novak-partners.com"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Anton Novák",
+        "firstName": "Anton",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [
+        {
+          "email": "novak@novak-partners.com",
+          "url": "https://pravnikov-sk.com/bratislava/uslugi/poradenstvo-pri-riadeni-konfliktov/",
+          "context": "právny adresár"
+        }
+      ],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 55,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 20,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47245042",
+    "leadId": "ldry_47245042",
+    "companyId": "cmp_47245042",
+    "notes": "PRÁVNE MIESTO = JELENČÍK A PARTNERS; Račianska 26E; JUDr. Michal Jelenčík; jelencik.sk.",
+    "skip_reason": null,
+    "website": "https://www.jelencik.sk",
+    "contacts": [
+      {
+        "fullName": "JUDr. Michal Jelenčík",
+        "role": "konateľ",
+        "email": "kontakt@jelencik.sk",
+        "emailSource": "registry",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "search": {
+      "queries": [
+        "47245042",
+        "PRÁVNE MIESTO Bratislava",
+        "Michal Jelenčík jelencik"
+      ],
+      "hits": [
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/539014/display/event",
+          "type": "registry",
+          "title": "SAK Jelenčík",
+          "snippet": "kontakt@jelencik.sk, www.jelencik.sk"
+        },
+        {
+          "url": "https://www.uvostat.sk/subjekt/47245042",
+          "type": "aggregator",
+          "title": "UVOstat PRÁVNE MIESTO",
+          "snippet": "skrátený názov PRÁVNE MIESTO"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Michal Jelenčík",
+        "firstName": "Michal",
+        "role": "konateľ",
+        "source": "RPO/SAK"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.jelencik.sk",
+      "emails": [
+        {
+          "email": "kontakt@jelencik.sk",
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/539014/display/event",
+          "context": "SAK + jelencik.sk"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 82,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "rationaleSk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    }
+  },
+  {
+    "ico": "47247053",
+    "leadId": "ldry_47247053",
+    "companyId": "cmp_47247053",
+    "notes": "AK Bolf Arménska 8; Mgr. Martin Bolf; bolf.sk; martin@bolf.sk.",
+    "skip_reason": null,
+    "website": "https://akbolf.sk",
+    "contacts": [
+      {
+        "fullName": "Mgr. Martin Bolf",
+        "role": "konateľ",
+        "email": "martin@bolf.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.94
+      }
+    ],
+    "search": {
+      "queries": [
+        "47247053",
+        "Martin Bolf advokát Bratislava",
+        "martin@bolf.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://akbolf.sk/",
+          "type": "own_site",
+          "title": "Mgr. Martin Bolf",
+          "snippet": "právne služby od 2009"
+        },
+        {
+          "url": "https://podnikam.sk/zoznam-firiem/mgr-martin-bolf-advokatska-kancelaria-s-r-o/",
+          "type": "aggregator",
+          "title": "Podnikam Bolf",
+          "snippet": "martin@bolf.sk, www.bolf.sk"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Martin Bolf",
+        "firstName": "Martin",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://akbolf.sk",
+      "emails": [
+        {
+          "email": "martin@bolf.sk",
+          "url": "https://podnikam.sk/zoznam-firiem/mgr-martin-bolf-advokatska-kancelaria-s-r-o/",
+          "context": "oficiálny kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 82,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "rationaleSk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    }
+  },
+  {
+    "ico": "47253347",
+    "leadId": "ldry_47253347",
+    "companyId": "cmp_47253347",
+    "notes": "AK Roman Gašparík Bernolákova 6; pôsobí ako senior associate LYNX Legal; bez vlastného webu/emailu firmy.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "47253347",
+        "Roman Gašparík advokát Bratislava",
+        "Gašparík LYNX"
+      ],
+      "hits": [
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=295754&P=0",
+          "type": "registry",
+          "title": "ORSR Gašparík AK",
+          "snippet": "Bernolákova 6, IČO 47253347"
+        },
+        {
+          "url": "https://lynx.legal/team/roman-gasparik/",
+          "type": "other",
+          "title": "LYNX Legal profil",
+          "snippet": "roman.gasparik@lynx.legal – iná organizácia"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Roman Gašparík LL.M.",
+        "firstName": "Roman",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 32,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 20,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47253363",
+    "leadId": "ldry_47253363",
+    "companyId": "cmp_47253363",
+    "notes": "ŠVECOVÁ s.r.o. Laurinská 3; JUDr. Stanislava Švecová; spolupracuje s MST Partners; gmail v adresári.",
+    "skip_reason": null,
+    "website": null,
+    "contacts": [
+      {
+        "fullName": "JUDr. Stanislava Švecová",
+        "role": "konateľ",
+        "email": "stanislava.svecova@gmail.com",
+        "emailSource": "other",
+        "isPrimary": true,
+        "confidence": 0.7
+      }
+    ],
+    "search": {
+      "queries": [
+        "47253363",
+        "ŠVECOVÁ advokát Bratislava",
+        "Stanislava Švecová email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.epravo.sk/top/adresar/advokati/?pg=513",
+          "type": "other",
+          "title": "ePravo adresár",
+          "snippet": "stanislava.svecova@gmail.com"
+        },
+        {
+          "url": "https://mstpartners.eu/?page_id=93",
+          "type": "other",
+          "title": "MST Partners team",
+          "snippet": "stanislava.svecova@mstpartners.sk – spolupráca"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Stanislava Švecová",
+        "firstName": "Stanislava",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [
+        {
+          "email": "stanislava.svecova@gmail.com",
+          "url": "https://www.epravo.sk/top/adresar/advokati/?pg=513",
+          "context": "právny adresár"
+        }
+      ],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 55,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 20,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47254840",
+    "leadId": "ldry_47254840",
+    "companyId": "cmp_47254840",
+    "notes": "BAK & PARTNERS Panská 14; JUDr. Peter Bak; bakpartners.sk; office@bakpartners.sk.",
+    "skip_reason": null,
+    "website": "https://www.bakpartners.sk",
+    "contacts": [
+      {
+        "fullName": "JUDr. Peter Bak",
+        "role": "konateľ",
+        "email": "office@bakpartners.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.96
+      }
+    ],
+    "search": {
+      "queries": [
+        "47254840",
+        "BAK PARTNERS Bratislava",
+        "Peter Bak office@bakpartners.sk"
+      ],
+      "hits": [
+        {
+          "url": "https://www.bakpartners.sk/",
+          "type": "own_site",
+          "title": "BAK & PARTNERS",
+          "snippet": "office@bakpartners.sk, Panská 14"
+        },
+        {
+          "url": "https://www.orsr.sk/vypis.asp?ID=309515&P=1",
+          "type": "registry",
+          "title": "ORSR BAK",
+          "snippet": "JUDr. Peter Bak"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Peter Bak",
+        "firstName": "Peter",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.bakpartners.sk",
+      "emails": [
+        {
+          "email": "office@bakpartners.sk",
+          "url": "https://www.bakpartners.sk/",
+          "context": "footer kontakt"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 87,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 38,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 85,
+        "rationaleSk": "Silný právny segment s verejným webom a kontaktom."
+      }
+    }
+  },
+  {
+    "ico": "47257822",
+    "leadId": "ldry_47257822",
+    "companyId": "cmp_47257822",
+    "notes": "Peter Pethő advokát s.r.o.; pôsobí ako Counsel Barger Prekop; bez vlastného webu/emailu AK.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "47257822",
+        "Peter Pethő advokát Bratislava",
+        "Pethő Barger Prekop"
+      ],
+      "hits": [
+        {
+          "url": "https://www.bargerprekop.com/the-team/of-counsel/peter-petho/",
+          "type": "other",
+          "title": "Barger Prekop Pethő",
+          "snippet": "ppetho@bargerprekop.com"
+        },
+        {
+          "url": "https://www.orsr.sk/hladaj_ico.asp?ICO=47257822",
+          "type": "registry",
+          "title": "ORSR Pethő",
+          "snippet": "Peter Pethő advokát s.r.o."
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Peter Pethő",
+        "firstName": "Peter",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 10,
+        "rationaleSk": "Advokátska kancelária – účtovný produkt nie je primárny."
+      },
+      "B": {
+        "score": 18,
+        "rationaleSk": "Obmedzený fit pre mzdy."
+      },
+      "C": {
+        "score": 32,
+        "rationaleSk": "Právna prax – dokumenty, workflow, klientska komunikácia."
+      },
+      "D": {
+        "score": 20,
+        "rationaleSk": "Digitálne nástroje pre kanceláriu."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47568003",
+    "leadId": "ldry_47568003",
+    "companyId": "cmp_47568003",
+    "notes": "Credit Point – vymáhanie pohľadávok; Tbiliská 29; creditpoint.sk; collection@creditpoint.sk.",
+    "skip_reason": null,
+    "website": "http://creditpoint.sk",
+    "contacts": [
+      {
+        "fullName": "Ing. Andrej Hornáček",
+        "role": "konateľ",
+        "email": "collection@creditpoint.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.9
+      }
+    ],
+    "search": {
+      "queries": [
+        "47568003",
+        "Credit Point Bratislava",
+        "Andrej Hornáček Credit Point"
+      ],
+      "hits": [
+        {
+          "url": "http://creditpoint.sk/index.html",
+          "type": "own_site",
+          "title": "Credit Point",
+          "snippet": "collection@creditpoint.sk"
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-credit-point-s-r-o",
+          "type": "aggregator",
+          "title": "Credit Point ORSR",
+          "snippet": "Ing. Andrej Hornáček"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Andrej Hornáček",
+        "firstName": "Andrej",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "http://creditpoint.sk",
+      "emails": [
+        {
+          "email": "collection@creditpoint.sk",
+          "url": "http://creditpoint.sk/index.html",
+          "context": "hlavná stránka"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 8,
+        "rationaleSk": "Mimo účtovnícky ICP."
+      },
+      "B": {
+        "score": 8,
+        "rationaleSk": "Mimo payroll ICP."
+      },
+      "C": {
+        "score": 10,
+        "rationaleSk": "Nie je právna kancelária."
+      },
+      "D": {
+        "score": 15,
+        "rationaleSk": "Slabý všeobecný fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47648244",
+    "leadId": "ldry_47648244",
+    "companyId": "cmp_47648244",
+    "notes": "UAVONIC – dronové služby (nie účtovníctvo); uavonic.com; uavonic@uavonic.com; Ing. Michal Ševera.",
+    "skip_reason": null,
+    "website": "https://uavonic.com",
+    "contacts": [
+      {
+        "fullName": "Ing. Michal Ševera",
+        "role": "konateľ",
+        "email": "uavonic@uavonic.com",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.88
+      }
+    ],
+    "search": {
+      "queries": [
+        "47648244",
+        "UAVONIC Bratislava Petržalka",
+        "UAVONIC kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://uavonic.com/",
+          "type": "own_site",
+          "title": "UAVONIC",
+          "snippet": "dronové služby Slovensko"
+        },
+        {
+          "url": "https://uavonic.com/zasady-ochrany-osobnych-udajov/",
+          "type": "own_site",
+          "title": "GDPR UAVONIC",
+          "snippet": "IČO 47648244, gdpr@uavonic.com"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Michal Ševera",
+        "firstName": "Michal",
+        "role": "konateľ",
+        "source": "lead/RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://uavonic.com",
+      "emails": [
+        {
+          "email": "uavonic@uavonic.com",
+          "url": "https://www.tenderinfo.org/slovakia/supplier/1503758/uavonic-s-r-o",
+          "context": "verejný tender profil s IČO 47648244"
+        }
+      ],
+      "skip_reason": null
+    },
+    "scores": {
+      "A": {
+        "score": 8,
+        "rationaleSk": "Mimo účtovnícky ICP."
+      },
+      "B": {
+        "score": 8,
+        "rationaleSk": "Mimo payroll ICP."
+      },
+      "C": {
+        "score": 10,
+        "rationaleSk": "Nie je právna kancelária."
+      },
+      "D": {
+        "score": 15,
+        "rationaleSk": "Slabý všeobecný fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47864664",
+    "leadId": "ldry_47864664",
+    "companyId": "cmp_47864664",
+    "notes": "ADMIN Consulting Široká 29; Ing. Andrea Danaková; tržby ~42k€ 2025; bez webu/emailu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "47864664",
+        "ADMIN Consulting Bratislava Danaková"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/47864664",
+          "type": "aggregator",
+          "title": "ADMIN Consulting Finstat",
+          "snippet": "zisk 11 213€ 2025"
+        },
+        {
+          "url": "https://www.finreg.sk/subjekt/2121157104",
+          "type": "other",
+          "title": "Administrative Consulting iná firma",
+          "snippet": "52826830 – kolízia názvu"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Andrea Danaková",
+        "firstName": "Andrea",
+        "role": "konateľ",
+        "source": "lead/RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 38,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 28,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 18,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47869976",
+    "leadId": "ldry_47869976",
+    "companyId": "cmp_47869976",
+    "notes": "MC-ADMIN Černockého 5A Rača; Martin Cigánik; účtovníctvo; tržby ~14k€; bez webu.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "47869976",
+        "MC-ADMIN Bratislava Cigánik"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/47869976",
+          "type": "aggregator",
+          "title": "MC-ADMIN Finstat",
+          "snippet": "býv. FREEDU CENTRUM, účtovníctvo"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Martin Cigánik",
+        "firstName": "Martin",
+        "role": "konateľ/spoločník",
+        "source": "lead/RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47908556",
+    "leadId": "ldry_47908556",
+    "companyId": "cmp_47908556",
+    "notes": "Ortex SK ≠ Ortex 44465637; Doležalova 15C Ružinov; Marius Mačiulis; 0 tržby 2019; bez webu. CZ IČO kolízia ignorovaná.",
+    "skip_reason": "no_email",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "47908556",
+        "Ortex SK Bratislava Ružinov",
+        "Marius Mačiulis Ortex"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/47908556-ortex-sk-s-r-o",
+          "type": "registry",
+          "title": "Ortex SK RPO",
+          "snippet": "Marius Mačiulis konateľ, Doležalova 15C"
+        },
+        {
+          "url": "https://www.finreg.sk/subjekt/2022719886",
+          "type": "other",
+          "title": "Ortex s.r.o. iná firma",
+          "snippet": "IČO 44465637 – explicitne odlišná entita"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Marius Mačiulis",
+        "firstName": "Marius",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 5,
+        "rationaleSk": "Škrupinová účtovnícka entita bez digitálnej prítomnosti."
+      },
+      "B": {
+        "score": 5,
+        "rationaleSk": "Bez kontaktu – mzdový fit neoveriteľný."
+      },
+      "C": {
+        "score": 5,
+        "rationaleSk": "Nie je advokátska kancelária."
+      },
+      "D": {
+        "score": 5,
+        "rationaleSk": "Nízky fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  },
+  {
+    "ico": "47966921",
+    "leadId": "ldry_47966921",
+    "companyId": "cmp_47966921",
+    "notes": "ADP SK – býv. eZmluva.sk N130; Bajkalská 5/A; Boris Lukáčik; 0 tržby; pravdepodobne payroll vendor/interná entita, nie cold ICP.",
+    "skip_reason": "it_internal",
+    "website": null,
+    "contacts": [],
+    "search": {
+      "queries": [
+        "47966921",
+        "ADP SK Bratislava",
+        "Boris Lukáčik ADP"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/47966921",
+          "type": "aggregator",
+          "title": "ADP SK Finstat",
+          "snippet": "býv. eZmluva.sk N130, 0 tržby"
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/boris-lukacik-1",
+          "type": "aggregator",
+          "title": "Boris Lukáčik funkcie",
+          "snippet": "konateľ ADP SK s.r.o."
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Boris Lukáčik",
+        "firstName": "Boris",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "B": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "C": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "D": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Lead vylúčený zo sequencie."
+      }
+    }
+  },
+  {
+    "ico": "48259799",
+    "leadId": "ldry_48259799",
+    "companyId": "cmp_48259799",
+    "notes": "SH-MPU účtovníctvo Muškátova 42; Michael Seiler konateľ od 1/2025; hsmpu1@gmail.com v adresári (nie vlastný web).",
+    "skip_reason": null,
+    "website": null,
+    "contacts": [
+      {
+        "fullName": "Michael Seiler",
+        "role": "konateľ",
+        "email": "hsmpu1@gmail.com",
+        "emailSource": "other",
+        "isPrimary": true,
+        "confidence": 0.72
+      }
+    ],
+    "search": {
+      "queries": [
+        "48259799",
+        "SH MPU Bratislava",
+        "Michael Seiler MPU"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/48259799-sh-mpu-s-r-o",
+          "type": "registry",
+          "title": "SH-MPU RPO",
+          "snippet": "Michael Seiler konateľ, tržby 31k 2025"
+        },
+        {
+          "url": "https://www.instituciafiriem.sk/partner/hs_mpu_s_r_o/sk/",
+          "type": "other",
+          "title": "HS-MPU adresár",
+          "snippet": "hsmpu1@gmail.com, Muškátova 42"
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Michael Seiler",
+        "firstName": "Michael",
+        "role": "konateľ",
+        "source": "RPO"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [
+        {
+          "email": "hsmpu1@gmail.com",
+          "url": "https://www.instituciafiriem.sk/partner/hs_mpu_s_r_o/sk/",
+          "context": "katalógový profil HS-MPU"
+        }
+      ],
+      "skip_reason": "no_site"
+    },
+    "scores": {
+      "A": {
+        "score": 58,
+        "rationaleSk": "Účtovnícka/právo-poradenská firma – digitalizácia účtovníctva a fakturácie."
+      },
+      "B": {
+        "score": 48,
+        "rationaleSk": "Potenciál pre mzdové a HR procesy u SMB klientov."
+      },
+      "C": {
+        "score": 12,
+        "rationaleSk": "Primárne účtovníctvo, nie právna prax."
+      },
+      "D": {
+        "score": 18,
+        "rationaleSk": "Všeobecné podnikové nástroje – sekundárny fit."
+      },
+      "E": {
+        "score": 0,
+        "rationaleSk": "Nie je warm lead."
+      }
+    }
+  }
+]
