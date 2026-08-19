@@ -90,6 +90,7 @@ WHERE o.data->'legalForms'->0->'value'->>'code' = '112'
     )
     OR left(o.data->'statisticalCodes'->'mainActivity'->>'code', 2) BETWEEN '10' AND '33'
   )
+  AND cur_name.value !~* 'likvid|konkurz|v likvidácii|zrušen'
   AND o.data->'identifiers'->0->>'value' IS NOT NULL
 ORDER BY ico, score DESC, o.id;
 

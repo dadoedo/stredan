@@ -67,8 +67,9 @@ When volume grows past ~200–500 enrichments/day, add cheap deterministic helpe
 
 Agents **do not** need a custom HTTP API. They insert/update via Postgres MCP:
 
-- `LeadEnrichment.inputJson` / `outputJson`
-- `LeadScore.inputJson` / `outputJson`
+- `LeadEnrichment.inputJson` / `outputJson` — unique `(leadId, kind)`
+- `LeadScore.inputJson` / `outputJson` — unique `(leadId, offerId)`
+- `Lead.skipReason` + `status=skipped` when the firm is not sendable
 - `AgentRun.inputJson` / `outputJson` + `summary`
 - `Touch` + `TouchEvent` for every send/reply
 - `ExperimentDaily` keyed by `(day, offerId, sendAccountId)`
@@ -85,8 +86,8 @@ Agents **do not** need a custom HTTP API. They insert/update via Postgres MCP:
 1. Mailboxes 1–5 on https://mcp.stredan.sk (David fills emails)
 2. Map each mailbox key into `/admin/accounts` and set active
 3. IMAP folders `Leadgen/A`…`E`, `Leadgen/Replies`
-4. Schedule Cursor Automation with `docs/leadgen/AGENT_PLAYBOOK.md`
-5. Dry-run 50 firms, no send
+4. Schedule Cursor Automation with the **stub** in `docs/leadgen/AUTOMATION_PROMPT.md` (git is the playbook; do not paste the full prompt into the UI).
+5. Dry-run 50 firms, no send. Writer: `scripts/leadgen-apply-enrichment.ts`.
 
 ## Non-goals (v1)
 
