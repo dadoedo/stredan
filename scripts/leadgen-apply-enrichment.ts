@@ -186,7 +186,7 @@ function statementsForLead(lead: LeadIn, runId: string | null): string[] {
       : lead.notes
     : skip
       ? `skip_reason=${skip}`
-      : null;
+      : undefined;
   const status = skip ? "skipped" : "enriched";
   const website = lead.website_enrichment?.website ?? lead.website ?? null;
   const ownSite = Boolean(website);
@@ -204,8 +204,21 @@ function statementsForLead(lead: LeadIn, runId: string | null): string[] {
     );
   }
 
+  const notesAssign =
+    notes === undefined ? `"notes" = "notes"` : `notes = ${sqlNullStr(notes)}`;
   stmts.push(
-    `UPDATE "Lead" SET status = ${sqlStr(status)}, notes = ${sqlNullStr(notes)}, "skipReason" = ${sqlNullStr(skip)}, "updatedAt" = NOW() WHERE id = ${sqlStr(leadId)};`,
+    `UPDATE "Lead" SET
+  status = CASE
+    WHEN status IN ('sourced','enriching','enriched','skipped','scored') THEN ${sqlStr(status)}
+    ELSE status
+  END,
+  ${notesAssign},
+  "skipReason" = CASE
+    WHEN status IN ('sourced','enriching','enriched','skipped','scored') THEN ${sqlNullStr(skip)}
+    ELSE "skipReason"
+  END,
+  "updatedAt" = NOW()
+WHERE id = ${sqlStr(leadId)};`,
   );
 
   const searchInput = {

@@ -14,6 +14,52 @@ WHERE "skipReason" IS NULL
 
 UPDATE "LeadContact" SET email = NULL WHERE email = '';
 
+-- Collapse extra Lead rows per company before unique (companyId).
+-- Keep the furthest pipeline status, then newest. Re-point children first
+-- so touches/enrichments/scores are not lost to ON DELETE CASCADE.
+-- Real table (not TEMP) so statement-at-a-time MCP sessions still see it.
+DROP TABLE IF EXISTS _leadgen_lead_keep;
+CREATE TABLE _leadgen_lead_keep AS
+SELECT DISTINCT ON ("companyId") id AS keep_id, "companyId"
+FROM "Lead"
+ORDER BY "companyId",
+  CASE status
+    WHEN 'won' THEN 10
+    WHEN 'meeting' THEN 9
+    WHEN 'replied' THEN 8
+    WHEN 'contacted' THEN 7
+    WHEN 'queued' THEN 6
+    WHEN 'scored' THEN 5
+    WHEN 'enriched' THEN 4
+    WHEN 'skipped' THEN 3
+    WHEN 'enriching' THEN 2
+    WHEN 'sourced' THEN 1
+    ELSE 0
+  END DESC,
+  "updatedAt" DESC,
+  id DESC;
+
+UPDATE "LeadEnrichment" e SET "leadId" = k.keep_id
+FROM "Lead" l JOIN _leadgen_lead_keep k ON k."companyId" = l."companyId"
+WHERE e."leadId" = l.id AND e."leadId" <> k.keep_id;
+
+UPDATE "LeadScore" s SET "leadId" = k.keep_id
+FROM "Lead" l JOIN _leadgen_lead_keep k ON k."companyId" = l."companyId"
+WHERE s."leadId" = l.id AND s."leadId" <> k.keep_id;
+
+UPDATE "LeadContact" c SET "leadId" = k.keep_id
+FROM "Lead" l JOIN _leadgen_lead_keep k ON k."companyId" = l."companyId"
+WHERE c."leadId" = l.id AND c."leadId" <> k.keep_id;
+
+UPDATE "Touch" t SET "leadId" = k.keep_id
+FROM "Lead" l JOIN _leadgen_lead_keep k ON k."companyId" = l."companyId"
+WHERE t."leadId" = l.id AND t."leadId" <> k.keep_id;
+
+DELETE FROM "Lead" l
+WHERE l.id NOT IN (SELECT keep_id FROM _leadgen_lead_keep);
+
+DROP TABLE IF EXISTS _leadgen_lead_keep;
+
 DELETE FROM "LeadEnrichment" a
 WHERE a.id NOT IN (
   SELECT id FROM (
