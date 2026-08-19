@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0a0908;
-  --color-foreground: #f4f1ea;
-  --color-muted: #9a9388;
-  --color-border: #2a2723;
-  --color-brand: #e11d2e;
-  --color-brand-dim: #8a6a48;
-  --color-surface: #141210;
-  --color-surface-2: #1c1916;
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-muted: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
+  --color-brand: hsl(var(--brand));
+  --color-brand-dim: hsl(var(--brand-dim));
+  --color-surface: hsl(var(--surface));
+  --color-surface-2: hsl(var(--surface-2));
   --color-sidebar: #f7f7f8;
-  --color-sidebar-border: #e8e8ea;
-  --color-sidebar-hover: #efeff1;
-  --color-sidebar-active: #e8e8ec;
+  --color-sidebar-border: #e4e4e7;
+  --color-sidebar-hover: #ebebed;
+  --color-sidebar-active: #dfe0e4;
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-popover: hsl(var(--popover));
@@ -36,22 +36,25 @@
 }
 
 :root {
-  --background: 0 0% 4%;
+  --background: 20 14% 4%;
   --foreground: 40 20% 95%;
-  --card: 0 0% 6%;
+  --card: 20 10% 6%;
   --card-foreground: 40 20% 95%;
-  --popover: 0 0% 6%;
+  --popover: 20 10% 6%;
   --popover-foreground: 40 20% 95%;
   --primary: 40 20% 95%;
-  --primary-foreground: 0 0% 4%;
-  --secondary: 0 0% 12%;
+  --primary-foreground: 20 14% 4%;
+  --secondary: 25 9% 12%;
   --secondary-foreground: 40 20% 95%;
   --muted-foreground: 35 8% 58%;
-  --accent: 0 0% 12%;
+  --accent: 25 9% 12%;
   --accent-foreground: 40 20% 95%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 98%;
-  --input: 0 0% 16%;
+  --input: 30 8% 15%;
+  --border: 30 8% 15%;
+  --surface: 20 10% 7%;
+  --surface-2: 25 9% 10%;
   --ring: 355 78% 50%;
   --brand: 355 78% 50%;
   --brand-dim: 25 30% 41%;
@@ -71,40 +74,29 @@
   --primary-foreground: 0 0% 98%;
   --secondary: 240 5% 96%;
   --secondary-foreground: 240 6% 10%;
-  --muted-foreground: 240 4% 38%;
-  --accent: 240 5% 96%;
+  --muted-foreground: 240 5% 32%;
+  --accent: 240 5% 94%;
   --accent-foreground: 240 6% 10%;
   --destructive: 0 72% 45%;
   --destructive-foreground: 0 0% 98%;
   --input: 240 6% 90%;
+  --border: 240 6% 88%;
+  --surface: 0 0% 100%;
+  --surface-2: 240 5% 96%;
   --ring: 240 6% 10%;
   --brand: 0 72% 45%;
   --brand-dim: 0 60% 35%;
 
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-muted: hsl(var(--muted-foreground));
-  --color-border: hsl(var(--input));
-  --color-accent: hsl(var(--accent));
-  --color-brand: hsl(var(--brand));
-  --color-brand-dim: hsl(var(--brand-dim));
-  --color-surface: hsl(var(--card));
-  --color-surface-2: hsl(var(--secondary));
-  --color-sidebar: #f7f7f8;
-  --color-sidebar-border: #e4e4e7;
-  --color-sidebar-hover: #ececee;
-  --color-sidebar-active: #e4e4e9;
-
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
 .admin select,
 .admin textarea,
 .admin input:not([type="checkbox"]):not([type="radio"]):not([data-slot="input"]) {
-  background-color: var(--color-surface);
-  color: var(--color-foreground);
-  border: 1px solid var(--color-border);
+  background-color: hsl(var(--surface));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
   border-radius: calc(var(--radius) - 2px);
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
 }
@@ -119,18 +111,18 @@
 
 .admin table th,
 .admin table td {
-  border-color: var(--color-border);
+  border-color: hsl(var(--border));
 }
 
 .admin table thead th {
-  background: var(--color-surface-2);
-  color: var(--color-foreground);
+  background: hsl(var(--surface-2));
+  color: hsl(var(--foreground));
   font-weight: 600;
 }
 
 .admin code {
   border-radius: 0.25rem;
-  background: var(--color-surface-2);
+  background: hsl(var(--surface-2));
   padding: 0.125rem 0.375rem;
   font-size: 0.875em;
 }
@@ -191,8 +183,8 @@ html {
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
   font-family: var(--font-dm-sans), system-ui, sans-serif;
 }
 
@@ -201,7 +193,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-brand);
+  outline: 2px solid hsl(var(--brand));
   outline-offset: 2px;
 }
 
