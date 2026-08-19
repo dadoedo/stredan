@@ -8,7 +8,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,9 +21,9 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-sm border-border shadow-md">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-semibold tracking-tight">
+        <h1 className="text-2xl font-semibold tracking-tight">
           Admin prihlásenie
-        </CardTitle>
+        </h1>
         <CardDescription>
           Zadaj heslo pre prístup do administrácie.
         </CardDescription>

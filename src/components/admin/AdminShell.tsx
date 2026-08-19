@@ -133,9 +133,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         />
       )}
       <aside
+        id="admin-mobile-nav"
+        inert={!mobileOpen ? true : undefined}
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-sidebar-border bg-sidebar shadow-xl transition-transform duration-200 md:hidden",
-          mobileOpen ? "translate-x-0" : "-translate-x-full",
+          mobileOpen ? "translate-x-0" : "-translate-x-full pointer-events-none",
         )}
         aria-hidden={!mobileOpen}
       >
