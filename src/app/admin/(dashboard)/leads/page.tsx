@@ -3,14 +3,21 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import {
+  buildLeadsOrderBy,
   buildLeadsQueryString,
   clampPage,
   extractSkipReason,
   formatContact,
+  hasActiveFilters,
   LEAD_STATUSES,
+  parseContactFilter,
+  parseSortDirection,
+  parseSortField,
+  type ContactFilter,
   type LeadStatus,
 } from "@/lib/leads-admin";
 import { LeadsPagination } from "./LeadsPagination";
+import { LeadsSortHeader } from "./LeadsSortHeader";
 import { LeadsToolbar } from "./LeadsToolbar";
 
 const PAGE_SIZE = 50;
@@ -19,6 +26,9 @@ type SearchParams = {
   q?: string;
   status?: string;
   skip?: string;
+  contact?: string;
+  sort?: string;
+  dir?: string;
   page?: string;
 };
 
@@ -26,12 +36,19 @@ function buildLeadsWhere(params: {
   q?: string;
   status?: string;
   skip?: string;
+  contact?: ContactFilter;
 }): Prisma.LeadWhereInput {
   const where: Prisma.LeadWhereInput = {};
   const and: Prisma.LeadWhereInput[] = [];
 
   if (params.status && LEAD_STATUSES.includes(params.status as LeadStatus)) {
     where.status = params.status as LeadStatus;
+  }
+
+  if (params.contact === "yes") {
+    and.push({ contacts: { some: {} } });
+  } else if (params.contact === "no") {
+    and.push({ contacts: { none: {} } });
   }
 
   if (params.q?.trim()) {
@@ -83,18 +100,23 @@ export default async function AdminLeadsPage({
   const q = params.q?.trim() || undefined;
   const status = params.status?.trim() || undefined;
   const skip = params.skip?.trim() || undefined;
+  const contact = parseContactFilter(params.contact);
+  const sort = parseSortField(params.sort);
+  const dir = parseSortDirection(params.dir);
   const requestedPage = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
-  const where = buildLeadsWhere({ q, status, skip });
+  const where = buildLeadsWhere({ q, status, skip, contact });
   const total = await prisma.lead.count({ where });
   const page = clampPage(requestedPage, total, PAGE_SIZE);
 
+  const query = { q, status, skip, contact, sort, dir };
+
   if (requestedPage !== page) {
-    redirect(`/admin/leads${buildLeadsQueryString({ q, status, skip }, page)}`);
+    redirect(`/admin/leads${buildLeadsQueryString(query, page)}`);
   }
 
   const leads = await prisma.lead.findMany({
     where,
-    orderBy: { updatedAt: "desc" },
+    orderBy: buildLeadsOrderBy(sort, dir) as Prisma.LeadOrderByWithRelationInput,
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
     include: {
@@ -109,8 +131,6 @@ export default async function AdminLeadsPage({
     },
   });
 
-  const query = { q, status, skip };
-
   return (
     <div>
       <h2 className="font-heading text-xl font-semibold">Leady</h2>
@@ -118,26 +138,51 @@ export default async function AdminLeadsPage({
         Enrichment píše automatizácia priamo do DB cez Postgres MCP (nie HTTP API).
       </p>
 
-      <LeadsToolbar q={q} status={status} skip={skip} />
+      <LeadsToolbar q={q} status={status} skip={skip} contact={contact} sort={sort} dir={dir} />
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[56rem] border-collapse text-sm">
+        <table className="w-full min-w-[64rem] border-collapse text-sm">
           <thead>
             <tr className="text-left text-muted">
               <th className="border-b border-border px-3 py-2 font-medium">Firma</th>
               <th className="border-b border-border px-3 py-2 font-medium">Stav</th>
               <th className="border-b border-border px-3 py-2 font-medium">Kontakt</th>
               <th className="border-b border-border px-3 py-2 font-medium">Skip dôvod</th>
+              <LeadsSortHeader
+                label="Aktualizované"
+                field="updatedAt"
+                currentSort={sort}
+                currentDir={dir}
+                query={query}
+              />
               <th className="border-b border-border px-3 py-2 font-medium">IČO</th>
               <th className="border-b border-border px-3 py-2 font-medium">Mesto</th>
-              <th className="border-b border-border px-3 py-2 font-medium">Enrich</th>
-              <th className="border-b border-border px-3 py-2 font-medium">Score</th>
-              <th className="border-b border-border px-3 py-2 font-medium">Send</th>
+              <LeadsSortHeader
+                label="Enrich"
+                field="enrich"
+                currentSort={sort}
+                currentDir={dir}
+                query={query}
+              />
+              <LeadsSortHeader
+                label="Score"
+                field="score"
+                currentSort={sort}
+                currentDir={dir}
+                query={query}
+              />
+              <LeadsSortHeader
+                label="Send"
+                field="send"
+                currentSort={sort}
+                currentDir={dir}
+                query={query}
+              />
             </tr>
           </thead>
           <tbody>
             {leads.map((lead) => {
-              const contact = lead.contacts[0];
+              const contactRow = lead.contacts[0];
               const skipReason = extractSkipReason(lead);
 
               return (
@@ -149,10 +194,13 @@ export default async function AdminLeadsPage({
                   </td>
                   <td className="border-b border-border px-3 py-2">{lead.status}</td>
                   <td className="border-b border-border px-3 py-2 text-muted">
-                    {formatContact(contact)}
+                    {formatContact(contactRow)}
                   </td>
                   <td className="border-b border-border px-3 py-2 text-muted">
                     {skipReason ?? "—"}
+                  </td>
+                  <td className="border-b border-border px-3 py-2 text-muted whitespace-nowrap">
+                    {lead.updatedAt.toLocaleString("sk-SK")}
                   </td>
                   <td className="border-b border-border px-3 py-2 text-muted">
                     {lead.company.ico ?? "—"}
@@ -177,7 +225,9 @@ export default async function AdminLeadsPage({
 
         {leads.length === 0 && (
           <p className="py-8 text-center text-muted">
-            {q || status || skip ? "Žiadne leady pre zvolené filtre." : "Zatiaľ žiadne leady."}
+            {hasActiveFilters(query)
+              ? "Žiadne leady pre zvolené filtre."
+              : "Zatiaľ žiadne leady."}
           </p>
         )}
       </div>

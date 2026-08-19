@@ -24,6 +24,17 @@ export const LEAD_STATUSES = [
 export type LeadStatus = (typeof LEAD_STATUSES)[number];
 export type SkipReason = (typeof SKIP_REASONS)[number];
 
+export const LEAD_SORT_FIELDS = ["updatedAt", "enrich", "score", "send"] as const;
+export type LeadSortField = (typeof LEAD_SORT_FIELDS)[number];
+
+export const CONTACT_FILTERS = ["yes", "no"] as const;
+export type ContactFilter = (typeof CONTACT_FILTERS)[number];
+
+export type SortDirection = "asc" | "desc";
+
+export const DEFAULT_SORT: LeadSortField = "updatedAt";
+export const DEFAULT_SORT_DIR: SortDirection = "desc";
+
 type ContactLike = {
   fullName?: string | null;
   email?: string | null;
@@ -80,11 +91,71 @@ export function buildLeadsQueryString(
   const search = new URLSearchParams();
 
   for (const [key, value] of Object.entries(params)) {
-    if (key !== "page" && value) search.set(key, value);
+    if (key === "page") continue;
+    if (key === "sort" && value === DEFAULT_SORT) continue;
+    if (key === "dir" && value === DEFAULT_SORT_DIR) continue;
+    if (value) search.set(key, value);
   }
 
   if (page && page > 1) search.set("page", String(page));
 
   const query = search.toString();
   return query ? `?${query}` : "";
+}
+
+export function parseSortField(value?: string): LeadSortField {
+  if (value && LEAD_SORT_FIELDS.includes(value as LeadSortField)) {
+    return value as LeadSortField;
+  }
+  return DEFAULT_SORT;
+}
+
+export function parseSortDirection(value?: string): SortDirection {
+  return value === "asc" ? "asc" : DEFAULT_SORT_DIR;
+}
+
+export function parseContactFilter(value?: string): ContactFilter | undefined {
+  if (value && CONTACT_FILTERS.includes(value as ContactFilter)) {
+    return value as ContactFilter;
+  }
+  return undefined;
+}
+
+export function sortLinkDir(
+  currentSort: LeadSortField,
+  currentDir: SortDirection,
+  clickedSort: LeadSortField,
+): SortDirection {
+  if (currentSort === clickedSort) {
+    return currentDir === "desc" ? "asc" : "desc";
+  }
+  return "desc";
+}
+
+export function buildLeadsOrderBy(
+  sort: LeadSortField,
+  dir: SortDirection,
+): Record<string, unknown> {
+  switch (sort) {
+    case "enrich":
+      return { enrichments: { _count: dir } };
+    case "score":
+      return { scores: { _count: dir } };
+    case "send":
+      return { touches: { _count: dir } };
+    case "updatedAt":
+    default:
+      return { updatedAt: dir };
+  }
+}
+
+export function hasActiveFilters(params: Record<string, string | undefined>): boolean {
+  return Boolean(
+    params.q ||
+      params.status ||
+      params.skip ||
+      params.contact ||
+      (params.sort && params.sort !== DEFAULT_SORT) ||
+      (params.dir && params.dir !== DEFAULT_SORT_DIR),
+  );
 }
