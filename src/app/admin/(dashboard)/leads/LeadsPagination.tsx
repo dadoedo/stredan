@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { buildLeadsQueryString } from "@/lib/leads-admin";
+import { buildLeadsQueryString, clampPage } from "@/lib/leads-admin";
 
 type LeadsPaginationProps = {
   page: number;
@@ -10,10 +10,11 @@ type LeadsPaginationProps = {
 
 export function LeadsPagination({ page, pageSize, total, query }: LeadsPaginationProps) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const safePage = clampPage(page, total, pageSize);
   if (totalPages <= 1) return null;
 
-  const from = (page - 1) * pageSize + 1;
-  const to = Math.min(page * pageSize, total);
+  const from = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
+  const to = Math.min(safePage * pageSize, total);
 
   return (
     <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-sm">
@@ -22,9 +23,9 @@ export function LeadsPagination({ page, pageSize, total, query }: LeadsPaginatio
       </p>
 
       <div className="flex items-center gap-2">
-        {page > 1 ? (
+        {safePage > 1 ? (
           <Link
-            href={`/admin/leads${buildLeadsQueryString(query, page - 1)}`}
+            href={`/admin/leads${buildLeadsQueryString(query, safePage - 1)}`}
             className="rounded border border-border px-3 py-1.5 hover:border-foreground/20 hover:bg-surface-2/60"
           >
             Predchádzajúca
@@ -34,12 +35,12 @@ export function LeadsPagination({ page, pageSize, total, query }: LeadsPaginatio
         )}
 
         <span className="px-2 text-muted">
-          Strana {page} / {totalPages}
+          Strana {safePage} / {totalPages}
         </span>
 
-        {page < totalPages ? (
+        {safePage < totalPages ? (
           <Link
-            href={`/admin/leads${buildLeadsQueryString(query, page + 1)}`}
+            href={`/admin/leads${buildLeadsQueryString(query, safePage + 1)}`}
             className="rounded border border-border px-3 py-1.5 hover:border-foreground/20 hover:bg-surface-2/60"
           >
             Ďalšia

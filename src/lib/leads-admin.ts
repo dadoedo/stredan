@@ -52,7 +52,8 @@ export function extractSkipReason(lead: {
   notes?: string | null;
   enrichments?: EnrichmentLike[];
 }): string | null {
-  if (lead.notes?.trim()) return lead.notes.trim();
+  const notes = lead.notes?.trim();
+  if (notes && SKIP_REASONS.includes(notes as SkipReason)) return notes;
 
   const website = lead.enrichments?.find((row) => row.kind === "website");
   if (
@@ -65,6 +66,11 @@ export function extractSkipReason(lead: {
   }
 
   return null;
+}
+
+export function clampPage(page: number, total: number, pageSize: number): number {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  return Math.min(Math.max(1, page), totalPages);
 }
 
 export function buildLeadsQueryString(

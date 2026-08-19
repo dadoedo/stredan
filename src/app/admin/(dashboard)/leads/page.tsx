@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import {
+  buildLeadsQueryString,
+  clampPage,
   extractSkipReason,
   formatContact,
   LEAD_STATUSES,
@@ -50,14 +53,18 @@ function buildLeadsWhere(params: {
     and.push({
       OR: [
         { notes: { equals: skip } },
-        { notes: { contains: skip, mode: "insensitive" } },
         {
-          enrichments: {
-            some: {
-              kind: "website",
-              outputJson: { path: ["skip_reason"], equals: skip },
+          AND: [
+            { OR: [{ notes: null }, { notes: "" }] },
+            {
+              enrichments: {
+                some: {
+                  kind: "website",
+                  outputJson: { path: ["skip_reason"], equals: skip },
+                },
+              },
             },
-          },
+          ],
         },
       ],
     });
@@ -76,28 +83,31 @@ export default async function AdminLeadsPage({
   const q = params.q?.trim() || undefined;
   const status = params.status?.trim() || undefined;
   const skip = params.skip?.trim() || undefined;
-  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
+  const requestedPage = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
   const where = buildLeadsWhere({ q, status, skip });
+  const total = await prisma.lead.count({ where });
+  const page = clampPage(requestedPage, total, PAGE_SIZE);
 
-  const [leads, total] = await Promise.all([
-    prisma.lead.findMany({
-      where,
-      orderBy: { updatedAt: "desc" },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-      include: {
-        company: true,
-        contacts: { orderBy: [{ isPrimary: "desc" }, { createdAt: "asc" }], take: 1 },
-        enrichments: {
-          where: { kind: "website" },
-          orderBy: { createdAt: "desc" },
-          take: 1,
-        },
-        _count: { select: { enrichments: true, scores: true, touches: true } },
+  if (requestedPage !== page) {
+    redirect(`/admin/leads${buildLeadsQueryString({ q, status, skip }, page)}`);
+  }
+
+  const leads = await prisma.lead.findMany({
+    where,
+    orderBy: { updatedAt: "desc" },
+    skip: (page - 1) * PAGE_SIZE,
+    take: PAGE_SIZE,
+    include: {
+      company: true,
+      contacts: { orderBy: [{ isPrimary: "desc" }, { createdAt: "asc" }], take: 1 },
+      enrichments: {
+        where: { kind: "website" },
+        orderBy: { createdAt: "desc" },
+        take: 1,
       },
-    }),
-    prisma.lead.count({ where }),
-  ]);
+      _count: { select: { enrichments: true, scores: true, touches: true } },
+    },
+  });
 
   const query = { q, status, skip };
 
