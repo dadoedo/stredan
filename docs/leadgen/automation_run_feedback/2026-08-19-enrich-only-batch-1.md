@@ -179,3 +179,5 @@ The playbook shutdown step (`UPDATE AgentRun SET status=succeeded`) **did run** 
 **Batch 1 was a successful dry run** for enrich+score pipeline quality, not for operator latency. The data in admin is usable for David’s inspection. The main fixes are **engineering** (one SQL writer, idempotent writes, early shutdown signal) and **documentation** (`COPY.md`, run-status clarification) — not more agent autonomy.
 
 Next run should reuse lessons from this file and delete duplicate `LeadScore`/`LeadEnrichment` rows for this batch if analytics noise matters.
+
+**Follow-up:** Same-day [batch 2](./2026-08-19-enrich-only-batch-2.md) hit the same SQL write failures at higher severity (~6 h). See [feedback index](./README.md) for consolidated actions.
