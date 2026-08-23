@@ -36,29 +36,35 @@
 }
 
 :root {
-  --background: 20 14% 4%;
-  --foreground: 40 20% 95%;
-  --card: 20 10% 6%;
-  --card-foreground: 40 20% 95%;
-  --popover: 20 10% 6%;
-  --popover-foreground: 40 20% 95%;
-  --primary: 40 20% 95%;
-  --primary-foreground: 20 14% 4%;
-  --secondary: 25 9% 12%;
-  --secondary-foreground: 40 20% 95%;
-  --muted-foreground: 35 8% 58%;
-  --accent: 25 9% 12%;
-  --accent-foreground: 40 20% 95%;
+  --background: 40 23% 96%;
+  --foreground: 0 0% 7%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 7%;
+  --primary: 0 0% 7%;
+  --primary-foreground: 40 23% 96%;
+  --secondary: 40 15% 92%;
+  --secondary-foreground: 0 0% 7%;
+  --muted-foreground: 30 4% 35%;
+  --accent: 40 15% 92%;
+  --accent-foreground: 0 0% 7%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 98%;
-  --input: 30 8% 15%;
-  --border: 30 8% 15%;
-  --surface: 20 10% 7%;
-  --surface-2: 25 9% 10%;
+  --input: 35 12% 88%;
+  --border: 35 12% 88%;
+  --surface: 0 0% 100%;
+  --surface-2: 40 20% 97%;
   --ring: 355 78% 50%;
   --brand: 355 78% 50%;
   --brand-dim: 25 30% 41%;
   --radius: 0.5rem;
+  --ink: #121212;
+  --paper: #f7f5f2;
+  --mist: #5c5854;
+  --line: #e4dfd8;
+  --mark: #e11d2e;
+  --panel: #ffffff;
 }
 
 /* ─── Admin (light, high-contrast, Cursor-inspired) ─── */
@@ -127,6 +133,24 @@
   font-size: 0.875em;
 }
 
+@keyframes agency-hero-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-4%, 5%, 0) scale(1.06);
+  }
+}
+
+@keyframes agency-hero-drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(5%, -4%, 0) scale(1.05);
+  }
+}
+
 @keyframes slide-in-from-right {
   from {
     transform: translateX(100%);
@@ -183,8 +207,8 @@ html {
 }
 
 body {
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-dm-sans), system-ui, sans-serif;
 }
 
@@ -200,15 +224,8 @@ body {
 /* ─── Agency homepage (light, work-first) ─── */
 
 .agency {
-  --ink: #121212;
-  --paper: #f7f5f2;
-  --mist: #5c5854;
-  --line: #e4dfd8;
-  --mark: #e11d2e;
-  --panel: #ffffff;
   color: var(--ink);
   background: var(--paper);
-  overflow-x: clip;
 }
 
 .agency-shell {
@@ -318,8 +335,54 @@ body {
 }
 
 .agency-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   padding: 5rem 0 3.5rem;
-  background: #fff;
+  background: var(--paper);
+}
+
+.agency-hero::before,
+.agency-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(72px);
+  will-change: transform;
+}
+
+.agency-hero::before {
+  top: -18%;
+  right: -8%;
+  width: min(58vw, 540px);
+  height: min(58vw, 540px);
+  background: radial-gradient(
+    circle,
+    rgba(225, 29, 46, 0.07) 0%,
+    rgba(225, 29, 46, 0.02) 42%,
+    transparent 72%
+  );
+  animation: agency-hero-drift-a 26s ease-in-out infinite alternate;
+}
+
+.agency-hero::after {
+  bottom: -20%;
+  left: -10%;
+  width: min(50vw, 460px);
+  height: min(50vw, 460px);
+  background: radial-gradient(
+    circle,
+    rgba(228, 223, 216, 0.95) 0%,
+    rgba(247, 245, 242, 0.45) 45%,
+    transparent 72%
+  );
+  animation: agency-hero-drift-b 32s ease-in-out infinite alternate;
+}
+
+.agency-hero .agency-shell {
+  position: relative;
+  z-index: 1;
 }
 
 @media (min-width: 640px) {
@@ -335,39 +398,109 @@ body {
 }
 
 .agency-logos {
-  padding: 1.75rem 0 2.25rem;
+  padding: 2rem 0 2.5rem;
   border-top: 1px solid var(--line);
-  background: #fff;
+  background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
 }
 
-.agency-logo-row {
-  margin: 1rem 0 0;
+.agency-logo-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+}
+
+.agency-logo-track {
+  margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.4rem 1.8rem;
+  width: max-content;
   align-items: center;
+  gap: 3rem;
+  animation: agency-logo-scroll 42s linear infinite;
 }
 
-.agency-logo-row li {
-  height: 28px;
+.agency-logo-marquee:hover .agency-logo-track {
+  animation-play-state: paused;
+}
+
+.agency-logo-track li {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
 }
 
-.agency-logo-img {
-  height: 24px;
-  width: auto;
-  max-width: 96px;
-  object-fit: contain;
-  filter: grayscale(1);
-  opacity: 0.55;
+.agency-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
 }
 
-.agency-logo-row li:hover .agency-logo-img {
-  filter: none;
+.agency-logo-link:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.agency-logo-link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.agency-logo-img {
+  height: 32px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  opacity: 0.92;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.agency-logo-img.is-wide {
+  height: 28px;
+  max-width: 168px;
+}
+
+.agency-logo-link:hover .agency-logo-img {
   opacity: 1;
+  transform: scale(1.04);
+}
+
+@keyframes agency-logo-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agency-logo-marquee {
+    mask-image: none;
+    overflow: visible;
+  }
+
+  .agency-logo-track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem 2rem;
+    padding: 0 1.25rem;
+  }
 }
 
 .agency-work {
@@ -532,6 +665,55 @@ body {
   font-size: 0.95rem;
 }
 
+.agency-stack {
+  padding: 4rem 0;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+}
+
+.agency-stack-grid {
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+}
+
+@media (min-width: 640px) {
+  .agency-stack-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .agency-stack-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.agency-stack-item {
+  padding: 1.1rem 1.15rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 0.5rem;
+}
+
+.agency-stack-item strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.agency-stack-item span {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--mist);
+}
+
 .agency-offers {
   padding: 4rem 0;
   border-top: 1px solid var(--line);
@@ -684,26 +866,27 @@ body {
 
 .agency-page {
   min-height: 100dvh;
-  background: #f7f5f2;
-  color: #121212;
+  background: var(--paper);
+  color: var(--ink);
+  overflow-x: clip;
 }
 
 .header-agency {
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 1px solid #e4dfd8;
+  border-bottom: 1px solid var(--line);
   background: rgba(247, 245, 242, 0.92);
   backdrop-filter: blur(12px);
-  color: #121212;
+  color: var(--ink);
 }
 
 .footer-agency {
-  border-top: 1px solid #e4dfd8;
-  background: #f7f5f2;
-  color: #5c5854;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--mist);
 }
 
 .footer-agency a {
-  color: #121212;
+  color: var(--ink);
 }

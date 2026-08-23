@@ -174,7 +174,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
         </h2>
 
         <div
-          className="mt-6 flex gap-1 rounded-lg border border-zinc-600 bg-zinc-900/80 p-1"
+          className="mt-6 flex gap-1 rounded-lg border border-border bg-surface p-1"
           role="tablist"
           aria-label={
             locale === "sk" ? "Štatistiky portfólia" : "Portfolio stats"
@@ -196,8 +196,8 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
               }}
               className={`min-h-11 rounded-md px-4 py-2.5 text-sm font-medium transition-colors ${
                 activeTab === tab.id
-                  ? "bg-zinc-600 text-white shadow-sm"
-                  : "text-zinc-300 hover:bg-zinc-700 hover:text-white"
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted hover:bg-surface-2 hover:text-foreground"
               }`}
             >
               {locale === "sk" ? tab.labelSk : tab.labelEn}
@@ -209,13 +209,13 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
           id={`stats-panel-${activeTab}`}
           role="tabpanel"
           aria-labelledby={`stats-tab-${activeTab}`}
-          className="mt-6 rounded-xl border border-zinc-600 bg-zinc-900/50 p-6 sm:p-8"
+          className="mt-6 rounded-xl border border-border bg-surface p-6 sm:p-8"
         >
           {activeTab === "technologies" && (
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Left: chart + legend only */}
               <div className="flex flex-col">
-                <h3 className="mb-2 text-sm font-medium text-zinc-300">
+                <h3 className="mb-2 text-sm font-medium text-foreground">
                   {locale === "sk"
                     ? "Projekty podľa technológie"
                     : "Projects by technology"}
@@ -254,7 +254,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                             <Cell
                               key={i}
                               fill={CHART_COLORS[i % CHART_COLORS.length]}
-                              stroke="#52525b"
+                              stroke="#e4dfd8"
                               strokeWidth={1}
                             />
                           ))}
@@ -265,20 +265,20 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                           verticalAlign="bottom"
                           wrapperStyle={{ paddingTop: 8 }}
                           formatter={(value, entry: { payload?: { value?: number } }) => (
-                            <span className="text-xs text-zinc-300">
+                            <span className="text-xs text-muted">
                               {value} ({entry?.payload?.value ?? 0})
                             </span>
                           )}
                         />
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: "#18181b",
-                            border: "1px solid #52525b",
+                            backgroundColor: "#ffffff",
+                            border: "1px solid #e4dfd8",
                             borderRadius: "8px",
-                            color: "#fafafa",
+                            color: "#121212",
                           }}
-                          itemStyle={{ color: "#fafafa" }}
-                          labelStyle={{ color: "#fafafa" }}
+                          itemStyle={{ color: "#121212" }}
+                          labelStyle={{ color: "#121212" }}
                           formatter={(value) => [
                             `${value ?? 0} ${locale === "sk" ? "projektov" : "projects"}`,
                           ]}
@@ -288,7 +288,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     </div>
                   </>
                 ) : (
-                  <p className="py-12 text-center text-sm text-zinc-400">
+                  <p className="py-12 text-center text-sm text-muted">
                     {locale === "sk" ? "Žiadne dáta" : "No data"}
                   </p>
                 )}
@@ -296,7 +296,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
 
               {/* Right: technologies + projects */}
               <div>
-                <h3 className="mb-3 text-sm font-medium text-zinc-300">
+                <h3 className="mb-3 text-sm font-medium text-foreground">
                   {locale === "sk"
                     ? "Klikni na technológiu – zobrazia sa projekty"
                     : "Click a technology → see its projects"}
@@ -314,8 +314,8 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                       }
                       className={`inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors ${
                         selectedTechSlug === item.techSlug
-                          ? "bg-zinc-500 text-white"
-                          : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600 hover:text-white"
+                          ? "bg-foreground text-background"
+                          : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
                       }`}
                     >
                       {stats.technologies.find((t) => t.slug === item.techSlug)
@@ -335,8 +335,8 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                   ))}
                 </div>
                 {selectedTech ? (
-                  <div className="rounded border border-zinc-600 bg-zinc-800/50 p-3">
-                    <p className="mb-2 text-xs text-zinc-400">
+                  <div className="rounded border border-border bg-surface-2 p-3">
+                    <p className="mb-2 text-xs text-muted">
                       {selectedTech.projects.length}{" "}
                       {locale === "sk" ? "projektov" : "projects"}
                     </p>
@@ -345,7 +345,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                         <Link
                           key={p.slug}
                           href={`/projects/${p.slug}`}
-                          className="text-zinc-300 underline-offset-2 transition-colors hover:text-white hover:underline focus-visible:underline"
+                          className="text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
                         >
                           {getProjectTitle(p)}
                         </Link>
@@ -353,7 +353,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     </div>
                   </div>
                 ) : (
-                  <p className="py-2 text-sm text-zinc-400">
+                  <p className="py-2 text-sm text-muted">
                     {locale === "sk"
                       ? "Vyber technológiu vyššie"
                       : "Select a technology above"}
@@ -367,7 +367,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Left: chart + legend only */}
               <div className="flex flex-col">
-                <h3 className="mb-2 text-sm font-medium text-zinc-300">
+                <h3 className="mb-2 text-sm font-medium text-foreground">
                   {locale === "sk"
                     ? "Projekty podľa integrácie"
                     : "Projects by integration"}
@@ -406,7 +406,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                             <Cell
                               key={i}
                               fill={CHART_COLORS[i % CHART_COLORS.length]}
-                              stroke="#52525b"
+                              stroke="#e4dfd8"
                               strokeWidth={1}
                             />
                           ))}
@@ -417,20 +417,20 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                           verticalAlign="bottom"
                           wrapperStyle={{ paddingTop: 8 }}
                           formatter={(value, entry: { payload?: { value?: number } }) => (
-                            <span className="text-xs text-zinc-300">
+                            <span className="text-xs text-muted">
                               {value} ({entry?.payload?.value ?? 0})
                             </span>
                           )}
                         />
                           <Tooltip
                             contentStyle={{
-                              backgroundColor: "#18181b",
-                              border: "1px solid #52525b",
+                              backgroundColor: "#ffffff",
+                              border: "1px solid #e4dfd8",
                               borderRadius: "8px",
-                              color: "#fafafa",
+                              color: "#121212",
                             }}
-                            itemStyle={{ color: "#fafafa" }}
-                            labelStyle={{ color: "#fafafa" }}
+                            itemStyle={{ color: "#121212" }}
+                            labelStyle={{ color: "#121212" }}
                             formatter={(value) => [
                               `${value ?? 0} ${locale === "sk" ? "projektov" : "projects"}`,
                             ]}
@@ -440,7 +440,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     </div>
                   </>
                   ) : (
-                    <p className="py-12 text-center text-sm text-zinc-400">
+                    <p className="py-12 text-center text-sm text-muted">
                       {locale === "sk"
                         ? "Žiadne integrácie"
                         : "No integrations"}
@@ -450,7 +450,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
 
               {/* Right: integrations + projects */}
               <div>
-                <h3 className="mb-3 text-sm font-medium text-zinc-300">
+                <h3 className="mb-3 text-sm font-medium text-foreground">
                   {locale === "sk"
                     ? "Klikni na integráciu – zobrazia sa projekty"
                     : "Click an integration → see its projects"}
@@ -468,8 +468,8 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                       }
                       className={`inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors ${
                         selectedIntSlug === item.intSlug
-                          ? "bg-zinc-500 text-white"
-                          : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600 hover:text-white"
+                          ? "bg-foreground text-background"
+                          : "bg-surface-2 text-muted hover:bg-border hover:text-foreground"
                       }`}
                     >
                       {stats.integrations.find((i) => i.slug === item.intSlug)
@@ -489,8 +489,8 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                   ))}
                 </div>
                 {selectedInt ? (
-                  <div className="rounded border border-zinc-600 bg-zinc-800/50 p-3">
-                    <p className="mb-2 text-xs text-zinc-400">
+                  <div className="rounded border border-border bg-surface-2 p-3">
+                    <p className="mb-2 text-xs text-muted">
                       {selectedInt.projects.length}{" "}
                       {locale === "sk" ? "projektov" : "projects"}
                     </p>
@@ -499,7 +499,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                         <Link
                           key={p.slug}
                           href={`/projects/${p.slug}`}
-                          className="text-zinc-300 underline-offset-2 transition-colors hover:text-white hover:underline focus-visible:underline"
+                          className="text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
                         >
                           {getProjectTitle(p)}
                         </Link>
@@ -507,7 +507,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     </div>
                   </div>
                 ) : (
-                  <p className="py-2 text-sm text-zinc-400">
+                  <p className="py-2 text-sm text-muted">
                     {locale === "sk"
                       ? "Vyber integráciu vyššie"
                       : "Select an integration above"}
@@ -520,7 +520,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
           {activeTab === "overview" && (
             <div className="grid gap-10 sm:grid-cols-2">
               <div>
-                <h3 className="mb-4 text-sm font-medium text-zinc-300">
+                <h3 className="mb-4 text-sm font-medium text-foreground">
                   {locale === "sk"
                     ? "Projekty podľa kategórie"
                     : "Projects by category"}
@@ -559,7 +559,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                             <Cell
                               key={i}
                               fill={CHART_COLORS[i % CHART_COLORS.length]}
-                              stroke="#52525b"
+                              stroke="#e4dfd8"
                               strokeWidth={1}
                             />
                           ))}
@@ -570,20 +570,20 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                           verticalAlign="bottom"
                           wrapperStyle={{ paddingTop: 8 }}
                           formatter={(value, entry: { payload?: { value?: number } }) => (
-                            <span className="text-xs text-zinc-300">
+                            <span className="text-xs text-muted">
                               {value} ({entry?.payload?.value ?? 0})
                             </span>
                           )}
                         />
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: "#18181b",
-                            border: "1px solid #52525b",
+                            backgroundColor: "#ffffff",
+                            border: "1px solid #e4dfd8",
                             borderRadius: "8px",
-                            color: "#fafafa",
+                            color: "#121212",
                           }}
-                          itemStyle={{ color: "#fafafa" }}
-                          labelStyle={{ color: "#fafafa" }}
+                          itemStyle={{ color: "#121212" }}
+                          labelStyle={{ color: "#121212" }}
                           formatter={(value) => [
                             `${value ?? 0} ${locale === "sk" ? "projektov" : "projects"}`,
                           ]}
@@ -593,13 +593,13 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     </div>
                   </>
                 ) : (
-                  <p className="py-12 text-center text-zinc-400">
+                  <p className="py-12 text-center text-muted">
                     {locale === "sk" ? "Žiadne dáta" : "No data"}
                   </p>
                 )}
               </div>
               <div>
-                <h3 className="mb-4 text-sm font-medium text-zinc-300">
+                <h3 className="mb-4 text-sm font-medium text-foreground">
                   {locale === "sk"
                     ? "Projekty podľa roka"
                     : "Projects by year"}
@@ -635,28 +635,28 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     >
                       <XAxis
                         dataKey="year"
-                        stroke="#71717a"
-                        tick={{ fill: "#d4d4d8", fontSize: 12 }}
+                        stroke="#a8a29e"
+                        tick={{ fill: "#5c5854", fontSize: 12 }}
                       />
                       <YAxis
-                        stroke="#71717a"
-                        tick={{ fill: "#d4d4d8", fontSize: 12 }}
+                        stroke="#a8a29e"
+                        tick={{ fill: "#5c5854", fontSize: 12 }}
                         allowDecimals={false}
                       />
                       <Bar
                         dataKey="count"
-                        fill="#71717a"
+                        fill="#8a6a48"
                         radius={[4, 4, 0, 0]}
                       />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#18181b",
-                          border: "1px solid #52525b",
+                          backgroundColor: "#ffffff",
+                          border: "1px solid #e4dfd8",
                           borderRadius: "8px",
-                          color: "#fafafa",
+                          color: "#121212",
                         }}
-                        itemStyle={{ color: "#fafafa" }}
-                        labelStyle={{ color: "#fafafa" }}
+                        itemStyle={{ color: "#121212" }}
+                        labelStyle={{ color: "#121212" }}
                         formatter={(value) => [
                           `${value ?? 0} ${locale === "sk" ? "projektov" : "projects"}`,
                         ]}
@@ -669,7 +669,7 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
                     </div>
                   </>
                 ) : (
-                  <p className="py-12 text-center text-zinc-400">
+                  <p className="py-12 text-center text-muted">
                     {locale === "sk" ? "Žiadne dáta" : "No data"}
                   </p>
                 )}
@@ -679,8 +679,8 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
         </div>
 
         {/* GitHub Contributions */}
-        <div className="mt-8 rounded-xl border border-zinc-600 bg-zinc-900/50 p-6 sm:p-8">
-          <h3 className="mb-4 text-sm font-medium text-zinc-300">
+        <div className="mt-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
+          <h3 className="mb-4 text-sm font-medium text-foreground">
             {locale === "sk"
               ? "GitHub príspevky"
               : "GitHub contributions"}
@@ -698,14 +698,14 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
           >
             <GitHubCalendar
               username="dadoedo"
-              colorScheme="dark"
+              colorScheme="light"
               theme={{
-                dark: [
-                  "#161b22",
-                  "#0e4429",
-                  "#006d32",
-                  "#26a641",
-                  "#39d353",
+                light: [
+                  "#ebedf0",
+                  "#9be9a8",
+                  "#40c463",
+                  "#30a14e",
+                  "#216e39",
                 ],
               }}
               transformData={(contributions) => {

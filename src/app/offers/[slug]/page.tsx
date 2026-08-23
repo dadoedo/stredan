@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { SiteShell } from "@/components/SiteShell";
 import { getLocale } from "@/lib/locale";
 import { getOfferBySlug } from "@/lib/offers";
 
@@ -147,10 +146,8 @@ export default async function OfferLandingPage({ params }: Props) {
   const mailHref = `mailto:david@stredan.sk?subject=${mailSubject}`;
 
   return (
-    <>
-      <Header locale={locale} />
-      <main id="main-content" className="px-6 py-24">
-        <div className="mx-auto max-w-3xl">
+    <SiteShell locale={locale}>
+      <div className="agency-shell py-24">
           <Link
             href="/#offers"
             className="text-sm text-muted underline-offset-2 hover:text-foreground hover:underline"
@@ -160,30 +157,22 @@ export default async function OfferLandingPage({ params }: Props) {
           <p className="mt-8 text-sm text-muted">
             {isSk ? "Ponuka" : "Offer"} {view.code}
           </p>
-          <h1 className="mt-2 font-heading text-4xl font-bold tracking-tight sm:text-5xl">
-            {view.name}
-          </h1>
-          <p className="mt-6 text-lg text-muted">{view.oneLiner}</p>
+          <h1 className="agency-h2 max-w-none sm:text-5xl">{view.name}</h1>
+          <p className="agency-lede">{view.oneLiner}</p>
           {view.priceHint && (
-            <p className="mt-4 text-sm text-zinc-400">{view.priceHint}</p>
+            <p className="mt-4 text-sm text-muted">{view.priceHint}</p>
           )}
 
-          <div className="mt-10 flex flex-wrap gap-4">
-            <a
-              href={mailHref}
-              className="inline-flex min-h-11 items-center border border-foreground bg-foreground px-5 text-sm font-medium text-background"
-            >
+          <div className="agency-cta-row">
+            <a href={mailHref} className="agency-btn-primary">
               {view.cta}
             </a>
-            <Link
-              href="/about"
-              className="inline-flex min-h-11 items-center text-sm text-muted underline-offset-2 hover:underline"
-            >
+            <Link href="/about" className="agency-btn-ghost">
               {isSk ? "Kto to stavia" : "Who builds this"}
             </Link>
           </div>
 
-          <dl className="mt-16 space-y-8 border-t border-border/50 pt-10">
+          <dl className="mt-16 space-y-8 border-t border-border pt-10">
             {view.icpNotes && (
               <div>
                 <dt className="text-sm text-muted">
@@ -202,8 +191,6 @@ export default async function OfferLandingPage({ params }: Props) {
             )}
           </dl>
         </div>
-      </main>
-      <Footer locale={locale} />
-    </>
+    </SiteShell>
   );
 }

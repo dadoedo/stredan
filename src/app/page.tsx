@@ -1,6 +1,5 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { AgencyHome } from "@/components/AgencyHome";
+import { SiteShell } from "@/components/SiteShell";
 import { getLocale } from "@/lib/locale";
 import { getActiveOffers, type OfferPublic } from "@/lib/offers";
 
@@ -115,12 +114,8 @@ export default async function AgencyHomePage() {
   }
 
   return (
-    <div className="agency-page">
-      <Header locale={locale} variant="agency" />
-      <main id="main-content">
-        <AgencyHome locale={locale} offers={offers} />
-      </main>
-      <Footer locale={locale} variant="agency" />
-    </div>
+    <SiteShell locale={locale}>
+      <AgencyHome locale={locale} offers={offers} />
+    </SiteShell>
   );
 }

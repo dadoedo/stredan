@@ -1,7 +1,6 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { StatsDashboard } from "@/components/StatsDashboard";
 import { WorkExperienceSection } from "@/components/WorkExperienceSection";
+import { SiteShell } from "@/components/SiteShell";
 import { prisma } from "@/lib/prisma";
 import { getStats } from "@/lib/stats";
 import { getLocale } from "@/lib/locale";
@@ -41,56 +40,37 @@ export default async function AboutPage() {
   const legacy = projects.filter((p) => p.category === "legacy");
 
   return (
-    <>
-      <Header locale={locale} />
+    <SiteShell locale={locale}>
+      <section className="flex min-h-[70vh] flex-col justify-center px-6">
+        <div className="agency-shell">
+          <p className="agency-section-label">
+            {locale === "sk" ? "Osobný profil" : "Personal profile"}
+          </p>
+          <h1 className="agency-h1 max-w-none">Read, Build, Write</h1>
+          <p className="agency-lede max-w-lg">{t.heroSubtitle}</p>
+          <nav className="mt-8 flex flex-wrap gap-6" aria-label={t.inPageNav}>
+            <a href="#stats" className="agency-btn-ghost">
+              {t.stats}
+            </a>
+            <a href="#work" className="agency-btn-ghost">
+              {t.heroLinkProjects}
+            </a>
+            <a href="/books" className="agency-btn-ghost">
+              {t.heroLinkBooks}
+            </a>
+          </nav>
+        </div>
+      </section>
 
-      <main id="main-content">
-        <section className="flex min-h-[70vh] flex-col justify-center px-6">
-          <div className="mx-auto w-full max-w-5xl">
-            <p className="text-sm text-muted">
-              {locale === "sk" ? "Osobný profil" : "Personal profile"}
-            </p>
-            <h1 className="mt-3 font-heading text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl">
-              Read, Build, Write
-            </h1>
-            <p className="mt-6 max-w-lg text-lg text-muted sm:text-xl">
-              {t.heroSubtitle}
-            </p>
-            <nav className="mt-8 flex flex-wrap gap-6" aria-label={t.inPageNav}>
-              <a
-                href="#stats"
-                className="text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
-              >
-                {t.stats}
-              </a>
-              <a
-                href="#work"
-                className="text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
-              >
-                {t.heroLinkProjects}
-              </a>
-              <a
-                href="/books"
-                className="text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
-              >
-                {t.heroLinkBooks}
-              </a>
-            </nav>
-          </div>
-        </section>
+      <StatsDashboard stats={stats} locale={locale} />
 
-        <StatsDashboard stats={stats} locale={locale} />
-
-        <WorkExperienceSection
-          locale={locale}
-          featured={featured}
-          other={other}
-          legacy={legacy}
-          jobs={jobs}
-        />
-      </main>
-
-      <Footer locale={locale} />
-    </>
+      <WorkExperienceSection
+        locale={locale}
+        featured={featured}
+        other={other}
+        legacy={legacy}
+        jobs={jobs}
+      />
+    </SiteShell>
   );
 }

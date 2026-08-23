@@ -1,6 +1,5 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import Link from "next/link";
+import { SiteShell } from "@/components/SiteShell";
 import { getLocale } from "@/lib/locale";
 
 const essaysContent = {
@@ -30,26 +29,15 @@ export default async function EssaysPage() {
   const c = essaysContent[locale];
 
   return (
-    <>
-      <Header locale={locale} />
+    <SiteShell locale={locale}>
+      <div className="agency-shell py-24">
+        <Link href="/" className="agency-btn-ghost mb-8 inline-block text-sm">
+          ← {c.backToHome}
+        </Link>
 
-      <main id="main-content" className="min-h-screen px-6 pt-24 pb-24">
-        <div className="mx-auto max-w-2xl">
-          <Link
-            href="/"
-            className="mb-8 inline-block text-sm text-muted transition-colors hover:text-foreground"
-          >
-            ← {c.backToHome}
-          </Link>
-
-          <h1 className="font-heading text-4xl font-bold tracking-tight">
-            {c.title}
-          </h1>
-          <p className="mt-4 text-lg text-muted">{c.intro}</p>
-        </div>
-      </main>
-
-      <Footer locale={locale} />
-    </>
+        <h1 className="agency-h2 max-w-none text-4xl">{c.title}</h1>
+        <p className="agency-lede">{c.intro}</p>
+      </div>
+    </SiteShell>
   );
 }

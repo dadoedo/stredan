@@ -66,7 +66,7 @@ export function ProjectCard({
     fullDescription && truncatePreview(fullDescription, PREVIEW_CHARS);
 
   return (
-    <div className="group mb-4 break-inside-avoid border border-border p-6 transition-colors hover:border-zinc-600">
+    <div className="group mb-4 break-inside-avoid border border-border bg-surface p-6 transition-colors hover:border-foreground/20">
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
           {project.logo && (
@@ -80,7 +80,7 @@ export function ProjectCard({
             <h3 className="font-heading text-lg font-semibold tracking-tight">
               <Link
                 href={`/projects/${project.slug}`}
-                className="transition-colors hover:text-zinc-400"
+                className="transition-colors hover:text-muted"
               >
                 {title}
               </Link>
@@ -90,7 +90,7 @@ export function ProjectCard({
             ))}
           </div>
         </div>
-        <span className="shrink-0 text-sm text-zinc-400">{project.year}</span>
+        <span className="shrink-0 text-sm text-muted">{project.year}</span>
       </div>
       {description && (
         <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -215,7 +215,7 @@ export function CompactProject({
             href={project.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center text-zinc-400 transition-colors hover:text-foreground"
+            className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center text-muted transition-colors hover:text-foreground"
             aria-label={`${title} — ${locale === "sk" ? "web projektu" : "project website"}`}
           >
             <ExternalLinkIcon />
@@ -235,7 +235,7 @@ export function CompactProject({
             />
           ))}
         </div>
-        <span className="w-10 text-right text-xs tabular-nums text-zinc-400">
+        <span className="w-10 text-right text-xs tabular-nums text-muted">
           {project.year}
         </span>
       </div>
@@ -278,7 +278,7 @@ export function JobEntry({
           <h3 className="font-heading text-lg font-medium">{position}</h3>
           <p className="text-muted">{company}</p>
         </div>
-        <span className="text-sm tabular-nums text-zinc-400">
+        <span className="text-sm tabular-nums text-muted">
           {job.startYear} &mdash; {job.current ? t.present : job.endYear}
         </span>
       </div>
@@ -297,7 +297,7 @@ export function JobEntry({
             href={job.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-foreground underline decoration-zinc-400 underline-offset-2 transition-colors hover:decoration-foreground"
+            className="inline-flex items-center gap-1 text-foreground underline decoration-border underline-offset-2 transition-colors hover:decoration-foreground"
           >
             {urlLabel}
             <ExternalLinkIcon className="size-3" />

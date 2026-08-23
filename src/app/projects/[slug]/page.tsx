@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { SiteShell } from "@/components/SiteShell";
 import { ExternalLinkIcon } from "@/components/ExternalLinkIcon";
 import { TagBadge } from "@/components/TagBadge";
 import { LinkifyText } from "@/components/LinkifyText";
@@ -97,10 +96,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const category = formatCategory(project.category, locale);
 
   return (
-    <>
-      <Header locale={locale} />
-      <main id="main-content" className="px-6 pt-28 pb-24">
-        <article className="mx-auto max-w-5xl">
+    <SiteShell locale={locale}>
+      <article className="agency-shell py-28">
           <Link
             href="/#work"
             className="inline-flex items-center text-sm text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline"
@@ -149,14 +146,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
           <section className="mt-8 grid gap-6 sm:grid-cols-2">
             <div className="space-y-1">
-              <p className="text-xs uppercase tracking-wide text-zinc-400">
+              <p className="text-xs uppercase tracking-wide text-muted">
                 {t.projectYear}
               </p>
               <p className="text-sm text-foreground">{project.year ?? "—"}</p>
             </div>
 
             <div className="space-y-1">
-              <p className="text-xs uppercase tracking-wide text-zinc-400">
+              <p className="text-xs uppercase tracking-wide text-muted">
                 {t.projectCategory}
               </p>
               <p className="text-sm text-foreground">{category}</p>
@@ -246,8 +243,6 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </section>
           )}
         </article>
-      </main>
-      <Footer locale={locale} />
-    </>
+    </SiteShell>
   );
 }

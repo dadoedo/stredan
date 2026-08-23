@@ -7,18 +7,76 @@ import type { OfferPublic } from "@/lib/offers";
 import { OpensInNewTab } from "@/components/OpensInNewTab";
 
 const CLIENTS = [
-  { name: "Foodient", logo: "/logos/foodient.png" },
-  { name: "ViralSky", logo: "/logos/viralsky.png" },
-  { name: "SkySnail", logo: "/logos/skysnail.png" },
-  { name: "Anderro", logo: "/logos/anderro.png" },
-  { name: "OFF.Studio", logo: "/logos/offstudio.png" },
-  { name: "AllDevs", logo: "/logos/alldevs.png" },
-  { name: "Pozicto", logo: "/logos/pozicto.png" },
-  { name: "Frostbox", logo: "/logos/frostbox.png" },
-  { name: "AllBooks", logo: "/logos/allbooks.png" },
-  { name: "Ligreza", logo: "/logos/ligreza.png" },
-  { name: "Stredan", logo: "/logos/stredan.png" },
+  { name: "Foodient", logo: "/logos/foodient.png", href: "https://foodient.app" },
+  { name: "ViralSky", logo: "/logos/viralsky.png", href: "https://viralsky.ai" },
+  { name: "SkySnail", logo: "/logos/skysnail.png", href: "https://skysnail.io" },
+  { name: "Anderro", logo: "/logos/anderro.png", href: "https://anderro.com" },
+  { name: "OFF.Studio", logo: "/logos/offstudio.png", href: "https://offstudio.sk" },
+  { name: "AllDevs", logo: "/logos/alldevs.png", href: "https://alldevs.cz" },
+  { name: "Pozicto", logo: "/logos/pozicto.png", href: "https://pozic.to" },
+  { name: "Frostbox", logo: "/logos/frostbox.png", href: "https://frostbox.sk" },
+  { name: "Ligreza", logo: "/logos/ligreza.png", href: "https://ligreza.sk" },
+  { name: "AskData", logo: "/logos/askdata.svg", href: "https://askdata.sk" },
+  {
+    name: "Bratislava Music Academy",
+    logo: "/logos/bma.svg",
+    href: "https://app.bratislavamusicacademy.sk",
+    wide: true,
+  },
+  {
+    name: "Autofino",
+    logo: "/logos/autofino.svg",
+    href: "https://autofino.sk",
+    wide: true,
+  },
 ] as const;
+
+function ClientLogosMarquee({ locale }: { locale: Locale }) {
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduceMotion(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const track = reduceMotion ? [...CLIENTS] : [...CLIENTS, ...CLIENTS];
+
+  return (
+    <div className="agency-logo-marquee">
+      <ul className="agency-logo-track">
+        {track.map((client, index) => (
+          <li key={`${client.name}-${index}`}>
+            <a
+              href={client.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="agency-logo-link"
+              aria-label={client.name}
+            >
+              <img
+                src={client.logo}
+                alt=""
+                className={
+                  "wide" in client && client.wide
+                    ? "agency-logo-img is-wide"
+                    : "agency-logo-img"
+                }
+                width={120}
+                height={32}
+                loading="lazy"
+                decoding="async"
+              />
+              <OpensInNewTab locale={locale} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 const WORK = [
   {
@@ -33,7 +91,7 @@ const WORK = [
     metaEn: "Infinee · product",
   },
   {
-    href: "https://bmacademy.sk",
+    href: "https://app.bratislavamusicacademy.sk",
     img: "/work/bma.png",
     featured: false,
     titleSk: "Bratislava Music Academy",
@@ -85,12 +143,10 @@ type Copy = {
   ctaPrimary: string;
   ctaSecondary: string;
   proofLine: string;
-  trustedBy: string;
   workEyebrow: string;
   workTitle: string;
   workCaption: string;
   workMeta: string;
-  workMore: string;
   heroAlt: string;
   heroCap: string;
   metricsLabel: string;
@@ -98,6 +154,10 @@ type Copy = {
   howEyebrow: string;
   howTitle: string;
   steps: { n: string; title: string; body: string }[];
+  stackEyebrow: string;
+  stackTitle: string;
+  stackCaption: string;
+  stackItems: { label: string; desc: string }[];
   offersEyebrow: string;
   offersTitle: string;
   aboutEyebrow: string;
@@ -115,34 +175,32 @@ type Copy = {
 const copy: Record<Locale, Copy> = {
   sk: {
     kicker: "Pre firmy, ktoré už majú dosť nástrojov",
-    headline: "Dostanete týždeň späť. Kontrolu si necháte.",
-    sub: "Jeden proces, ktorý vás brzdí. V prevádzke, na úrovni, akú poznáte zo svetových produktov. Nie workshop. Nie prezentácia.",
-    ctaPrimary: "Chcem to v prevádzke",
+    headline: "Ušetríme vám týždeň času. Ako ho využijete už určite viete.",
+    sub: "Procesy ktoré vás reálne brzdia vieme zrýchliť a zautomatizovať. Nasadenie priamo do prevádzky, reálne výsledky, ušité na mieru.",
+    ctaPrimary: "Začnime",
     ctaSecondary: "Pozrite si prácu",
     proofLine:
       "Rovnaká latka ako pri produktoch, ktoré dnes používajú desaťtisíce ľudí. Tentokrát pre vašu firmu.",
-    trustedBy: "Infinee · AllDevs · Stredan",
     workEyebrow: "Práca",
     workTitle: "Nie sľuby. Veci, ktoré už bežia.",
     workCaption:
       "Štúdiá, trhoviská, aplikácie. Od prvého riadku kódu až po ľudí, ktorí to otvárajú každý deň.",
     workMeta: "OFF.Studio · klient · 2025",
-    workMore: "Výber z Infinee, AllDevs a Stredan",
     heroAlt: "OFF. Contrast Therapy: rezervácie a značka",
     heroCap: "OFF.Studio · klient · 2025",
     metricsLabel: "Čísla, nie pocity",
     metrics: [
       { value: "43k+", label: "ľudí na produktoch, ktoré sme spustili" },
-      { value: "4", label: "produkty za 8 mesiacov. Jeden človek na technike" },
+      { value: "20+", label: "firiem, ktoré nám už dali dôveru" },
       { value: "1", label: "úzke hrdlo na začiatok. Nie dvadsať projektov." },
     ],
     howEyebrow: "Ako",
-    howTitle: "Najprv bolesť. Potom softvér.",
+    howTitle: "Pomenujeme, čo vás trápi; potom nájdeme riešenie.",
     steps: [
       {
         n: "01",
-        title: "Pomenujeme, čo vás žerie",
-        body: "Hodiny, dopyty, únik dát. Jedna vec. Kým ju nevieme pomenovať, nestaviame.",
+        title: "Identifikácia a evaluácia",
+        body: "Stratené hodiny, nevyužité dáta, príliš veľa ľudskej roboty. Zadefinujeme problém a až potom sa bavíme o riešení.",
       },
       {
         n: "02",
@@ -151,8 +209,38 @@ const copy: Record<Locale, Copy> = {
       },
       {
         n: "03",
-        title: "Ukážeme číslo",
+        title: "Vyhodnotenie",
         body: "Predtým a potom. Ak sa nič nepohlo, končíme. Žiadne doladenie bez dôkazu.",
+      },
+    ],
+    stackEyebrow: "Stack",
+    stackTitle: "Nie len ChatGPT v prehliadači.",
+    stackCaption:
+      "Tieto veci už nasadzujeme do prevádzky; nie na slide.",
+    stackItems: [
+      {
+        label: "RAG",
+        desc: "Firemné dokumenty a dáta ako kontext pre AI",
+      },
+      {
+        label: "MCP",
+        desc: "Bezpečné napojenie na CRM, e-mail, databázy",
+      },
+      {
+        label: "Cloud Agents",
+        desc: "Agenti na serveri, nie v tabe prehliadača",
+      },
+      {
+        label: "Sandboxes",
+        desc: "Izolované prostredie pre kód a nástroje",
+      },
+      {
+        label: "AI Agents",
+        desc: "Konkrétny proces od vstupu po výsledok",
+      },
+      {
+        label: "Automatizácia",
+        desc: "Triggery, workflow, napojenie na systémy",
       },
     ],
     offersEyebrow: "Ako začať",
@@ -161,17 +249,17 @@ const copy: Record<Locale, Copy> = {
     aboutRole: "Founder · CTO",
     aboutName: "Dávid Stredánsky",
     aboutLead:
-      "Stredan je malé štúdio so svetovou latkou. Navrhujem to, píšem to a ručím za to, čo ostane zapnuté, keď z hovoru odídete.",
+      "Stredan je AI & Software štúdio v Bratislave. S tímom šikovných ľudí navrhujeme a budujeme riešenia pre firmy na Slovensku, v Česku, ale aj v zahraničí.",
     aboutBullets: [
-      "Viac ako 10 rokov vývoja: od prototypu po prevádzku, ktorú netreba strážiť",
-      "Backend pre módny e-shop (CSRetail)",
-      "CTO Infinee Labs: Foodient, ViralSky, SkySnail, Anderro. V prevádzke",
+      "Viac ako 10 rokov od prvého riadku kódu po systém, ktorý netreba strážiť",
+      "AI agenti, automatizácia a vlastný softvér; vždy jeden proces, nie celý chaos naraz",
+      "Desaťtisíce používateľov na produktoch a aplikáciách, ktoré sme dodali",
     ],
     aboutCta: "Celý profil",
     finalTitle: "Jedna veta: čo vás spomaľuje.",
     finalSub: "Odpoviem narovinu: audit, agent, alebo „toto AI neriešte“.",
     finalCta: "david@stredan.sk",
-    finalNote: "Zvyčajne do jedného pracovného dňa. Bez prezentácie.",
+    finalNote: "Zvyčajne do jedného pracovného dňa.",
   },
   en: {
     kicker: "For companies that are done collecting tools",
@@ -181,28 +269,26 @@ const copy: Record<Locale, Copy> = {
     ctaSecondary: "The proof is below",
     proofLine:
       "The same bar as products tens of thousands of people already use. This time, for your company.",
-    trustedBy: "Infinee · AllDevs · Stredan",
     workEyebrow: "Work",
     workTitle: "Not a promise. Things that run.",
     workCaption:
       "Studios, marketplaces, apps. Designed and shipped end-to-end, from the first line to people who open them every day.",
     workMeta: "OFF.Studio · client · 2025",
-    workMore: "Selected from Infinee, AllDevs, and Stredan",
     heroAlt: "OFF. Contrast Therapy: booking and brand",
     heroCap: "OFF.Studio · client · 2025",
     metricsLabel: "Numbers, not mood",
     metrics: [
       { value: "43k+", label: "people on products we shipped" },
-      { value: "4", label: "products in 8 months. One technical owner" },
+      { value: "20+", label: "companies that already trusted us" },
       { value: "1", label: "bottleneck to start. Not twenty initiatives." },
     ],
     howEyebrow: "How",
-    howTitle: "Your pain first. Software second.",
+    howTitle: "We name what hurts; then we find the solution.",
     steps: [
       {
         n: "01",
-        title: "Name what eats the week",
-        body: "Hours, leads, leaking data. One thing. If we can’t name it, we don’t start building.",
+        title: "Identification and evaluation",
+        body: "Lost hours, unused data, too much manual work. We define the problem first; only then do we talk solutions.",
       },
       {
         n: "02",
@@ -211,8 +297,37 @@ const copy: Record<Locale, Copy> = {
       },
       {
         n: "03",
-        title: "Show the number",
+        title: "Evaluation",
         body: "Before and after. If it didn’t move, we stop. No ‘we’ll polish it’ without proof.",
+      },
+    ],
+    stackEyebrow: "Stack",
+    stackTitle: "More than ChatGPT in a browser tab.",
+    stackCaption: "What we actually deploy in production; not on a slide.",
+    stackItems: [
+      {
+        label: "RAG",
+        desc: "Company documents and data as AI context",
+      },
+      {
+        label: "MCP",
+        desc: "Secure hooks into CRM, email, databases",
+      },
+      {
+        label: "Cloud Agents",
+        desc: "Agents on the server, not in a browser tab",
+      },
+      {
+        label: "Sandboxes",
+        desc: "Isolated environments for code and tools",
+      },
+      {
+        label: "AI Agents",
+        desc: "One workflow from input to outcome",
+      },
+      {
+        label: "Automation",
+        desc: "Triggers, workflows, system integrations",
       },
     ],
     offersEyebrow: "How to start",
@@ -221,17 +336,17 @@ const copy: Record<Locale, Copy> = {
     aboutRole: "Founder · CTO",
     aboutName: "Dávid Stredánsky",
     aboutLead:
-      "Stredan is a small studio with a world-class bar. I design it, write it, and own what stays on after you leave the call.",
+      "Stredan is an AI & software studio in Bratislava. With a sharp team, we design and build solutions for companies in Slovakia, Czechia, and abroad.",
     aboutBullets: [
-      "10+ years full-stack: prototype through systems people don’t baby-sit",
-      "Enterprise backend for fashion e-commerce (CSRetail)",
-      "CTO, Infinee Labs: Foodient, ViralSky, SkySnail, Anderro. In production",
+      "10+ years from the first line of code to systems you don’t babysit",
+      "AI agents, automation, and custom software; one process at a time, not twenty at once",
+      "Tens of thousands of people on products and apps we shipped",
     ],
     aboutCta: "Full profile",
     finalTitle: "One sentence: what eats your Tuesday.",
     finalSub: "I’ll answer straight: audit, agent, or “don’t put AI on this.”",
     finalCta: "david@stredan.sk",
-    finalNote: "Usually within one business day. No pitch deck.",
+    finalNote: "Usually within one business day.",
   },
 };
 
@@ -312,17 +427,11 @@ export function AgencyHome({
         </div>
       </section>
 
-      <section className="agency-logos" aria-label={t.trustedBy}>
-        <div className="agency-shell">
-          <p className="agency-section-label">{t.trustedBy}</p>
-          <ul className="agency-logo-row">
-            {CLIENTS.map((c) => (
-              <li key={c.name}>
-                <img src={c.logo} alt={c.name} className="agency-logo-img" />
-              </li>
-            ))}
-          </ul>
-        </div>
+      <section
+        className="agency-logos"
+        aria-label={locale === "sk" ? "Klienti" : "Clients"}
+      >
+        <ClientLogosMarquee locale={locale} />
       </section>
 
       <section id="work" className="agency-work">
@@ -331,7 +440,6 @@ export function AgencyHome({
             <p className="agency-section-label">{t.workEyebrow}</p>
             <h2 className="agency-h2">{t.workTitle}</h2>
             <p className="agency-body">{t.workCaption}</p>
-            <p className="agency-work-src">{t.workMore}</p>
           </div>
           <ul className="agency-work-bento">
             {WORK.map((w) => (
@@ -390,6 +498,24 @@ export function AgencyHome({
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      <section className="agency-stack">
+        <div className="agency-shell">
+          <Reveal>
+            <p className="agency-section-label">{t.stackEyebrow}</p>
+            <h2 className="agency-h2">{t.stackTitle}</h2>
+            <p className="agency-body">{t.stackCaption}</p>
+          </Reveal>
+          <ul className="agency-stack-grid">
+            {t.stackItems.map((item) => (
+              <li key={item.label} className="agency-stack-item">
+                <strong>{item.label}</strong>
+                <span>{item.desc}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

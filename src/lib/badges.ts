@@ -5,21 +5,21 @@ export const BADGE_CONFIG: Record<
   "open-source": {
     label: "Open source",
     icon: "☆",
-    className: "bg-amber-950 text-amber-200",
+    className: "bg-amber-100 text-amber-900",
   },
   marketplace: {
     label: "Marketplace",
     icon: "◇",
-    className: "bg-emerald-950 text-emerald-200",
+    className: "bg-emerald-100 text-emerald-900",
   },
   ios: {
     label: "iOS",
     icon: "",
-    className: "bg-sky-950 text-sky-200",
+    className: "bg-sky-100 text-sky-900",
   },
   android: {
     label: "Android",
     icon: "",
-    className: "bg-green-950 text-green-200",
+    className: "bg-green-100 text-green-900",
   },
 };

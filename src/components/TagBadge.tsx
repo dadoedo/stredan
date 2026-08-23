@@ -12,12 +12,14 @@ export function TagBadge({ name, icon, variant = "default", size = "md" }: TagBa
     size === "sm" ? "text-xs" : size === "md" ? "text-sm" : "text-sm";
   const padding =
     size === "sm" ? "px-2 py-0.5" : size === "md" ? "px-2.5 py-1" : "px-3 py-1.5";
-  const textColor =
-    variant === "muted" ? "text-zinc-300" : "text-zinc-100";
+  const tone =
+    variant === "muted"
+      ? "border border-border bg-surface-2 text-muted"
+      : "border border-border bg-surface text-foreground";
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-md ${padding} ${textSize} ${textColor} bg-zinc-700/90`}
+      className={`inline-flex items-center gap-1.5 rounded-md ${padding} ${textSize} ${tone}`}
     >
       {icon ? (
         <img

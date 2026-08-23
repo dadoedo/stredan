@@ -23,7 +23,7 @@ export function LinkifyText({
             href={part}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground underline decoration-zinc-400 underline-offset-2 transition-colors hover:decoration-foreground"
+            className="text-foreground underline decoration-border underline-offset-2 transition-colors hover:decoration-foreground"
           >
             {part}
             <OpensInNewTab locale={locale} />

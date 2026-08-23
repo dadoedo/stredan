@@ -8,19 +8,12 @@ import LocaleSwitcher from "./LocaleSwitcher";
 
 const MENU_ANIMATION_DURATION = 200;
 
-export default function Header({
-  locale,
-  variant = "default",
-}: {
-  locale: Locale;
-  variant?: "default" | "agency";
-}) {
+export default function Header({ locale }: { locale: Locale }) {
   const t = ui[locale];
   const [menuOpen, setMenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const isAgency = variant === "agency";
 
   const closeMenu = () => {
     if (!menuOpen) return;
@@ -74,43 +67,17 @@ export default function Header({
     };
   }, [menuOpen]);
 
-  const navLinkClass = isAgency
-    ? "text-sm text-[#5c5854] underline-offset-4 transition-colors hover:text-[#121212] hover:underline"
-    : "text-sm text-muted underline-offset-2 transition-colors hover:text-foreground hover:underline focus-visible:underline";
+  const navLinkClass =
+    "text-sm text-muted underline-offset-4 transition-colors hover:text-foreground hover:underline";
 
   return (
-    <header
-      className={
-        isAgency
-          ? "header-agency w-full"
-          : "w-full border-b border-border/50 bg-background/80 backdrop-blur-md"
-      }
-    >
-      <div
-        className={
-          isAgency
-            ? "mx-auto flex h-16 max-w-[1180px] items-center justify-between px-6"
-            : "mx-auto flex h-14 max-w-5xl items-center justify-between px-6"
-        }
-      >
+    <header className="header-agency w-full">
+      <div className="mx-auto flex h-16 max-w-[1180px] items-center justify-between px-6">
         <Link
           href="/"
-          className={
-            isAgency
-              ? "text-[15px] font-semibold tracking-tight text-[#121212]"
-              : "font-heading text-2xl font-semibold transition-colors hover:opacity-80"
-          }
+          className="text-[15px] font-semibold tracking-tight text-foreground"
         >
-          {isAgency ? (
-            "STREDAN"
-          ) : (
-            <>
-              <span className="text-zinc-400">David </span>
-              <span className="text-foreground">Stredan</span>
-              <span className="text-foreground">.sk</span>
-              <span className="text-zinc-400">y</span>
-            </>
-          )}
+          STREDAN
         </Link>
 
         <nav
@@ -123,7 +90,7 @@ export default function Header({
           <Link href="/about" className={navLinkClass}>
             {t.navAbout}
           </Link>
-          <Link href={isAgency ? "/#work" : "/about#work"} className={navLinkClass}>
+          <Link href="/#work" className={navLinkClass}>
             {t.work}
           </Link>
           <LocaleSwitcher locale={locale} />
@@ -133,7 +100,7 @@ export default function Header({
           ref={menuButtonRef}
           type="button"
           onClick={() => (menuOpen ? closeMenu() : openMenu())}
-          className={`flex min-h-11 min-w-11 items-center justify-center md:hidden ${isAgency ? "text-[#121212]" : "text-muted hover:text-foreground"}`}
+          className="flex min-h-11 min-w-11 items-center justify-center text-foreground md:hidden"
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? t.closeMenu : t.openMenu}
@@ -160,22 +127,22 @@ export default function Header({
         createPortal(
           <>
             <div
-              className={`fixed inset-0 z-[100] backdrop-blur-sm md:hidden ${isAgency ? "bg-black/30" : "bg-zinc-400/40"} ${isClosing ? "animate-[fade-out_0.2s_ease-out_forwards]" : "animate-[fade-in_0.2s_ease-out]"}`}
+              className={`fixed inset-0 z-[100] bg-black/30 backdrop-blur-sm md:hidden ${isClosing ? "animate-[fade-out_0.2s_ease-out_forwards]" : "animate-[fade-in_0.2s_ease-out]"}`}
               onClick={closeMenu}
               aria-hidden
             />
             <nav
               ref={menuRef}
               id="mobile-menu"
-              className={`fixed right-0 top-0 z-[110] flex h-dvh w-80 max-w-[90vw] flex-col border-l md:hidden ${isAgency ? "border-[#e4dfd8] bg-[#f7f5f2] text-[#121212]" : "border-border/50 bg-background"} ${isClosing ? "animate-[slide-out-to-right_0.2s_ease-in_forwards]" : "animate-[slide-in-from-right_0.2s_ease-out]"}`}
+              className={`fixed right-0 top-0 z-[110] flex h-dvh w-80 max-w-[90vw] flex-col border-l border-border bg-background text-foreground md:hidden ${isClosing ? "animate-[slide-out-to-right_0.2s_ease-in_forwards]" : "animate-[slide-in-from-right_0.2s_ease-out]"}`}
               aria-label={t.mobileMenu}
             >
-              <div className="flex items-center justify-between border-b border-border/50 px-6 py-4">
+              <div className="flex items-center justify-between border-b border-border px-6 py-4">
                 <span className="text-sm font-medium text-muted">Menu</span>
                 <button
                   type="button"
                   onClick={closeMenu}
-                  className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-muted transition-colors hover:bg-muted/20 hover:text-foreground"
+                  className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-muted transition-colors hover:bg-surface-2 hover:text-foreground"
                   aria-label={t.closeMenu}
                 >
                   <svg
@@ -199,43 +166,43 @@ export default function Header({
                   <Link
                     href="/#offers"
                     onClick={closeMenu}
-                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-muted/20"
+                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
                   >
                     {t.navOffers}
                   </Link>
                   <Link
                     href="/about"
                     onClick={closeMenu}
-                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-muted/20"
+                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
                   >
                     {t.navAbout}
                   </Link>
                   <Link
-                    href={isAgency ? "/#work" : "/about#work"}
+                    href="/#work"
                     onClick={closeMenu}
-                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-muted/20"
+                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
                   >
                     {t.work}
                   </Link>
                 </div>
-                <div className="my-2 h-px bg-border/50" />
+                <div className="my-2 h-px bg-border" />
                 <div className="space-y-1">
                   <Link
                     href="/books"
                     onClick={closeMenu}
-                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-muted/20"
+                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
                   >
                     {t.heroLinkBooks}
                   </Link>
                   <Link
                     href="/essays"
                     onClick={closeMenu}
-                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-muted/20"
+                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
                   >
                     {t.heroLinkEssays}
                   </Link>
                 </div>
-                <div className="mt-6 border-t border-border/50 pt-4">
+                <div className="mt-6 border-t border-border pt-4">
                   <LocaleSwitcher locale={locale} className="text-foreground" />
                 </div>
               </div>
