@@ -24,6 +24,8 @@ Outbound lab pre slovenské SME. Predaj AI implementácie (Stredan), nie kúpen�
 | [COST.md](./COST.md) | Agent vs deterministic cost |
 | [RPO.md](./RPO.md) | Register právnických osôb |
 
+Run feedback / post-mortems: [`automation_run_feedback/`](./automation_run_feedback/) (operator latency, MCP write failures, prompt tweaks).
+
 ## Quick start (dev)
 
 ```bash
