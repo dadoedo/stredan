@@ -26,7 +26,8 @@ Execute the `.sql` via Postgres MCP (`stredan` / `prod`). One cold Touch per lea
       "company": "ANS Accounting",
       "hook": "Vo vašom odbore to zvyčajne začína pri faktúrach, DPH a pretáčaní dokladov z mailu do Pohody.",
       "landing": "https://stredan.sk/offers/shadow-ai",
-      "firstName": "Milan"
+      "firstName": "Milan",
+      "subject_variant": 1
     }
   }
 ]
@@ -49,7 +50,9 @@ If the sendable query returns **0 rows**, the agent stops. It does **not** enric
 
 ## Cell pick
 
-Random active offer among that lead's sendable A–D × random active `SendAccount` with `mcpAccountKey`, still under `dailyCap` (today's `draft` + `sent` Touches). Offer E is not cold.
+**Stratified**, not pure random: among that lead's sendable A–D offers pick the one with the fewest drafts today (`draft` + `queued` + `sent` Touches), ties break randomly. Then a random active `SendAccount` with `mcpAccountKey`, still under `dailyCap`. Offer E is not cold.
+
+Why: pure random collapses onto whichever offer the pool skews to (C on a lawyer/accountant pool) and the A–E × 1–5 experiment stops testing offers against each other. Keep per-offer counts within ~3 of each other until ≥30 replies.
 
 ## Writer checks
 

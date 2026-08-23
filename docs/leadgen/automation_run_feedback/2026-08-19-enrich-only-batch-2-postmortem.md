@@ -212,7 +212,9 @@ Batch 2 data is **mostly usable** (48/50 searched, 19 emails, scores present), b
 **Primary cause:** treating Postgres MCP as a bulk SQL pipe for hundreds of multi-line statements.  
 **Secondary causes:** parallel subagents without write coordination, hollow status updates, conflating Cursor session time with batch completion.
 
-Until writes move to a **local script or ≤8 KB per-lead MCP calls**, expect **multi-hour** runs regardless of research parallelism. Batch 1 post-mortem P0 items remain open; batch 2 proves they are blocking production cron.
+Until writes move to **per-lead `upsert_lead_enrichment`** (or `--apply`), expect **multi-hour** runs regardless of research parallelism.
+
+**Update 2026-08-23:** `upsert_lead_enrichment` MCP tool + writer statement order fix shipped in repo. Deploy `agent-mcp` to activate. See [feedback README](./README.md).
 
 ---
 

@@ -80,9 +80,11 @@ Módy (jeden na beh, nemiešať):
 
 | Mode | Čo robí |
 |------|---------|
-| `ENRICH_ONLY` | Ďalších až 50 firiem z RPO + skóre A–D. Žiadny Touch. |
+| `ENRICH_ONLY` | Ďalších až 50 firiem z RPO + skóre A–D. Žiadny Touch. Rotuj NACE segmenty podľa „Batch mix“ v playbooku. |
 | `DRAFT_ONLY` | Draft z **už enrichnutých** sendable leadov v `stredan`. Žiadny RPO pull. Cap 40. Ak je sendable = 0, STOP (nezačne enrich). |
-| `SEND` | Email MCP. Zatiaľ vypnuté. |
+| `SEND` | Email MCP. Ramp + predletový checklist: [SEND_PLAN.md](./SEND_PLAN.md). Zapína výslovne David. |
+
+Rotácia módov: kým je pool tenký → `ENRICH_ONLY` (rotácia segmentov), keď má ≥20 čerstvých sendable → `DRAFT_ONLY`, send až po Davida.
 
 ---
 
