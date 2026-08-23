@@ -29,14 +29,16 @@ export function LeadsToolbar({ q, status, skip, contact, sort, dir }: LeadsToolb
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [search, setSearch] = useState(q ?? "");
+  const [prevQ, setPrevQ] = useState(q);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const query = { q, status, skip, contact, sort, dir };
   const showReset = hasActiveFilters(query);
 
-  useEffect(() => {
+  if (q !== prevQ) {
+    setPrevQ(q);
     setSearch(q ?? "");
-  }, [q]);
+  }
 
   useEffect(() => {
     return () => {

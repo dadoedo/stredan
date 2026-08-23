@@ -1,7 +1,7 @@
 "use client";
 
 import { Calendar } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { bookingPopupUrl } from "@/lib/booking";
 import { trackEvent } from "@/lib/analytics";
 
@@ -11,6 +11,28 @@ const STYLE_HREF =
   "https://calendar.google.com/calendar/scheduling-button-script.css";
 
 const MOBILE_BOOKING_QUERY = "(max-width: 768px), (pointer: coarse)";
+
+function subscribeMobileBooking(onChange: () => void) {
+  const mq = window.matchMedia(MOBILE_BOOKING_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function getMobileBookingSnapshot() {
+  return window.matchMedia(MOBILE_BOOKING_QUERY).matches;
+}
+
+function getMobileBookingServerSnapshot() {
+  return false;
+}
+
+function useMobileBooking() {
+  return useSyncExternalStore(
+    subscribeMobileBooking,
+    getMobileBookingSnapshot,
+    getMobileBookingServerSnapshot,
+  );
+}
 
 declare global {
   interface Window {
@@ -75,25 +97,15 @@ export function BookingCallButton({
   eventProps?: Record<string, unknown>;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
-  const [useDirectPage, setUseDirectPage] = useState(false);
+  const [popupReady, setPopupReady] = useState(false);
+  const useDirectPage = useMobileBooking();
+  const ready = useDirectPage || popupReady;
 
   useEffect(() => {
-    const mq = window.matchMedia(MOBILE_BOOKING_QUERY);
-    const updateMode = () => setUseDirectPage(mq.matches);
-    updateMode();
-    mq.addEventListener("change", updateMode);
-
-    if (mq.matches) {
-      setReady(true);
-      return () => mq.removeEventListener("change", updateMode);
-    }
+    if (useDirectPage) return;
 
     const host = hostRef.current;
-    if (!host) {
-      mq.removeEventListener("change", updateMode);
-      return;
-    }
+    if (!host) return;
 
     let mounted = true;
 
@@ -115,17 +127,16 @@ export function BookingCallButton({
           googleBtn.tabIndex = -1;
         }
 
-        setReady(true);
+        setPopupReady(true);
       })
       .catch(() => {
-        if (mounted) setReady(true);
+        if (mounted) setPopupReady(true);
       });
 
     return () => {
       mounted = false;
-      mq.removeEventListener("change", updateMode);
     };
-  }, [label, campaign]);
+  }, [label, campaign, useDirectPage]);
 
   const openBooking = () => {
     trackEvent("contact_started", {
