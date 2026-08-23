@@ -115,23 +115,25 @@ function contactId(leadId: string, email: string | null, fullName: string): stri
 
 export function normalizeLead(raw: LeadIn, index: number): LeadIn {
   if (!raw || typeof raw !== "object") throw new Error(`Lead ${index} is not an object`);
-  if (!ICO_RE.test(raw.ico)) throw new Error(`Lead ${index}: ico must be 8 digits`);
-  const skip = asSkip(raw.skip_reason ?? raw.website_enrichment?.skip_reason ?? null, raw.ico);
+  const ico = String(raw.ico ?? "").trim();
+  if (!ICO_RE.test(ico)) throw new Error(`Lead ${index}: ico must be 8 digits`);
+  const skip = asSkip(raw.skip_reason ?? raw.website_enrichment?.skip_reason ?? null, ico);
   for (const hit of raw.search?.hits ?? []) {
     if (!HIT_TYPES.includes(hit.type)) {
-      throw new Error(`${raw.ico}: hit type ${JSON.stringify(hit.type)} is invalid`);
+      throw new Error(`${ico}: hit type ${JSON.stringify(hit.type)} is invalid`);
     }
   }
   if (raw.scores) {
     for (const code of OFFER_CODES) {
       const row = raw.scores[code];
-      if (row) asIntScore(row.score, code, raw.ico);
+      if (row) asIntScore(row.score, code, ico);
     }
   }
   return {
     ...raw,
-    leadId: raw.leadId ?? `ldry_${raw.ico}`,
-    companyId: raw.companyId ?? `cmp_${raw.ico}`,
+    ico,
+    leadId: raw.leadId ?? `ldry_${ico}`,
+    companyId: raw.companyId ?? `cmp_${ico}`,
     skip_reason: skip,
   };
 }

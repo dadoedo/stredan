@@ -44,19 +44,49 @@ export async function upsertLeadEnrichment(config: PostgresConfig, input: Upsert
     validateScoreInvariant(lead, input.scoresOnly ?? false);
 
     const stmts = executableStatements(statementsForLead(lead, runId, input.scoresOnly ?? false));
+    if (stmts.length === 0) {
+      return {
+        success: false as const,
+        error: `No SQL to run for ico ${lead.ico} (scores-only with no A–D scores?).`,
+      };
+    }
+
     const sql = getConnection({ connectionUrl: env.connectionUrl });
 
+    const existing = await sql<{ id: string }[]>`
+      SELECT l.id FROM "Lead" l
+      JOIN "Company" c ON c.id = l."companyId"
+      WHERE c.ico = ${lead.ico}
+      LIMIT 1
+    `;
+    if (existing.length === 0) {
+      return {
+        success: false as const,
+        error: `No Lead in DB for ico ${lead.ico}. Source from RPO before upsert_lead_enrichment.`,
+      };
+    }
+
+    let rowsAffected = 0;
     await sql.begin(async (tx) => {
       for (const stmt of stmts) {
-        await tx.unsafe(stmt);
+        const result = await tx.unsafe(stmt);
+        rowsAffected += result.count;
       }
     });
+
+    if (rowsAffected === 0) {
+      return {
+        success: false as const,
+        error: `Upsert for ico ${lead.ico} affected 0 rows. Lead exists but writes did not apply.`,
+      };
+    }
 
     return {
       success: true as const,
       ico: lead.ico,
       leadId: lead.leadId,
       statements: stmts.length,
+      rowsAffected,
       status: lead.skip_reason ? "skipped" : input.scoresOnly ? "scores_only" : "enriched",
     };
   } catch (error) {
