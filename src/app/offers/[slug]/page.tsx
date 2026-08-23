@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/SiteShell";
+import { AgencyEmailButton } from "@/components/AgencyEmailButton";
+import { BookingCallButton } from "@/components/BookingCallButton";
+import { EngagementModels } from "@/components/EngagementModels";
 import { OfferViewTracker } from "@/components/OfferViewTracker";
-import { TrackedAnchor } from "@/components/TrackedAnchor";
 import { getLocale } from "@/lib/locale";
 import { getOfferBySlug } from "@/lib/offers";
 
@@ -162,15 +164,11 @@ export default async function OfferLandingPage({ params }: Props) {
           </p>
           <h1 className="agency-h2 max-w-none sm:text-5xl">{view.name}</h1>
           <p className="agency-lede">{view.oneLiner}</p>
-          {view.priceHint && (
-            <p className="mt-4 text-sm text-muted">{view.priceHint}</p>
-          )}
+          <EngagementModels locale={locale} variant="offer" />
 
           <div className="agency-cta-row">
-            <TrackedAnchor
+            <AgencyEmailButton
               href={mailHref}
-              className="agency-btn-primary"
-              event="contact_started"
               eventProps={{
                 location: "offer",
                 method: "email",
@@ -178,8 +176,17 @@ export default async function OfferLandingPage({ params }: Props) {
               }}
             >
               {view.cta}
-            </TrackedAnchor>
-            <Link href="/about" className="agency-btn-ghost">
+            </AgencyEmailButton>
+            <BookingCallButton
+              label={isSk ? "Rezervovať schôdzku" : "Book a call"}
+              campaign={`offer-${slug}`}
+              eventProps={{
+                location: "offer",
+                method: "booking",
+                offer: slug,
+              }}
+            />
+            <Link href="/about" className="agency-btn-secondary">
               {isSk ? "Kto to stavia" : "Who builds this"}
             </Link>
           </div>

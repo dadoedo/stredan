@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/translations";
 import type { OfferPublic } from "@/lib/offers";
+import { AgencyEmailButton } from "@/components/AgencyEmailButton";
+import { BookingCallButton } from "@/components/BookingCallButton";
+import { EngagementModels } from "@/components/EngagementModels";
 import { OpensInNewTab } from "@/components/OpensInNewTab";
 import { trackEvent } from "@/lib/analytics";
 
@@ -28,6 +31,18 @@ const CLIENTS = [
     name: "Autofino",
     logo: "/logos/autofino.svg",
     href: "https://autofino.sk",
+    wide: true,
+  },
+  {
+    name: "Future Practice",
+    logo: "/logos/futurepractice.svg",
+    href: "https://www.futurepractice.com",
+    wide: true,
+  },
+  {
+    name: "ClientUp",
+    logo: "/logos/clientup.svg",
+    href: "https://clientup.io",
     wide: true,
   },
 ] as const;
@@ -97,8 +112,10 @@ const WORK = [
     featured: false,
     titleSk: "Bratislava Music Academy",
     titleEn: "Bratislava Music Academy",
-    lineSk: "Rezervácia skúšobnej hodiny. Nástroj, lektor, termín.",
-    lineEn: "Book a trial lesson. Instrument, tutor, slot.",
+    lineSk:
+      "Nie len rezervácie. Celý interný systém: lektori, žiaci, admin, evidencia, SMS, upozornenia.",
+    lineEn:
+      "Not just booking. Full internal system: tutors, students, admin, records, SMS, alerts.",
     metaSk: "Stredan · klient",
     metaEn: "Stredan · client",
   },
@@ -409,19 +426,28 @@ export function AgencyHome({
           <h1 className="agency-h1">{t.headline}</h1>
           <p className="agency-lede">{t.sub}</p>
           <div className="agency-cta-row">
-            <Link
-              href="/offers/ai-audit"
+            <a
+              href="#offers"
               className="agency-btn-primary"
               onClick={() =>
                 trackEvent("cta_clicked", {
                   location: "hero",
-                  offer: "ai-audit",
+                  target: "offers",
                 })
               }
             >
               {t.ctaPrimary}
-            </Link>
-            <a href="#work" className="agency-btn-ghost">
+            </a>
+            <a
+              href="#work"
+              className="agency-btn-secondary"
+              onClick={() =>
+                trackEvent("cta_clicked", {
+                  location: "hero",
+                  target: "work",
+                })
+              }
+            >
               {t.ctaSecondary}
             </a>
           </div>
@@ -540,6 +566,7 @@ export function AgencyHome({
           <Reveal>
             <p className="agency-section-label">{t.offersEyebrow}</p>
             <h2 className="agency-h2">{t.offersTitle}</h2>
+            <EngagementModels locale={locale} />
           </Reveal>
           <ol className="agency-offer-list">
             {offers.map((offer) => (
@@ -548,9 +575,6 @@ export function AgencyHome({
                   <span className="agency-offer-code">{offer.code}</span>
                   <h3 className="agency-offer-name">{offer.name}</h3>
                   <p className="agency-offer-line">{offer.oneLiner}</p>
-                  {offer.priceHint && (
-                    <p className="agency-offer-price">{offer.priceHint}</p>
-                  )}
                 </div>
                 <Link
                   href={offer.landingPath}
@@ -602,18 +626,19 @@ export function AgencyHome({
         <div className="agency-shell">
           <h2 className="agency-h2">{t.finalTitle}</h2>
           <p className="agency-lede">{t.finalSub}</p>
-          <a
-            href="mailto:david@stredan.sk"
-            className="agency-btn-primary"
-            onClick={() =>
-              trackEvent("contact_started", {
-                location: "home_final",
-                method: "email",
-              })
-            }
-          >
-            {t.finalCta}
-          </a>
+          <div className="agency-cta-row">
+            <AgencyEmailButton
+              href="mailto:david@stredan.sk"
+              eventProps={{ location: "home_final", method: "email" }}
+            >
+              {t.finalCta}
+            </AgencyEmailButton>
+            <BookingCallButton
+              label={locale === "sk" ? "Rezervovať schôdzku" : "Book a call"}
+              campaign="home-final"
+              eventProps={{ location: "home_final", method: "booking" }}
+            />
+          </div>
           <p className="agency-final-note">{t.finalNote}</p>
         </div>
       </section>

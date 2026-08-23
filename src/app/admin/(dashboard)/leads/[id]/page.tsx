@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { JsonBlock } from "@/components/admin/JsonBlock";
+import { extractSkipReason } from "@/lib/leads-admin";
+import { prisma } from "@/lib/prisma";
 
 export default async function AdminLeadDetailPage({
   params,
@@ -24,13 +25,15 @@ export default async function AdminLeadDetailPage({
   });
   if (!lead) notFound();
 
+  const skipReason = extractSkipReason(lead);
+
   return (
     <div className="space-y-8">
       <div>
         <h2 className="font-heading text-xl font-semibold">{lead.company.name}</h2>
         <p className="text-sm text-muted">
           {lead.status} · IČO {lead.company.ico ?? "—"} · {lead.company.city ?? "—"}
-          {lead.skipReason ? ` · skip ${lead.skipReason}` : ""}
+          {skipReason ? ` · skip ${skipReason}` : ""}
         </p>
         {lead.notes && <p className="mt-2 text-sm text-muted">{lead.notes}</p>}
       </div>

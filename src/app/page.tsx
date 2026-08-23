@@ -11,7 +11,7 @@ const FALLBACK_SK: OfferPublic[] = [
     oneLiner:
       "Za 14 dní zmapujeme procesy a dostanete plán: čo stavať, kúpiť, alebo vynechať.",
     cta: "Objednať AI audit",
-    priceHint: "od 990 €",
+    priceHint: null,
     landingPath: "/offers/ai-audit",
   },
   {
@@ -21,7 +21,7 @@ const FALLBACK_SK: OfferPublic[] = [
     oneLiner:
       "Jeden agent na konkrétny proces. V prevádzke do 4–6 týždňov.",
     cta: "Spustiť pilot",
-    priceHint: "od 4 900 €",
+    priceHint: null,
     landingPath: "/offers/pilot-agent",
   },
   {
@@ -31,7 +31,7 @@ const FALLBACK_SK: OfferPublic[] = [
     oneLiner:
       "AI s pravidlami a vašimi dátami, nie nekontrolovaný ChatGPT v prehliadači.",
     cta: "Zabezpečiť AI",
-    priceHint: "od 2 900 €",
+    priceHint: null,
     landingPath: "/offers/shadow-ai",
   },
   {
@@ -40,7 +40,7 @@ const FALLBACK_SK: OfferPublic[] = [
     name: "AI do existujúcich systémov",
     oneLiner: "Napojenie AI na CRM, ERP a e-maily. Bez ďalšieho softvéru navyše.",
     cta: "Napojiť AI",
-    priceHint: "podľa integrácií",
+    priceHint: null,
     landingPath: "/offers/ai-integration",
   },
   {
@@ -49,7 +49,7 @@ const FALLBACK_SK: OfferPublic[] = [
     name: "Vlastná AI aplikácia",
     oneLiner: "Vlastný systém s AI vnútri: CRM, portál, vyhodnocovanie dát.",
     cta: "Konzultácia",
-    priceHint: "od 12 000 €",
+    priceHint: null,
     landingPath: "/offers/custom-ai-app",
   },
 ];
@@ -61,7 +61,7 @@ const FALLBACK_EN: OfferPublic[] = [
     name: "AI Opportunity Audit",
     oneLiner: "In 14 days: a written plan for what to build, buy, or skip.",
     cta: "Book an AI audit",
-    priceHint: "from €990",
+    priceHint: null,
     landingPath: "/offers/ai-audit",
   },
   {
@@ -70,7 +70,7 @@ const FALLBACK_EN: OfferPublic[] = [
     name: "Pilot AI Agent",
     oneLiner: "One production agent for one workflow. Live in 4–6 weeks.",
     cta: "Start a pilot",
-    priceHint: "from €4,900",
+    priceHint: null,
     landingPath: "/offers/pilot-agent",
   },
   {
@@ -79,7 +79,7 @@ const FALLBACK_EN: OfferPublic[] = [
     name: "Company AI under control",
     oneLiner: "AI with rules and your data, not uncontrolled ChatGPT.",
     cta: "Secure company AI",
-    priceHint: "from €2,900",
+    priceHint: null,
     landingPath: "/offers/shadow-ai",
   },
   {
@@ -88,7 +88,7 @@ const FALLBACK_EN: OfferPublic[] = [
     name: "AI into existing systems",
     oneLiner: "Wire AI into CRM, ERP and email. No extra software stack.",
     cta: "Connect AI",
-    priceHint: "depends on integrations",
+    priceHint: null,
     landingPath: "/offers/ai-integration",
   },
   {
@@ -97,7 +97,7 @@ const FALLBACK_EN: OfferPublic[] = [
     name: "Custom AI application",
     oneLiner: "A custom system with AI inside: CRM, portal, data evaluation.",
     cta: "Book a consult",
-    priceHint: "from €12,000",
+    priceHint: null,
     landingPath: "/offers/custom-ai-app",
   },
 ];
