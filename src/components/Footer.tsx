@@ -1,5 +1,6 @@
 import { type Locale } from "@/lib/translations";
 import { OpensInNewTab } from "@/components/OpensInNewTab";
+import { TrackedAnchor } from "@/components/TrackedAnchor";
 
 export default function Footer({ locale }: { locale: Locale }) {
   const companyName = locale === "sk" ? "Stredan s. r. o." : "Stredan Ltd";
@@ -14,9 +15,14 @@ export default function Footer({ locale }: { locale: Locale }) {
               &copy; {new Date().getFullYear()} Dávid Stredánsky
             </p>
             <div className="flex gap-6">
-              <a href="mailto:david@stredan.sk" className={linkClass}>
+              <TrackedAnchor
+                href="mailto:david@stredan.sk"
+                className={linkClass}
+                event="contact_started"
+                eventProps={{ location: "footer", method: "email" }}
+              >
                 Email
-              </a>
+              </TrackedAnchor>
               <a
                 href="https://github.com/dadoedo/"
                 target="_blank"

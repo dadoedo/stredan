@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/SiteShell";
+import { OfferViewTracker } from "@/components/OfferViewTracker";
+import { TrackedAnchor } from "@/components/TrackedAnchor";
 import { getLocale } from "@/lib/locale";
 import { getOfferBySlug } from "@/lib/offers";
 
@@ -147,6 +149,7 @@ export default async function OfferLandingPage({ params }: Props) {
 
   return (
     <SiteShell locale={locale}>
+      <OfferViewTracker slug={slug} code={view.code} name={view.name} />
       <div className="agency-shell py-24">
           <Link
             href="/#offers"
@@ -164,9 +167,18 @@ export default async function OfferLandingPage({ params }: Props) {
           )}
 
           <div className="agency-cta-row">
-            <a href={mailHref} className="agency-btn-primary">
+            <TrackedAnchor
+              href={mailHref}
+              className="agency-btn-primary"
+              event="contact_started"
+              eventProps={{
+                location: "offer",
+                method: "email",
+                offer: slug,
+              }}
+            >
               {view.cta}
-            </a>
+            </TrackedAnchor>
             <Link href="/about" className="agency-btn-ghost">
               {isSk ? "Kto to stavia" : "Who builds this"}
             </Link>

@@ -24,7 +24,11 @@ services:
       - internal
 
   stredan-app:
-    build: .
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN: ${NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN:-}
+        NEXT_PUBLIC_POSTHOG_HOST: ${NEXT_PUBLIC_POSTHOG_HOST:-https://eu.i.posthog.com}
     image: ${STREDAN_IMAGE:-ghcr.io/dadoedo/stredan}:${IMAGE_TAG:-local}
     container_name: stredan-app
     restart: unless-stopped
@@ -35,6 +39,8 @@ services:
       DATABASE_URL: postgresql://stredan:${POSTGRES_PASSWORD:-stredan_secret}@stredan-db:5432/stredan
       NODE_ENV: production
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN: ${NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN:-}
+      NEXT_PUBLIC_POSTHOG_HOST: ${NEXT_PUBLIC_POSTHOG_HOST:-https://eu.i.posthog.com}
     networks:
       - internal
       - web

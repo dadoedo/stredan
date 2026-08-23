@@ -16,6 +16,12 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ENV DATABASE_URL="postgresql://placeholder:placeholder@placeholder:5432/placeholder"
+
+ARG NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=
+ARG NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
+ENV NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=$NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN
+ENV NEXT_PUBLIC_POSTHOG_HOST=$NEXT_PUBLIC_POSTHOG_HOST
+
 RUN npx prisma generate
 RUN npm run build
 

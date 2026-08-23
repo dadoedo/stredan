@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/translations";
 import type { OfferPublic } from "@/lib/offers";
 import { OpensInNewTab } from "@/components/OpensInNewTab";
+import { trackEvent } from "@/lib/analytics";
 
 const CLIENTS = [
   { name: "Foodient", logo: "/logos/foodient.png", href: "https://foodient.app" },
@@ -408,7 +409,16 @@ export function AgencyHome({
           <h1 className="agency-h1">{t.headline}</h1>
           <p className="agency-lede">{t.sub}</p>
           <div className="agency-cta-row">
-            <Link href="/offers/ai-audit" className="agency-btn-primary">
+            <Link
+              href="/offers/ai-audit"
+              className="agency-btn-primary"
+              onClick={() =>
+                trackEvent("cta_clicked", {
+                  location: "hero",
+                  offer: "ai-audit",
+                })
+              }
+            >
               {t.ctaPrimary}
             </Link>
             <a href="#work" className="agency-btn-ghost">
@@ -454,6 +464,12 @@ export function AgencyHome({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="agency-shot"
+                  onClick={() =>
+                    trackEvent("work_clicked", {
+                      name: locale === "sk" ? w.titleSk : w.titleEn,
+                      url: w.href,
+                    })
+                  }
                 >
                   <span className="agency-shot-chrome" aria-hidden>
                     <i />
@@ -536,7 +552,16 @@ export function AgencyHome({
                     <p className="agency-offer-price">{offer.priceHint}</p>
                   )}
                 </div>
-                <Link href={offer.landingPath} className="agency-offer-cta">
+                <Link
+                  href={offer.landingPath}
+                  className="agency-offer-cta"
+                  onClick={() =>
+                    trackEvent("cta_clicked", {
+                      location: "home_offers",
+                      offer: offer.slug,
+                    })
+                  }
+                >
                   {offer.cta}
                 </Link>
               </li>
@@ -577,7 +602,16 @@ export function AgencyHome({
         <div className="agency-shell">
           <h2 className="agency-h2">{t.finalTitle}</h2>
           <p className="agency-lede">{t.finalSub}</p>
-          <a href="mailto:david@stredan.sk" className="agency-btn-primary">
+          <a
+            href="mailto:david@stredan.sk"
+            className="agency-btn-primary"
+            onClick={() =>
+              trackEvent("contact_started", {
+                location: "home_final",
+                method: "email",
+              })
+            }
+          >
             {t.finalCta}
           </a>
           <p className="agency-final-note">{t.finalNote}</p>
