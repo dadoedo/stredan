@@ -67,6 +67,9 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=${{ secrets.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN }}
+            NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
           tags: |
             ${{ env.IMAGE }}:${{ steps.cfg.outputs.image_tag }}
             ${{ env.IMAGE }}:${{ github.sha }}
@@ -96,15 +99,27 @@ jobs:
           APP_URL: ${{ steps.cfg.outputs.app_url }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN: ${{ secrets.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN }}
+          NEXT_PUBLIC_POSTHOG_HOST: https://eu.i.posthog.com
         with:
           host: ${{ secrets.PRODUCTION_HOST }}
           username: ${{ secrets.PRODUCTION_USER }}
           key: ${{ secrets.PRODUCTION_SSH_KEY }}
-          envs: GHCR_TOKEN,GHCR_USER,IMAGE,IMAGE_TAG,REMOTE_DIR,COMPOSE_FILE,APP_URL,POSTGRES_PASSWORD,ADMIN_PASSWORD
+          envs: GHCR_TOKEN,GHCR_USER,IMAGE,IMAGE_TAG,REMOTE_DIR,COMPOSE_FILE,APP_URL,POSTGRES_PASSWORD,ADMIN_PASSWORD,NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN,NEXT_PUBLIC_POSTHOG_HOST
           script: |
             set -euo pipefail
             mkdir -p "$REMOTE_DIR/deploy"
             cd "$REMOTE_DIR"
+
+            upsert_env() {
+              local key="$1" value="${2:-}"
+              touch .env
+              if grep -q "^${key}=" .env; then
+                sed -i "s|^${key}=.*|${key}=${value}|" .env
+              else
+                printf '%s=%s\n' "$key" "$value" >> .env
+              fi
+            }
 
             if [[ ! -f .env ]]; then
               : "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD secret missing for first bootstrap}"
@@ -117,6 +132,9 @@ jobs:
               } > .env
               echo "Wrote first-boot $REMOTE_DIR/.env"
             fi
+
+            upsert_env NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN "${NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN:-}"
+            upsert_env NEXT_PUBLIC_POSTHOG_HOST "${NEXT_PUBLIC_POSTHOG_HOST:-https://eu.i.posthog.com}"
 
             test -f "$COMPOSE_FILE" || { echo "Missing $REMOTE_DIR/$COMPOSE_FILE"; exit 1; }
 

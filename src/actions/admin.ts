@@ -6,10 +6,16 @@ import { revalidatePath } from "next/cache";
 import { ADMIN_COOKIE, getAdminToken, verifyPassword } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 import { downloadFavicon } from "@/lib/favicon";
+import {
+  captureServerEvent,
+  getPostHogClient,
+  getPostHogDistinctId,
+} from "@/lib/posthog-server";
 
 export async function login(formData: FormData) {
   const password = (formData.get("password") as string) ?? "";
   if (!verifyPassword(password)) {
+    await captureServerEvent("admin_login_failed");
     return { error: "Nesprávne heslo" };
   }
   const token = getAdminToken();
@@ -21,6 +27,13 @@ export async function login(formData: FormData) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   });
+  const distinctId = await getPostHogDistinctId();
+  const posthog = getPostHogClient();
+  posthog?.identify({
+    distinctId,
+    properties: { role: "admin" },
+  });
+  await captureServerEvent("admin_login_succeeded", { role: "admin" }, distinctId);
   redirect("/admin/matrix");
 }
 
