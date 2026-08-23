@@ -1,0 +1,756 @@
+[
+  {
+    "ico": "36867489",
+    "leadId": "ldry_36867489",
+    "companyId": "cmp_36867489",
+    "name": "Advokátska kancelária HPP s. r. o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "JUDr. Pavel Haulík",
+    "notes": "AK Záhradnícka 30; web hpp.sk; kancelaria@hpp.sk len na agregátore (Zlaté stránky), own-site kontakt nedostupný; SAK bez záznamu IČO 36867489.",
+    "skip_reason": "no_email",
+    "website": "http://www.hpp.sk",
+    "search": {
+      "queries": [
+        "36867489",
+        "Advokátska kancelária HPP Bratislava",
+        "JUDr. Pavel Haulík HPP kontakt email",
+        "site:sak.sk HPP advokátska kancelária 36867489"
+      ],
+      "hits": [
+        {
+          "url": "http://www.hpp.sk/",
+          "type": "own_site",
+          "title": "Advokátska kancelária HPP s. r. o.",
+          "snippet": "Advokátska kancelária Bratislava",
+          "hitIco": "36867489",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.zlatestranky.sk/firmy/Bratislava/H1605542/Advok%C3%A1tska+kancel%C3%A1ria+HPP,+s.r.o./",
+          "type": "aggregator",
+          "title": "Zlaté stránky HPP",
+          "snippet": "kancelaria@hpp.sk, Záhradnícka 30, IČO 36867489",
+          "hitIco": "36867489",
+          "icoMatch": true
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-advokatska-kancelaria-hpp-s-r-o-1",
+          "type": "aggregator",
+          "title": "ORSR profil HPP",
+          "snippet": "JUDr. Pavel Haulík konateľ, IČO 36867489",
+          "hitIco": "36867489",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.uvostat.sk/subjekt/36867489",
+          "type": "aggregator",
+          "title": "UVOstat HPP",
+          "snippet": "IČO 36867489, Záhradnícka 30 Bratislava",
+          "hitIco": "36867489",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/lawyer/adv",
+          "type": "registry",
+          "title": "SAK vyhľadanie",
+          "snippet": "site:sak.sk HPP 36867489 — bez záznamu spoločnosti",
+          "hitIco": null,
+          "icoMatch": false
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Pavel Haulík",
+        "firstName": "Pavel",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "http://www.hpp.sk",
+      "emails": [],
+      "skip_reason": "no_email",
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 55, "send": false, "why_sk": "Advokátska kancelária — bez overeného emailu.", "hook_id": "69-pravo", "risks": ["no_email"] },
+      "B": { "score": 38, "send": false, "why_sk": "Právo — chýba kontakt na cold send." },
+      "C": { "score": 50, "send": false, "why_sk": "Právna prax — potenciálny fit, no bez emailu.", "hook_id": "69-pravo", "risks": ["no_email"] },
+      "D": { "score": 35, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "36868582",
+    "leadId": "ldry_36868582",
+    "companyId": "cmp_36868582",
+    "name": "Šiška & advokáti s. r. o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "Milan Šiška",
+    "notes": "AK Mýtna 42; web msak.sk; office@msak.sk na /kontakt; komerčné právo, IT, verejné obstarávanie.",
+    "skip_reason": null,
+    "website": "https://www.msak.sk",
+    "search": {
+      "queries": [
+        "36868582",
+        "Šiška advokáti Bratislava",
+        "Milan Šiška msak kontakt email",
+        "site:sak.sk Šiška advokáti 36868582"
+      ],
+      "hits": [
+        {
+          "url": "https://www.msak.sk/kontakt/",
+          "type": "own_site",
+          "title": "Šiška & Advokáti kontakt",
+          "snippet": "office@msak.sk, Mýtna 42, IČO 36868582",
+          "hitIco": "36868582",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.msak.sk/home/",
+          "type": "own_site",
+          "title": "Šiška & Advokáti",
+          "snippet": "Legal services for innovative companies",
+          "hitIco": "36868582",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.finreg.sk/subjekt/2023065440",
+          "type": "aggregator",
+          "title": "FinReg Šiška & advokáti",
+          "snippet": "IČO 36868582, Mýtna 42, právne činnosti",
+          "hitIco": "36868582",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Milan Šiška",
+        "firstName": "Milan",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.msak.sk",
+      "emails": [
+        {
+          "email": "office@msak.sk",
+          "url": "https://www.msak.sk/kontakt/",
+          "context": "kontakt na webe kancelárie"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "Milan Šiška",
+        "role": "konateľ",
+        "email": "office@msak.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.93
+      }
+    ],
+    "scores": {
+      "A": { "score": 76, "send": true, "why_sk": "Advokátska kancelária pre inovatívne firmy — citlivé zmluvy a IP.", "hook_id": "69-pravo", "risks": [] },
+      "B": { "score": 42, "send": false, "why_sk": "Právo — menej opakovaných interných workflowov." },
+      "C": { "score": 82, "send": true, "why_sk": "IT a obchodné právo — verejné AI na zmluvách a dokumentoch.", "hook_id": "69-pravo", "risks": [] },
+      "D": { "score": 40, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "36868949",
+    "leadId": "ldry_36868949",
+    "companyId": "cmp_36868949",
+    "name": "De minimis, spol. s r. o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "Mgr. Marek Kaľavský",
+    "notes": "AK Lovinského 22; bez vlastného webu; SAK bez záznamu; kalavsky@prochazka.sk je starý Procházka email, neoverený pre De minimis.",
+    "skip_reason": "no_email",
+    "website": null,
+    "search": {
+      "queries": [
+        "36868949",
+        "De minimis advokátska kancelária Bratislava",
+        "Marek Kaľavský De minimis kontakt email",
+        "site:sak.sk De minimis 36868949"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/36868949",
+          "type": "aggregator",
+          "title": "Finstat De minimis",
+          "snippet": "IČO 36868949, Lovinského 22, tržby ~302k€ 2025",
+          "hitIco": "36868949",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.uvostat.sk/subjekt/36868949",
+          "type": "aggregator",
+          "title": "UVOstat De minimis",
+          "snippet": "Mgr. Marek Kaľavský konateľ, právne služby",
+          "hitIco": "36868949",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/lawyer/adv",
+          "type": "registry",
+          "title": "SAK vyhľadanie",
+          "snippet": "site:sak.sk Marek Kaľavský De minimis — bez záznamu",
+          "hitIco": null,
+          "icoMatch": false
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Marek Kaľavský",
+        "firstName": "Marek",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email",
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 58, "send": false, "why_sk": "Advokátska kancelária — bez overeného emailu.", "hook_id": "69-pravo", "risks": ["no_email"] },
+      "B": { "score": 35, "send": false, "why_sk": "Právo — chýba kontakt." },
+      "C": { "score": 55, "send": false, "why_sk": "Právna prax — potenciálny fit, no bez emailu.", "hook_id": "69-pravo", "risks": ["no_email"] },
+      "D": { "score": 30, "send": false, "why_sk": "Bez webu a mailu." }
+    }
+  },
+  {
+    "ico": "45328501",
+    "leadId": "ldry_45328501",
+    "companyId": "cmp_45328501",
+    "name": "Uniconstruct spol. s r. o.",
+    "city": "Bratislava",
+    "nace": "6920",
+    "konatel": "Nefedov Dmytro",
+    "notes": "Klincová 37/B; NACE účto, profil skôr konzultácie/stavebná; bez webu a emailu; právny nástupca TK INTERNATIONAL.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "45328501",
+        "Uniconstruct Bratislava",
+        "Nefedov Dmytro Uniconstruct kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://finstat.sk/45328501",
+          "type": "aggregator",
+          "title": "Finstat Uniconstruct",
+          "snippet": "IČO 45328501, Klincová 37/B, účtovníctvo",
+          "hitIco": "45328501",
+          "icoMatch": true
+        },
+        {
+          "url": "https://finstat.sk/44638086/obchodny_register",
+          "type": "registry",
+          "title": "Finstat TK INTERNATIONAL zlúčenie",
+          "snippet": "Právny nástupca Uniconstruct 45328501",
+          "hitIco": "44638086",
+          "icoMatch": false
+        },
+        {
+          "url": "https://unikonstrukt.sk/",
+          "type": "other",
+          "title": "Unikonstrukt železobetón",
+          "snippet": "Iná firma, nie IČO 45328501",
+          "hitIco": null,
+          "icoMatch": false
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Nefedov Dmytro",
+        "firstName": "Dmytro",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 22, "send": false, "why_sk": "Účtovná firma bez webu a kontaktu.", "risks": ["no_site", "shell?"] },
+      "B": { "score": 15, "send": false, "why_sk": "Bez digitálnej stopy." },
+      "C": { "score": 18, "send": false, "why_sk": "Účto — bez kontaktu." },
+      "D": { "score": 12, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "45612447",
+    "leadId": "ldry_45612447",
+    "companyId": "cmp_45612447",
+    "name": "FINTAX EU s. r. o.",
+    "city": "Bratislava - mestská časť Ružinov",
+    "nace": "6920",
+    "konatel": "Ing. Michal Plachý",
+    "notes": "Účto/dane; býv. MEP Consulting; Páričkova 22; profil na money.sk bez emailu; bez vlastného webu.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "45612447",
+        "FINTAX EU Bratislava",
+        "Michal Plachý FINTAX kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/45612447",
+          "type": "aggregator",
+          "title": "Finstat FINTAX EU",
+          "snippet": "IČO 45612447, účtovníctvo, tržby ~172k€ 2024",
+          "hitIco": "45612447",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.money.sk/poradcovia/mep-consulting-s-r-o/",
+          "type": "aggregator",
+          "title": "Money.sk FINTAX EU",
+          "snippet": "Páričkova 22, tel. 0903272677, bez emailu",
+          "hitIco": "45612447",
+          "icoMatch": true
+        },
+        {
+          "url": "http://www.fintax.cz/",
+          "type": "other",
+          "title": "FINTAX ČR",
+          "snippet": "Česká firma, iný subjekt než SK IČO 45612447",
+          "hitIco": null,
+          "icoMatch": false
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Michal Plachý",
+        "firstName": "Michal",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 30, "send": false, "why_sk": "Účtovná firma, ale chýba web aj email.", "risks": ["no_site", "no_email"] },
+      "B": { "score": 20, "send": false, "why_sk": "Bez overiteľného kanálu." },
+      "C": { "score": 28, "send": false, "why_sk": "Účto — potenciál, no bez kontaktu." },
+      "D": { "score": 18, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "46014586",
+    "leadId": "ldry_46014586",
+    "companyId": "cmp_46014586",
+    "name": "squalen, s. r. o.",
+    "city": "Bratislava - mestská časť Ružinov",
+    "nace": "6920",
+    "konatel": "Juraj Liener",
+    "notes": "Účtovníctvo Košická 52/A; bez webu a verejného emailu; 1 zamestnanec.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "46014586",
+        "squalen s.r.o. Bratislava",
+        "Juraj Liener squalen kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finreg.sk/subjekt/2023227690",
+          "type": "aggregator",
+          "title": "FinReg squalen",
+          "snippet": "IČO 46014586, účtovnícke činnosti, Košická 52/A",
+          "hitIco": "46014586",
+          "icoMatch": true
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-squalen-s-r-o-1",
+          "type": "aggregator",
+          "title": "ORSR profil squalen",
+          "snippet": "Juraj Liener konateľ, IČO 46014586",
+          "hitIco": "46014586",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Juraj Liener",
+        "firstName": "Juraj",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 24, "send": false, "why_sk": "Účtovná firma bez webu.", "risks": ["no_site", "no_email"] },
+      "B": { "score": 16, "send": false, "why_sk": "Bez digitálnej prítomnosti." },
+      "C": { "score": 20, "send": false, "why_sk": "Účto — bez kontaktu." },
+      "D": { "score": 14, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "46043284",
+    "leadId": "ldry_46043284",
+    "companyId": "cmp_46043284",
+    "name": "MELMAN s.r.o.",
+    "city": "Bratislava",
+    "nace": "6920",
+    "konatel": "Miroslav Horváth",
+    "notes": "Účtovníctvo Vlčie hrdlo 1037; konatelia Miroslav Horváth a Silvia Horváthová; bez webu a emailu.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "46043284",
+        "MELMAN s.r.o. Bratislava",
+        "Miroslav Horváth MELMAN kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-melman-s-r-o-1",
+          "type": "aggregator",
+          "title": "ORSR profil MELMAN",
+          "snippet": "IČO 46043284, Vlčie hrdlo 1037, účtovníctvo",
+          "hitIco": "46043284",
+          "icoMatch": true
+        },
+        {
+          "url": "https://finstat.sk/46043284",
+          "type": "aggregator",
+          "title": "Finstat MELMAN",
+          "snippet": "IČO 46043284, Bratislava",
+          "hitIco": "46043284",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Miroslav Horváth",
+        "firstName": "Miroslav",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 25, "send": false, "why_sk": "Účtovná firma bez webu.", "risks": ["no_site", "no_email"] },
+      "B": { "score": 18, "send": false, "why_sk": "Bez digitálnej prítomnosti." },
+      "C": { "score": 22, "send": false, "why_sk": "Účto — bez kontaktu." },
+      "D": { "score": 15, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "46195386",
+    "leadId": "ldry_46195386",
+    "companyId": "cmp_46195386",
+    "name": "OFIS SK s.r.o.",
+    "city": "Bratislava",
+    "nace": "6920",
+    "konatel": "Rudolf Kováčik",
+    "notes": "Účtovníctvo Alstrova 163; býv. rain.66; bez webu a verejného emailu.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "46195386",
+        "OFIS SK s.r.o. Bratislava",
+        "Rudolf Kováčik OFIS kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://m.dlznik.zoznam.sk/socialna-siet/spolocnost-rain-66-s-r-o-1",
+          "type": "registry",
+          "title": "ORSR OFIS SK",
+          "snippet": "IČO 46195386, Alstrova 163, Ing. Rudolf Kováčik",
+          "hitIco": "46195386",
+          "icoMatch": true
+        },
+        {
+          "url": "https://finstat.sk/46195386",
+          "type": "aggregator",
+          "title": "Finstat OFIS SK",
+          "snippet": "IČO 46195386, účtovníctvo Bratislava",
+          "hitIco": "46195386",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Rudolf Kováčik",
+        "firstName": "Rudolf",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 26, "send": false, "why_sk": "Účtovná firma bez webu.", "risks": ["no_site", "no_email"] },
+      "B": { "score": 18, "send": false, "why_sk": "Bez digitálnej prítomnosti." },
+      "C": { "score": 22, "send": false, "why_sk": "Účto — bez kontaktu." },
+      "D": { "score": 15, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "46201475",
+    "leadId": "ldry_46201475",
+    "companyId": "cmp_46201475",
+    "name": "MAGNUM Economy, s.r.o.",
+    "city": "Bratislava - mestská časť Ružinov",
+    "nace": "6920",
+    "konatel": "Ing. Zuzana Fritzová",
+    "notes": "Účtovníctvo Plynárenská 3A; bez webu a emailu; súvisí s MAGNUM Co. (autobazár, iné IČO).",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "46201475",
+        "MAGNUM Economy Bratislava",
+        "Zuzana Fritzová MAGNUM Economy kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-magnum-economy-s-r-o-1",
+          "type": "aggregator",
+          "title": "ORSR MAGNUM Economy",
+          "snippet": "IČO 46201475, Plynárenská 3A, Ing. Zuzana Fritzová",
+          "hitIco": "46201475",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.magnum-co.sk/renault/o-nas/kontakty/",
+          "type": "other",
+          "title": "MAGNUM Co. autobazár",
+          "snippet": "Iné IČO, Vráble/Nové Zámky — nie 46201475",
+          "hitIco": null,
+          "icoMatch": false
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Zuzana Fritzová",
+        "firstName": "Zuzana",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 24, "send": false, "why_sk": "Účtovná firma bez webu.", "risks": ["no_site", "no_email"] },
+      "B": { "score": 16, "send": false, "why_sk": "Bez digitálnej prítomnosti." },
+      "C": { "score": 20, "send": false, "why_sk": "Účto — bez kontaktu." },
+      "D": { "score": 14, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "46275118",
+    "leadId": "ldry_46275118",
+    "companyId": "cmp_46275118",
+    "name": "E&L Consulting s. r. o.",
+    "city": "Bratislava - mestská časť Vajnory",
+    "nace": "6920",
+    "konatel": "Ing. Hilda Regulová Gajdošová",
+    "notes": "Účto, mzdy, verejné obstarávanie; web elconsulting.sk; info@elconsulting.sk; konkurzný správca.",
+    "skip_reason": null,
+    "website": "https://www.elconsulting.sk",
+    "search": {
+      "queries": [
+        "46275118",
+        "E&L Consulting Bratislava",
+        "Hilda Regulová Gajdošová elconsulting kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.elconsulting.sk/kontakt",
+          "type": "own_site",
+          "title": "E&L Consulting kontakt",
+          "snippet": "info@elconsulting.sk, IČO 46275118, Rybničná 40",
+          "hitIco": "46275118",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.slovenskaporadna.sk/en/profil/e-l-consulting-s-r-o",
+          "type": "aggregator",
+          "title": "Slovenská poradňa E&L",
+          "snippet": "IČO 46275118, účtovníctvo a VO",
+          "hitIco": "46275118",
+          "icoMatch": true
+        },
+        {
+          "url": "https://finstat.sk/46275118",
+          "type": "aggregator",
+          "title": "Finstat E&L Consulting",
+          "snippet": "IČO 46275118, Bratislava",
+          "hitIco": "46275118",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Ing. Hilda Regulová Gajdošová",
+        "firstName": "Hilda",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.elconsulting.sk",
+      "emails": [
+        {
+          "email": "info@elconsulting.sk",
+          "url": "https://www.elconsulting.sk/kontakt",
+          "context": "kontakt na webe"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "Ing. Hilda Regulová Gajdošová",
+        "role": "konateľ",
+        "email": "info@elconsulting.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.91
+      }
+    ],
+    "scores": {
+      "A": { "score": 74, "send": true, "why_sk": "Účtovná a poradenská firma — citlivé doklady a VO.", "hook_id": "69-ucto", "risks": [] },
+      "B": { "score": 44, "send": false, "why_sk": "Nie je jasný jeden opakovaný workflow." },
+      "C": { "score": 70, "send": true, "why_sk": "Účto a konkurzy — verejné AI na dokumentoch.", "hook_id": "69-ucto", "risks": [] },
+      "D": { "score": 36, "send": false, "why_sk": "Stack neznámy." }
+    }
+  },
+  {
+    "ico": "46471227",
+    "leadId": "ldry_46471227",
+    "companyId": "cmp_46471227",
+    "name": "ML Technologies s. r. o.",
+    "city": "Bratislava - mestská časť Nové Mesto",
+    "nace": "6920",
+    "konatel": "László Molnár",
+    "notes": "Býv. Účtomat; Kukučínova 44; uctomat.sk nedostupný; gabrisova@uctomat.sk len na agregátore (bývalý konateľ); názov evokuje IT.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "46471227",
+        "ML Technologies Bratislava",
+        "László Molnár ML Technologies kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finreg.sk/subjekt/2820014109",
+          "type": "aggregator",
+          "title": "FinReg ML Technologies",
+          "snippet": "IČO 46471227, býv. Účtomat, účtovníctvo",
+          "hitIco": "46471227",
+          "icoMatch": true
+        },
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/spolocnost-uctomat-s-r-o-1",
+          "type": "aggregator",
+          "title": "ORSR Účtomat/ML Technologies",
+          "snippet": "László Molnár konateľ, Kukučínova 44",
+          "hitIco": "46471227",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.zlatestranky.sk/firmy/Bratislava/H1956574/%C3%9A%C4%8Dtomat,+s.+r.+o./",
+          "type": "aggregator",
+          "title": "Zlaté stránky Účtomat",
+          "snippet": "alena.gabrisova@uctomat.sk — bývalý konateľ, neoverené",
+          "hitIco": "46471227",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "László Molnár",
+        "firstName": "László",
+        "role": "konateľ",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": false,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": { "score": 22, "send": false, "why_sk": "Účtovná firma bez aktívneho webu.", "risks": ["no_site", "it?"] },
+      "B": { "score": 14, "send": false, "why_sk": "Bez kontaktu." },
+      "C": { "score": 18, "send": false, "why_sk": "Účto — bez overeného kanála." },
+      "D": { "score": 12, "send": false, "why_sk": "Názov a história evokujú IT." }
+    }
+  }
+]

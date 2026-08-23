@@ -1,0 +1,1000 @@
+[
+  {
+    "ico": "47231157",
+    "leadId": "ldry_47231157",
+    "companyId": "cmp_47231157",
+    "name": "Consilior Iuris s.r.o.",
+    "city": "Bratislava - mestská časť Staré Mesto",
+    "nace": "6910",
+    "konatel": "JUDr. Robert Hayden, M.B.A.",
+    "notes": "Advokátska kancelária v skupine Consilior; web consilior.eu; office@consilior.sk; tržby ~284k€ 2024.",
+    "skip_reason": null,
+    "website": "https://consilior.eu",
+    "search": {
+      "queries": [
+        "47231157",
+        "Consilior Iuris Bratislava",
+        "Robert Hayden Consilior kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://consilior.eu/",
+          "type": "own_site",
+          "title": "Consilior",
+          "snippet": "office@consilior.sk, Radlinského 51 Bratislava",
+          "hitIco": "47231157",
+          "icoMatch": true
+        },
+        {
+          "url": "https://finstat.sk/47231157",
+          "type": "aggregator",
+          "title": "Finstat Consilior Iuris",
+          "snippet": "Radlinského 51, právne služby",
+          "hitIco": "47231157",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/lawyer/osp/proxy/list/form/footer/pickers/picker/event/page/960",
+          "type": "registry",
+          "title": "SAK Consilior Iuris s.r.o.",
+          "snippet": "Consilior Iuris s.r.o., Bratislava Staré Mesto",
+          "hitIco": null,
+          "icoMatch": null
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Robert Hayden, M.B.A.",
+        "firstName": "Robert",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://consilior.eu",
+      "emails": [
+        {
+          "email": "office@consilior.sk",
+          "url": "https://consilior.eu/",
+          "context": "kontakt / pätička"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Robert Hayden, M.B.A.",
+        "role": "konateľ",
+        "email": "office@consilior.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.9
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 72,
+        "send": true,
+        "why_sk": "Advokátska kancelária so skupinou služieb — citlivé dokumenty a klientske spisy.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "B": {
+        "score": 22,
+        "send": false,
+        "why_sk": "Nie je jasný jeden opakovaný interný workflow mimo právnej agendy."
+      },
+      "C": {
+        "score": 78,
+        "send": true,
+        "why_sk": "Právna prax — dokumenty, workflow a klientska komunikácia.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "D": {
+        "score": 35,
+        "send": false,
+        "why_sk": "Všeobecné digitálne nástroje — sekundárny fit."
+      }
+    }
+  },
+  {
+    "ico": "47233516",
+    "leadId": "ldry_47233516",
+    "companyId": "cmp_47233516",
+    "name": "Advokátska kancelária JUDr. Andrea Cviková, s. r. o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "JUDr. Andrea Cviková",
+    "notes": "Kubániho 16; bez vlastného webu; SAK bez verejného emailu po site:sak.sk; tržby ~289k€ 2024.",
+    "skip_reason": "no_email",
+    "website": null,
+    "search": {
+      "queries": [
+        "47233516",
+        "Advokátska kancelária JUDr. Andrea Cviková Bratislava",
+        "Andrea Cviková kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/47233516",
+          "type": "aggregator",
+          "title": "Finstat Andrea Cviková",
+          "snippet": "Kubániho 16, právne služby",
+          "hitIco": "47233516",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.enviroportal.sk/eia/dokument/371030",
+          "type": "other",
+          "title": "Enviroportal EIA",
+          "snippet": "Advokátska kancelária JUDr. Andrea Cviková, Kubániho 16",
+          "hitIco": "47233516",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/lawyer/osp/proxy/list/form/footer/pickers/picker/event/page/850",
+          "type": "registry",
+          "title": "SAK vyhľadanie spoločenstiev",
+          "snippet": "site:sak.sk — firma nenájdená s emailom",
+          "hitIco": null,
+          "icoMatch": null
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Andrea Cviková",
+        "firstName": "Andrea",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email",
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 28,
+        "send": false,
+        "why_sk": "Advokátska kancelária bez overeného kontaktu.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email"]
+      },
+      "B": {
+        "score": 15,
+        "send": false,
+        "why_sk": "Bez emailu nie je cold outreach."
+      },
+      "C": {
+        "score": 25,
+        "send": false,
+        "why_sk": "Právna prax — potenciálny fit, ale chýba kontakt.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email"]
+      },
+      "D": {
+        "score": 12,
+        "send": false,
+        "why_sk": "Nedá sa overiť digitálna zrelosť."
+      }
+    }
+  },
+  {
+    "ico": "47234211",
+    "leadId": "ldry_47234211",
+    "companyId": "cmp_47234211",
+    "name": "Peter George, s. r. o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "Mgr. Juraj Florovič",
+    "notes": "Tolstého 9; konateľ Mgr. Juraj Florovič; bez webu; SAK bez záznamu; tržby 0€ 2024.",
+    "skip_reason": "no_site",
+    "website": null,
+    "search": {
+      "queries": [
+        "47234211",
+        "Peter George s.r.o. Bratislava",
+        "Juraj Florovič advokát kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://register.peniaze.sk/47234211-peter-george-s-r-o",
+          "type": "registry",
+          "title": "RPO Peter George",
+          "snippet": "Tolstého 9, Mgr. Juraj Florovič konateľ",
+          "hitIco": "47234211",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/en/cms/lawyer/vyhladanie/proxy/list/form/header/attr/adv_full_name/_event/sort/asc",
+          "type": "registry",
+          "title": "SAK vyhľadanie advokátov",
+          "snippet": "site:sak.sk — bez záznamu pre IČO 47234211",
+          "hitIco": null,
+          "icoMatch": null
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Juraj Florovič",
+        "firstName": "Juraj",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_site",
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 18,
+        "send": false,
+        "why_sk": "Bez webu a kontaktu — nízka priorita.",
+        "risks": ["no_site", "no_email"]
+      },
+      "B": {
+        "score": 10,
+        "send": false,
+        "why_sk": "Nie je kam smerovať outbound."
+      },
+      "C": {
+        "score": 15,
+        "send": false,
+        "why_sk": "Právna forma, ale bez digitálnej prítomnosti.",
+        "risks": ["no_site"]
+      },
+      "D": {
+        "score": 8,
+        "send": false,
+        "why_sk": "Nedá sa overiť prevádzka."
+      }
+    }
+  },
+  {
+    "ico": "47234547",
+    "leadId": "ldry_47234547",
+    "companyId": "cmp_47234547",
+    "name": "Advokátska kancelária JUDr. Marek Czompoly, s. r. o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "JUDr. Marek Czompoly",
+    "notes": "Ventúrska 16; web czompoly.sk; office@czompoly.sk; vymáhanie pohľadávok.",
+    "skip_reason": null,
+    "website": "https://www.czompoly.sk",
+    "search": {
+      "queries": [
+        "47234547",
+        "Advokátska kancelária JUDr. Marek Czompoly Bratislava",
+        "Marek Czompoly kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.czompoly.sk/",
+          "type": "own_site",
+          "title": "AK JUDr. Marek Czompoly",
+          "snippet": "office@czompoly.sk, Ventúrska 16",
+          "hitIco": "47234547",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.finstat.sk/47234547",
+          "type": "aggregator",
+          "title": "Finstat Czompoly",
+          "snippet": "Ventúrska 16, právne služby",
+          "hitIco": "47234547",
+          "icoMatch": true
+        },
+        {
+          "url": "https://obchodnyvestnik.justice.gov.sk/ObchodnyVestnik/Formular/FormularDetailHtml.aspx?IdFormular=2560627",
+          "type": "registry",
+          "title": "Obchodný vestník",
+          "snippet": "zástupca BNP Paribas, Ventúrska 16",
+          "hitIco": "47234547",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Marek Czompoly",
+        "firstName": "Marek",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.czompoly.sk",
+      "emails": [
+        {
+          "email": "office@czompoly.sk",
+          "url": "https://www.czompoly.sk/",
+          "context": "profil / kontakt"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Marek Czompoly",
+        "role": "konateľ",
+        "email": "office@czompoly.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.92
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 70,
+        "send": true,
+        "why_sk": "AK so sporovou agendou a automatizáciou vymáhania — citlivé dáta klientov.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "B": {
+        "score": 20,
+        "send": false,
+        "why_sk": "Primárne exekúcie a vymáhanie, nie HR/mzdy."
+      },
+      "C": {
+        "score": 80,
+        "send": true,
+        "why_sk": "Právna prax s IT v procese vymáhania — dokumenty a workflow.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "D": {
+        "score": 32,
+        "send": false,
+        "why_sk": "Vlastné IT v agende — mierne nižší fit."
+      }
+    }
+  },
+  {
+    "ico": "47237589",
+    "leadId": "ldry_47237589",
+    "companyId": "cmp_47237589",
+    "name": "LEGAL GROUP, s.r.o.",
+    "city": "Bratislava - mestská časť Staré Mesto",
+    "nace": "6910",
+    "konatel": "Mgr. Ivana Horňáková",
+    "notes": "Lomonosovova 2; web legalgroup.sk (iba telefón); SAK bez verejného emailu; tržby ~24k€ 2024.",
+    "skip_reason": "no_email",
+    "website": "http://legalgroup.sk",
+    "search": {
+      "queries": [
+        "47237589",
+        "LEGAL GROUP Bratislava",
+        "Ivana Horňáková LEGAL GROUP kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "http://legalgroup.sk/kontakt/",
+          "type": "own_site",
+          "title": "LEGAL GROUP kontakt",
+          "snippet": "Lomonosovova 2/B, +421 904 240 400, bez emailu",
+          "hitIco": "47237589",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.finstat.sk/47237589",
+          "type": "aggregator",
+          "title": "Finstat LEGAL GROUP",
+          "snippet": "Lomonosovova 2, právne služby",
+          "hitIco": "47237589",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/lawyer/osp/proxy/list/form/footer/pickers/picker/event/page/850",
+          "type": "registry",
+          "title": "SAK vyhľadanie spoločenstiev",
+          "snippet": "site:sak.sk LEGAL GROUP — email neoverený",
+          "hitIco": null,
+          "icoMatch": null
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Ivana Horňáková",
+        "firstName": "Ivana",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "http://legalgroup.sk",
+      "emails": [],
+      "skip_reason": "no_email",
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 26,
+        "send": false,
+        "why_sk": "Advokátska kancelária bez overeného emailu.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email"]
+      },
+      "B": {
+        "score": 14,
+        "send": false,
+        "why_sk": "Bez kontaktu nie je cold send."
+      },
+      "C": {
+        "score": 24,
+        "send": false,
+        "why_sk": "Právna prax, ale chýba email po SAK pass.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email"]
+      },
+      "D": {
+        "score": 18,
+        "send": false,
+        "why_sk": "Web bez mailu — nízka konvertibilita."
+      }
+    }
+  },
+  {
+    "ico": "47238747",
+    "leadId": "ldry_47238747",
+    "companyId": "cmp_47238747",
+    "name": "Advokátska kancelária Andrea Oršulová s. r. o.",
+    "city": "Bratislava - mestská časť Staré Mesto",
+    "nace": "6910",
+    "konatel": "JUDr. Andrea Baluch Oršulová, PhD.",
+    "notes": "Tabaková 2942/5; web aoplegal.sk; orsulova@aoplegal.sk; súťažné právo.",
+    "skip_reason": null,
+    "website": "https://aoplegal.sk",
+    "search": {
+      "queries": [
+        "47238747",
+        "Advokátska kancelária Andrea Oršulová Bratislava",
+        "Andrea Oršulová kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://aoplegal.sk/",
+          "type": "own_site",
+          "title": "Andrea Oršulová AK",
+          "snippet": "orsulova@aoplegal.sk, Tabaková 2942/5",
+          "hitIco": "47238747",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/adv/247921/display/display",
+          "type": "registry",
+          "title": "SAK Andrea Baluch Oršulová",
+          "snippet": "orsulova@aoplegal.sk, www.aoplegal.sk",
+          "hitIco": "47238747",
+          "icoMatch": true
+        },
+        {
+          "url": "https://chambers.com/lawyer/andrea-orsulova-europe-7:1523550",
+          "type": "aggregator",
+          "title": "Chambers Andrea Oršulová",
+          "snippet": "competition/antitrust, Bratislava",
+          "hitIco": null,
+          "icoMatch": null
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Andrea Baluch Oršulová, PhD.",
+        "firstName": "Andrea",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://aoplegal.sk",
+      "emails": [
+        {
+          "email": "orsulova@aoplegal.sk",
+          "url": "https://aoplegal.sk/",
+          "context": "kontakt / header"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Andrea Baluch Oršulová, PhD.",
+        "role": "konateľ",
+        "email": "orsulova@aoplegal.sk",
+        "emailSource": "own_site",
+        "isPrimary": true,
+        "confidence": 0.93
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 74,
+        "send": true,
+        "why_sk": "Boutique AK v súťažnom práve — komplexné dokumenty a compliance.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "B": {
+        "score": 20,
+        "send": false,
+        "why_sk": "Špecializácia na antitrust, nie HR procesy."
+      },
+      "C": {
+        "score": 85,
+        "send": true,
+        "why_sk": "Právna prax s compliance programami a dokumentáciou.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "D": {
+        "score": 36,
+        "send": false,
+        "why_sk": "Regulačná špecializácia — všeobecný stack sekundárny."
+      }
+    }
+  },
+  {
+    "ico": "47239077",
+    "leadId": "ldry_47239077",
+    "companyId": "cmp_47239077",
+    "name": "STEFANKOVA | law office s.r.o.",
+    "city": "Bratislava - mestská časť Ružinov",
+    "nace": "6910",
+    "konatel": "Mgr. Martina Troják",
+    "notes": "Miletičova 72; web stefankova.sk; SAK ivana.stefankova@hotmail.com; tržby ~21k€ 2024.",
+    "skip_reason": null,
+    "website": "https://www.stefankova.sk",
+    "search": {
+      "queries": [
+        "47239077",
+        "STEFANKOVA law office Bratislava",
+        "Martina Troják stefankova kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.stefankova.sk/",
+          "type": "own_site",
+          "title": "STEFANKOVA law office",
+          "snippet": "občianske, obchodné a nehnuteľnostné právo",
+          "hitIco": "47239077",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/523497/display/event",
+          "type": "registry",
+          "title": "SAK STEFANKOVA law office",
+          "snippet": "ivana.stefankova@hotmail.com, IČO 47239077",
+          "hitIco": "47239077",
+          "icoMatch": true
+        },
+        {
+          "url": "https://finstat.sk/47239077",
+          "type": "aggregator",
+          "title": "Finstat STEFANKOVA",
+          "snippet": "Miletičova 72, právne služby",
+          "hitIco": "47239077",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Martina Troják",
+        "firstName": "Martina",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": "https://www.stefankova.sk",
+      "emails": [
+        {
+          "email": "ivana.stefankova@hotmail.com",
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/523497/display/event",
+          "context": "SAK register spoločnosti"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "Mgr. Martina Troják",
+        "role": "konateľ",
+        "email": "ivana.stefankova@hotmail.com",
+        "emailSource": "registry",
+        "isPrimary": true,
+        "confidence": 0.78
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 65,
+        "send": true,
+        "why_sk": "Malá advokátska kancelária — dokumenty a klientske spisy.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "B": {
+        "score": 18,
+        "send": false,
+        "why_sk": "Všeobecná prax bez zjavného HR workflow."
+      },
+      "C": {
+        "score": 76,
+        "send": true,
+        "why_sk": "Právna prax — efektívne služby a komunikácia s klientmi.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "D": {
+        "score": 30,
+        "send": false,
+        "why_sk": "Malá kancelária — obmedzený rozpočet na nové nástroje."
+      }
+    }
+  },
+  {
+    "ico": "47246758",
+    "leadId": "ldry_47246758",
+    "companyId": "cmp_47246758",
+    "name": "Advokátska kancelária Ján Urbánek, s. r. o.",
+    "city": "Bratislava - mestská časť Staré mesto",
+    "nace": "6910",
+    "konatel": "JUDr. Ján Urbánek",
+    "notes": "Banícka 3270/6; býv. Legalpro s.r.o.; bez webu; SAK bez overeného emailu; tržby ~34k€ 2024.",
+    "skip_reason": "no_email",
+    "website": null,
+    "search": {
+      "queries": [
+        "47246758",
+        "Advokátska kancelária Ján Urbánek Bratislava",
+        "Ján Urbánek advokát kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/47246758",
+          "type": "aggregator",
+          "title": "Finstat Ján Urbánek",
+          "snippet": "Banícka 3270/6, historický názov Legalpro",
+          "hitIco": "47246758",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/lawyer/osp/proxy/list/form/footer/pickers/picker/event/page/850",
+          "type": "registry",
+          "title": "SAK vyhľadanie",
+          "snippet": "site:sak.sk Ján Urbánek — email neoverený pre IČO 47246758",
+          "hitIco": null,
+          "icoMatch": null
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Ján Urbánek",
+        "firstName": "Ján",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email",
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 24,
+        "send": false,
+        "why_sk": "AK bez webu a emailu.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email", "no_site"]
+      },
+      "B": {
+        "score": 12,
+        "send": false,
+        "why_sk": "Nie je kontakt na outbound."
+      },
+      "C": {
+        "score": 22,
+        "send": false,
+        "why_sk": "Právna prax, ale bez digitálneho kontaktu.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email"]
+      },
+      "D": {
+        "score": 10,
+        "send": false,
+        "why_sk": "Nedá sa overiť online prítomnosť."
+      }
+    }
+  },
+  {
+    "ico": "47248386",
+    "leadId": "ldry_47248386",
+    "companyId": "cmp_47248386",
+    "name": "AK Martin Jurečko s. r. o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "Mgr. Martin Jurečko",
+    "notes": "Podjavorinskej 3; bez webu; SAK bez záznamu pre IČO 47248386.",
+    "skip_reason": "no_email",
+    "website": null,
+    "search": {
+      "queries": [
+        "47248386",
+        "AK Martin Jurečko Bratislava",
+        "Martin Jurečko advokát kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://obchodnyvestnik.justice.gov.sk/ObchodnyVestnik/Web/Stiahnut.aspx?IdOvSubor=135657",
+          "type": "registry",
+          "title": "Obchodný vestník AK Martin Jurečko",
+          "snippet": "Podjavorinskej 3, Mgr. Martin Jurečko konateľ",
+          "hitIco": "47248386",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/en/cms/lawyer/osp/proxy/list/formular/rows/134650/attr/osp_name/event",
+          "type": "registry",
+          "title": "SAK vyhľadanie spoločenstiev",
+          "snippet": "site:sak.sk — AK Martin Jurečko nenájdené",
+          "hitIco": null,
+          "icoMatch": null
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "Mgr. Martin Jurečko",
+        "firstName": "Martin",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email",
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 20,
+        "send": false,
+        "why_sk": "AK bez overeného kontaktu.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email", "no_site"]
+      },
+      "B": {
+        "score": 10,
+        "send": false,
+        "why_sk": "Bez emailu nie je cold outreach."
+      },
+      "C": {
+        "score": 18,
+        "send": false,
+        "why_sk": "Právna forma bez verejného kontaktu.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email"]
+      },
+      "D": {
+        "score": 8,
+        "send": false,
+        "why_sk": "Nedá sa overiť prevádzka online."
+      }
+    }
+  },
+  {
+    "ico": "47249013",
+    "leadId": "ldry_47249013",
+    "companyId": "cmp_47249013",
+    "name": "Falbová, s. r. o.",
+    "city": "Bratislava",
+    "nace": "6910",
+    "konatel": "JUDr. Lucia Falbová",
+    "notes": "Rajecká 13; bez webu; SAK bez záznamu Lucia Falbová; aggregator email neoverený.",
+    "skip_reason": "no_email",
+    "website": null,
+    "search": {
+      "queries": [
+        "47249013",
+        "Falbová s.r.o. Bratislava",
+        "Lucia Falbová advokát kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://dlznik.zoznam.sk/socialna-siet/judr-lucia-falbova-3",
+          "type": "aggregator",
+          "title": "ORSR profil Lucia Falbová",
+          "snippet": "Rajecká 13, konateľ JUDr. Lucia Falbová",
+          "hitIco": "47249013",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.epravo.sk/top/adresar/advokati/?pg=107",
+          "type": "aggregator",
+          "title": "epravo.sk advokáti",
+          "snippet": "lucia.falbova@mstpartners.sk — iná firma, neoverené",
+          "hitIco": null,
+          "icoMatch": null
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/adv/630483/display/display",
+          "type": "registry",
+          "title": "SAK vyhľadanie advokátov",
+          "snippet": "site:sak.sk — Lucia Falbová nenájdená pre IČO 47249013",
+          "hitIco": null,
+          "icoMatch": null
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Lucia Falbová",
+        "firstName": "Lucia",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [],
+      "skip_reason": "no_email",
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [],
+    "scores": {
+      "A": {
+        "score": 22,
+        "send": false,
+        "why_sk": "AK bez overeného emailu.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email", "no_site"]
+      },
+      "B": {
+        "score": 12,
+        "send": false,
+        "why_sk": "Nie je kontakt na outbound."
+      },
+      "C": {
+        "score": 20,
+        "send": false,
+        "why_sk": "Právna prax, ale chýba overený kontakt.",
+        "hook_id": "69-pravo",
+        "risks": ["no_email"]
+      },
+      "D": {
+        "score": 10,
+        "send": false,
+        "why_sk": "Bez webu a mailu — nízka priorita."
+      }
+    }
+  },
+  {
+    "ico": "47249561",
+    "leadId": "ldry_47249561",
+    "companyId": "cmp_47249561",
+    "name": "BG Partners, s. r. o.",
+    "city": "Bratislava - mestská časť Staré mesto",
+    "nace": "6910",
+    "konatel": "JUDr. Zuzana Benkovská Gašičová",
+    "notes": "Jakubovo námestie 1; SAK gasicova@bgpartners.sk; bez vlastného webu; strata 2024.",
+    "skip_reason": null,
+    "website": null,
+    "search": {
+      "queries": [
+        "47249561",
+        "BG Partners Bratislava advokát",
+        "Zuzana Benkovská Gašičová kontakt email"
+      ],
+      "hits": [
+        {
+          "url": "https://www.finstat.sk/47249561",
+          "type": "aggregator",
+          "title": "Finstat BG Partners",
+          "snippet": "Jakubovo námestie 1, právne služby",
+          "hitIco": "47249561",
+          "icoMatch": true
+        },
+        {
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/620949/display/event",
+          "type": "registry",
+          "title": "SAK BG Partners",
+          "snippet": "gasicova@bgpartners.sk, IČO 47249561",
+          "hitIco": "47249561",
+          "icoMatch": true
+        }
+      ]
+    },
+    "people": [
+      {
+        "fullName": "JUDr. Zuzana Benkovská Gašičová",
+        "firstName": "Zuzana",
+        "role": "konatel",
+        "source": "rpo"
+      }
+    ],
+    "website_enrichment": {
+      "website": null,
+      "emails": [
+        {
+          "email": "gasicova@bgpartners.sk",
+          "url": "https://www.sak.sk/web/sk/cms/link/osp/620949/display/event",
+          "context": "SAK register spoločnosti"
+        }
+      ],
+      "skip_reason": null,
+      "sakChecked": true,
+      "evucChecked": false
+    },
+    "contacts": [
+      {
+        "fullName": "JUDr. Zuzana Benkovská Gašičová",
+        "role": "konateľ",
+        "email": "gasicova@bgpartners.sk",
+        "emailSource": "registry",
+        "isPrimary": true,
+        "confidence": 0.88
+      }
+    ],
+    "scores": {
+      "A": {
+        "score": 68,
+        "send": true,
+        "why_sk": "Advokátska kancelária — klientske spisy a dokumentácia.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "B": {
+        "score": 18,
+        "send": false,
+        "why_sk": "Všeobecná prax bez zjavného HR workflow."
+      },
+      "C": {
+        "score": 74,
+        "send": true,
+        "why_sk": "Právna prax — dokumenty a klientska komunikácia.",
+        "hook_id": "69-pravo",
+        "risks": []
+      },
+      "D": {
+        "score": 28,
+        "send": false,
+        "why_sk": "Bez vlastného webu — nižšia digitálna zrelosť."
+      }
+    }
+  }
+]
