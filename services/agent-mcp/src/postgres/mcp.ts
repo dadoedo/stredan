@@ -10,6 +10,7 @@ import {
   query,
   querySchema,
 } from "./tools.js";
+import { upsertLeadEnrichment, upsertLeadEnrichmentSchema } from "./leadgen-upsert.js";
 import { getDatabaseInfo } from "../targets.js";
 import { getTableSchema } from "./client.js";
 
@@ -46,13 +47,25 @@ export function createPostgresMcp(config: PostgresConfig): McpServer {
 
   server.tool(
     "query",
-    "Execute a SQL query on a specified database and environment. Readonly keys/databases reject writes.",
+    "Execute a SQL query on a specified database and environment. Readonly keys/databases reject writes. For lead enrichment writes, prefer upsert_lead_enrichment (one lead per call).",
     querySchema.shape,
     async (args) => {
       const input = querySchema.parse(args);
       const result = await query(config, input);
       if (!result.success) return errorResult(result.error);
       return jsonText({ rowCount: result.rowCount, rows: result.rows });
+    }
+  );
+
+  server.tool(
+    "upsert_lead_enrichment",
+    "Idempotent write for one enriched lead: LeadEnrichment + LeadContact + LeadScore, then Lead.status last. Use after each lead (or each ~10-lead research batch). Replaces bulk SQL via query tool.",
+    upsertLeadEnrichmentSchema.shape,
+    async (args) => {
+      const input = upsertLeadEnrichmentSchema.parse(args);
+      const result = await upsertLeadEnrichment(config, input);
+      if (!result.success) return errorResult(result.error);
+      return jsonText(result);
     }
   );
 

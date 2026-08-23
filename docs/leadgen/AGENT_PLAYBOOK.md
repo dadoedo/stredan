@@ -83,7 +83,25 @@ LIMIT 1;
 
 For a given lead, restrict `o.code` to that lead's sendable offers (see DRAFT_ONLY SQL) before you pick.
 
+### Cell stratification (do this, not pure random)
+
+Pure random collapses the experiment onto one offer when the pool is skewed
+(e.g. lawyers/accountants make C dominate). Until ≥30 replies exist, keep the
+per-offer draft counts within 3 of each other:
+
+1. Count today's drafts per offer (draft + queued + sent Touches).
+2. Among the lead's sendable A–D offers, pick the **least-used** one.
+3. Tie → pick randomly among tied offers.
+4. Then pick a random active account still under `dailyCap` for that cell.
+
 Store `offerId`, `templateId`, `sendAccountId`, `channel`, `accountKey` on every `Touch`.
+
+### Subject variant
+
+Templates carry 2 subject variants for a reason — use both. Pick **randomly
+50/50** between variant 1 and 2, and record which one you used in
+`Touch.personalization` as `{"subject_variant": 1|2}`. Otherwise the subject
+axis tests nothing.
 
 ## Startup
 
@@ -103,6 +121,7 @@ This is the path that **processes enriched leads without pulling a new 50**.
 3. Cap **40** (the SQL already `LIMIT 40`). Leftovers stay for the next `DRAFT_ONLY` run.
 4. For each row:
    - Intersection: `sendable_offers` ∩ active A–D.
+   - Offer: least-drafted-today among that intersection (stratified, see "Cell stratification"), ties random.
    - Pick a random active account still under `dailyCap` (today's drafts + sends).
    - Load `EmailTemplate` `key=cold-1`, `locale=sk` for that offer.
    - Fill only `{{salutation}}`, `{{company}}`, `{{hook}}`, `{{landing}}` (COPY.md). If hook is null, drop that paragraph and the blank line.
@@ -156,6 +175,20 @@ LIMIT 400;
 
 Take the first 50 whose IČO is not in `Company` / `Suppression`. Drop names matching `likvid`, `konkurz`, `v likvidácii`, `zrušen`, and IČO `Neuvedené`. Upsert slim rows:
 
+**Batch mix (segment rotation).** Batches 1–2 drained lawyers + accountants,
+which collapsed the matrix onto offer C. Rotate segments so offers B/D get
+pool depth. Suggested mix for the next batches (~50 each):
+
+- ~15 × NACE div **43 / 41** (stavba) → hooks `41/43-stavba`, boosts B/D
+- ~12 × NACE div **46 / 52 / 49** (veľkoobchod, logistika, doprava) → hook `46`/`49/52-logistika`, boosts B/D
+- ~10 × NACE div **10–33** (výroba) → hook `10-33-vyroba`, boosts D/B
+- ~8 × NACE div **86** (zdravie) → hook `86-zdravie`, boosts C/A
+- ~5 × NACE div **68** (reality) → hook `68-reality`
+
+Filter by `nace_div` column on `rpo2.outreach_candidates`; pool depth is
+thousands per division, so this costs nothing. Keep Bratislava-first ordering
+inside each slice.
+
 ```sql
 INSERT INTO "Company" (id, "rpoId", ico, name, "naceCode", "naceLabel", city, "establishedAt", "updatedAt")
 VALUES ('cmp_<ico>', <rpo_id>, '<ico>', '<name>', '<nace>', '<nace_label>', '<city>', '<established>', NOW())
@@ -188,11 +221,10 @@ For each sourced lead:
 2. Classify every hit: `aggregator` | `own_site` | `social` | `registry` | `other`. Store `url`, `title`, `snippet`, `hitIco`, `icoMatch`. Mismatch IČO → `type=other`, ignore email/website.
 3. **People.** Always copy RPO konateľ into `people[]` with `firstName` (strip titles). Add extra names from site/aggregators with source URL.
 4. **Contact.** Emails only from pages you opened. Prefer `info@` / company domain. Do not guess `meno.priezvisko@`.
-5. Append the lead to `tmp/enrichment-<AgentRunId>.json` (see [ENRICHMENT_JSON.md](./ENRICHMENT_JSON.md)). Every search hit includes `hitIco` + `icoMatch`.
-6. After a batch of ~10 (or at the end):  
-   `npx tsx scripts/leadgen-apply-enrichment.ts tmp/enrichment-<id>.json --run-id <id> --out tmp/enrichment-<id>.sql`  
-   then run that SQL via MCP. **Do not hand-write LeadScore INSERTs.**
-7. The script sets `Company.website` only when an own_site URL exists, writes `LeadContact`, `LeadEnrichment` kinds `search|people|website`, `Lead.skipReason`, and `Lead.status` = `enriched` or `skipped`.
+5. Score A–D in the same object (COPY.md §9). **Immediately** persist via Postgres MCP `upsert_lead_enrichment` (one call per lead). JSON in `tmp/` is backup only.
+6. **Never** bulk-write at end of run. **Never** `UPDATE Lead.status` before enrichment rows exist. **Never** hand-write INSERTs. **Never** `exec_*.mjs` HTTP/WS paths.
+7. Optional backup append to `tmp/enrichment-<AgentRunId>.json` after each successful upsert.
+8. After ~10 leads, patch `AgentRun.outputJson` with `{phase, enriched_so_far, last_ico, write_errors[]}`.
 
 Skip send (still keep the rows): `no_site`, `no_email`, `shell`, `it_internal`, `bad_ico`, email confidence < 0.4. Low Finstat profit is **not** a skip.
 
@@ -212,8 +244,17 @@ For each lead in the JSON without scores A–D (including `skipped` — David st
 1. Load active `EmailTemplate` for the chosen offer (`key=cold-1`, locale=sk).
 2. Fill only allowed placeholders: `{{salutation}}`, `{{company}}`, `{{hook}}`, `{{landing}}`.
    Salutation is `Dobrý deň,` or `Dobrý deň, {firstName},` (given name only, vykanie in the body). Never ChatGPT/Claude/Gemini in copy.
-3. Create `Touch` **draft** with `sendAccountId` + `accountKey` + `channel` via `scripts/leadgen-apply-drafts.ts`.
-4. **STOP here in DRAFT_ONLY.** Do not call Email MCP.
+3. Subject: random 50/50 between variant 1 and 2; store `{"subject_variant": 1|2}` in `Touch.personalization`.
+4. Create `Touch` **draft** with `sendAccountId` + `accountKey` + `channel` via `scripts/leadgen-apply-drafts.ts`.
+5. **STOP here in DRAFT_ONLY.** Do not call Email MCP.
+
+### Cell stratification (replaces pure random cell pick)
+
+Until the experiment has ≥30 replies, keep per-offer counts within ~3 of each
+other: among the lead's sendable A–D offers pick the one with the fewest
+drafts today (draft+queued+sent), ties break randomly. Then a random active
+account under cap. Pure random collapses onto whichever offer the pool skews
+to (C today) and the A–E × 1–5 experiment stops testing anything.
 
 ## Send — MODE=SEND only (not enabled)
 

@@ -1,17 +1,62 @@
-# Enrichment JSON → SQL
+# Enrichment JSON → DB write
 
-The daily agent **must not** hand-write `INSERT` for scores/enrichments. Research into JSON, then:
+Research into JSON. **Write one lead at a time** — never bulk SQL at end of run (see [batch 2 post-mortem](./automation_run_feedback/2026-08-19-enrich-only-batch-2-postmortem.md)).
+
+## Primary path (cloud agent): Postgres MCP `upsert_lead_enrichment`
+
+After each lead (or each ~10-lead research mini-batch), call **one** MCP tool per lead:
+
+```json
+{
+  "database": "stredan",
+  "environment": "prod",
+  "agentRunId": "<AgentRunId>",
+  "lead": { "ico": "45389551", "name": "...", "search": { ... }, "scores": { ... } }
+}
+```
+
+The server runs a single transaction: `LeadEnrichment` → `LeadContact` → `LeadScore` → **`Lead.status` last**. Idempotent upserts. No SQL strings from the agent.
+
+**Do not** use raw `query` for enrichment writes. `query` is for reads (RPO, caps, verification).
+
+Ban from automation: `exec_*.mjs`, HTTP/WS MCP executors, bulk `UPDATE Lead SET status` before rows exist.
+
+## Local / CI fallback: `--apply`
+
+When `DATABASE_URL` or `LEADGEN_DATABASE_URL` is available on the VM:
 
 ```bash
 npx tsx scripts/leadgen-apply-enrichment.ts tmp/enrichment-<AgentRunId>.json \
   --run-id <AgentRunId> \
-  --out tmp/enrichment-<AgentRunId>.sql
+  --apply
+```
 
-# optional type check only
+One transaction per lead (`--chunk` defaults to 1 with `--apply`).
+
+## Legacy fallback (avoid): SQL file + MCP `query`
+
+Only if `upsert_lead_enrichment` is unavailable. **One statement per `query` call** (≤8 KB). Never multi-lead chunks.
+
+```bash
+npx tsx scripts/leadgen-apply-enrichment.ts tmp/enrichment-<AgentRunId>.json \
+  --run-id <AgentRunId> \
+  --chunk 1 \
+  --out tmp/enrichment-<AgentRunId>.sql
+```
+
+Execute **one SQL statement at a time** via Postgres MCP `query`.
+
+Type check only:
+
+```bash
 npx tsx scripts/leadgen-apply-enrichment.ts tmp/enrichment-<AgentRunId>.json --check
 ```
 
-Execute the `.sql` via Postgres MCP (`stredan` / `prod`) in the printed `MCP CHUNK` blocks (~10 leads). Statements are idempotent (`ON CONFLICT DO UPDATE`).
+Scores-only backfill:
+
+```bash
+npx tsx scripts/leadgen-apply-enrichment.ts tmp/scores.json --scores-only --apply
+```
 
 ## Array of leads
 
@@ -71,7 +116,7 @@ Execute the `.sql` via Postgres MCP (`stredan` / `prod`) in the printed `MCP CHU
 ]
 ```
 
-## Rules the script enforces
+## Rules the writer enforces
 
 | Field | Rule |
 |-------|------|
@@ -80,7 +125,8 @@ Execute the `.sql` via Postgres MCP (`stredan` / `prod`) in the printed `MCP CHU
 | `search.hits[].type` | `aggregator` \| `own_site` \| `social` \| `registry` \| `other` |
 | `scores.A–D.score` | **JSON integer** 0–100 (not a Python dict, not `"78"`) |
 | Offer E | omitted in ENRICH_ONLY |
+| enriched + email | must have ≥1 score A–D, or set `skip_reason` |
 
 `leadId` / `companyId` default to `ldry_<ico>` / `cmp_<ico>` if omitted.
 
-`skip_reason` set → SQL sets `Lead.status=skipped` and `Lead.skipReason`. Otherwise `enriched`.
+`skip_reason` set → `Lead.status=skipped` and `Lead.skipReason`. Otherwise `enriched`. Status is written **after** enrichment rows.
