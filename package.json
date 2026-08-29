@@ -31,6 +31,7 @@
     "posthog-js": "^1.418.10",
     "posthog-node": "^5.50.0",
     "react": "19.2.3",
+    "react-cursor-calendar": "github:dadoedo/react-cursor-calendar#v0.1.0",
     "react-dom": "19.2.3",
     "react-github-calendar": "^5.0.5",
     "recharts": "^3.7.0",

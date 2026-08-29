@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   skipTrailingSlashRedirect: true,
+  transpilePackages: ["react-cursor-calendar"],
   async rewrites() {
     return [
       {

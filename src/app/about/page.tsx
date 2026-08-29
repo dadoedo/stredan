@@ -5,13 +5,14 @@ import { prisma } from "@/lib/prisma";
 import { getStats } from "@/lib/stats";
 import { getLocale } from "@/lib/locale";
 import { ui } from "@/lib/translations";
+import { CURSOR_HANDLE, getCursorProfile } from "@/lib/cursor-profile";
 
 /** Personal brand / CV — previously the homepage */
 export default async function AboutPage() {
   const locale = await getLocale();
   const t = ui[locale];
 
-  const [projects, jobs, stats] = await Promise.all([
+  const [projects, jobs, stats, cursorProfile] = await Promise.all([
     prisma.project.findMany({
       where: { visible: true },
       orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
@@ -31,6 +32,7 @@ export default async function AboutPage() {
       orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
     }),
     getStats(),
+    getCursorProfile(CURSOR_HANDLE).catch(() => null),
   ]);
 
   const featured = projects.filter((p) => p.featured);
@@ -62,7 +64,11 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <StatsDashboard stats={stats} locale={locale} />
+      <StatsDashboard
+        stats={stats}
+        locale={locale}
+        cursorProfile={cursorProfile}
+      />
 
       <WorkExperienceSection
         locale={locale}

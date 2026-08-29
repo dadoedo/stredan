@@ -5,6 +5,13 @@ import Link from "next/link";
 import { GitHubCalendar } from "react-github-calendar";
 import "react-github-calendar/tooltips.css";
 import {
+  compactNumber,
+  CursorCalendar,
+  lastMonths,
+  totalCount,
+} from "react-cursor-calendar";
+import "react-cursor-calendar/tooltips.css";
+import {
   PieChart,
   Pie,
   Cell,
@@ -19,6 +26,7 @@ import {
 import type { StatsData } from "@/lib/stats";
 import type { Locale } from "@/lib/translations";
 import { OpensInNewTab } from "@/components/OpensInNewTab";
+import type { CursorProfile } from "react-cursor-calendar";
 
 const CHART_COLORS = [
   "#d4d4d8", // zinc-300
@@ -49,6 +57,7 @@ type TabId = "technologies" | "integrations" | "overview";
 interface StatsDashboardProps {
   stats: StatsData;
   locale: Locale;
+  cursorProfile?: CursorProfile | null;
 }
 
 function preparePieData<T extends { name: string; value: number }>(
@@ -101,7 +110,7 @@ function ChartDataTable({
   );
 }
 
-export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
+export function StatsDashboard({ stats, locale, cursorProfile }: StatsDashboardProps) {
   const [activeTab, setActiveTab] = useState<TabId>("technologies");
   const [selectedTechSlug, setSelectedTechSlug] = useState<string | null>(null);
   const [selectedIntSlug, setSelectedIntSlug] = useState<string | null>(null);
@@ -677,6 +686,47 @@ export function StatsDashboard({ stats, locale }: StatsDashboardProps) {
             </div>
           )}
         </div>
+
+        {/* Cursor activity */}
+        {cursorProfile ? (
+          <div className="mt-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
+            <h3 className="mb-4 text-sm font-medium text-foreground">
+              {locale === "sk" ? "Cursor aktivita" : "Cursor activity"}
+            </h3>
+            <CursorCalendar
+              handle="dadoeodo"
+              data={cursorProfile}
+              variant="heatmap"
+              theme="cursor"
+              colorScheme="light"
+              framed={false}
+              labels={{
+                totalCount:
+                  locale === "sk"
+                    ? `${compactNumber(totalCount(lastMonths(cursorProfile.activityCounts, 12)))} tokenov za posledných 12 mesiacov`
+                    : `${compactNumber(totalCount(lastMonths(cursorProfile.activityCounts, 12)))} tokens in the last 12 months`,
+              }}
+            />
+            <p className="mt-3 text-sm text-muted">
+              <a
+                href="https://cursor.com/@dadoeodo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-offset-2 hover:underline"
+              >
+                cursor.com/@dadoeodo
+              </a>
+              <OpensInNewTab locale={locale} />
+              {" · "}
+              <a
+                href="https://cursor-profile.stredan.sk"
+                className="underline-offset-2 hover:underline"
+              >
+                {locale === "sk" ? "ďalšie grafy" : "more graphs"}
+              </a>
+            </p>
+          </div>
+        ) : null}
 
         {/* GitHub Contributions */}
         <div className="mt-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
