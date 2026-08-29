@@ -4,7 +4,7 @@ import { CursorProfilePlayground } from "@/components/CursorProfilePlayground";
 export const metadata: Metadata = {
   title: "react-cursor-calendar",
   description:
-    "GitHub-style activity calendar for public Cursor profiles. npm i react-cursor-calendar",
+    "Activity calendar for public Cursor profiles. npm i react-cursor-calendar",
 };
 
 export default function CursorProfilePage() {
@@ -19,7 +19,7 @@ export default function CursorProfilePage() {
         <a className="underline underline-offset-2" href="https://cursor.com/@dadoeodo">
           cursor.com/@handle
         </a>
-        , same idea as react-github-calendar. Drop-in React component plus a CORS API.
+        . Drop-in React component plus a CORS API.
       </p>
 
       <pre className="mt-6 overflow-x-auto rounded-xl bg-foreground px-4 py-3 text-sm text-background">
@@ -28,7 +28,7 @@ export default function CursorProfilePage() {
 
       <p className="mt-4 text-sm text-muted">
         <a className="underline underline-offset-2" href="https://github.com/dadoedo/react-cursor-calendar">
-          GitHub
+          Source
         </a>
         {" · "}
         <a className="underline underline-offset-2" href="https://cursor-profile.stredan.sk/v1/dadoeodo">
