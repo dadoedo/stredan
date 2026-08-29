@@ -47,6 +47,6 @@ Builds locally, loads on the server, uses the same prod compose file.
 
 ## Expanding later
 
-- **cursor-profile.stredan.sk** — public API + demo for [`react-cursor-calendar`](https://github.com/dadoedo/react-cursor-calendar). Merge `deploy/cursor-profile.caddy` into `/root/caddy/Caddyfile`. Same `stredan-app` container; Next.js rewrites the host.
+- **cursor-profile.stredan.sk** — public API + demo for [`react-cursor-calendar`](https://www.npmjs.com/package/react-cursor-calendar). Merge `deploy/cursor-profile.caddy` into `/root/caddy/Caddyfile`. Same `stredan-app` container; Next.js rewrites the host.
 - **DB / Prisma migrations** — add `prisma/migrations`, then teach the deploy SSH step to run `prisma migrate deploy` (image currently ships the app only; prefer a one-shot migrate container or CI job over baking migrate into boot).
 - **Extra services** — add compose services under `deploy/` and keep path filters on the workflow honest.

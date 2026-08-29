@@ -27,6 +27,10 @@ export default function CursorProfilePage() {
       </pre>
 
       <p className="mt-4 text-sm text-muted">
+        <a className="underline underline-offset-2" href="https://www.npmjs.com/package/react-cursor-calendar">
+          npm
+        </a>
+        {" · "}
         <a className="underline underline-offset-2" href="https://github.com/dadoedo/react-cursor-calendar">
           Source
         </a>
