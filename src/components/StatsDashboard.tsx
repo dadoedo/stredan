@@ -9,6 +9,8 @@ import {
   CursorCalendar,
   lastMonths,
   totalCount,
+  type CursorCalendarActivity,
+  type CursorProfile,
 } from "react-cursor-calendar";
 import "react-cursor-calendar/tooltips.css";
 import {
@@ -26,7 +28,35 @@ import {
 import type { StatsData } from "@/lib/stats";
 import type { Locale } from "@/lib/translations";
 import { OpensInNewTab } from "@/components/OpensInNewTab";
-import type { CursorProfile } from "react-cursor-calendar";
+
+const CALENDAR_FILL_CLASS =
+  "w-full overflow-x-hidden [&_.react-activity-calendar]:!w-full [&_.react-activity-calendar__scroll-container]:w-full [&_.react-activity-calendar__scroll-container]:!overflow-x-hidden [&_.react-activity-calendar__calendar]:h-auto [&_.react-activity-calendar__calendar]:w-full";
+
+function fillCalendarYear(
+  activities: CursorCalendarActivity[],
+): CursorCalendarActivity[] {
+  const byDate = new Map(activities.map((activity) => [activity.date, activity]));
+  const now = new Date();
+  const today = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
+  const start = new Date(
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 11, 1),
+  );
+  while (start.getUTCDay() !== 0) {
+    start.setUTCDate(start.getUTCDate() - 1);
+  }
+  const filled: CursorCalendarActivity[] = [];
+  for (
+    const cursor = new Date(start);
+    cursor <= today;
+    cursor.setUTCDate(cursor.getUTCDate() + 1)
+  ) {
+    const date = cursor.toISOString().slice(0, 10);
+    filled.push(byDate.get(date) ?? { date, count: 0, level: 0 });
+  }
+  return filled;
+}
 
 const CHART_COLORS = [
   "#d4d4d8", // zinc-300
@@ -690,23 +720,33 @@ export function StatsDashboard({ stats, locale, cursorProfile }: StatsDashboardP
         {/* Cursor activity */}
         {cursorProfile ? (
           <div className="mt-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
-            <h3 className="mb-4 text-sm font-medium text-foreground">
+            <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-foreground">
+              <img
+                src="/icons/cursor.svg"
+                alt=""
+                width={16}
+                height={16}
+                className="size-4 shrink-0"
+              />
               {locale === "sk" ? "Cursor aktivita" : "Cursor activity"}
             </h3>
-            <CursorCalendar
-              handle="dadoeodo"
-              data={cursorProfile}
-              variant="heatmap"
-              theme="cursor"
-              colorScheme="light"
-              framed={false}
-              labels={{
-                totalCount:
-                  locale === "sk"
-                    ? `${compactNumber(totalCount(lastMonths(cursorProfile.activityCounts, 12)))} tokenov za posledných 12 mesiacov`
-                    : `${compactNumber(totalCount(lastMonths(cursorProfile.activityCounts, 12)))} tokens in the last 12 months`,
-              }}
-            />
+            <div className={CALENDAR_FILL_CLASS}>
+              <CursorCalendar
+                handle="dadoeodo"
+                data={cursorProfile}
+                variant="heatmap"
+                theme="cursor"
+                colorScheme="light"
+                framed={false}
+                transformData={fillCalendarYear}
+                labels={{
+                  totalCount:
+                    locale === "sk"
+                      ? `${compactNumber(totalCount(lastMonths(cursorProfile.activityCounts, 12)))} tokenov za posledných 12 mesiacov`
+                      : `${compactNumber(totalCount(lastMonths(cursorProfile.activityCounts, 12)))} tokens in the last 12 months`,
+                }}
+              />
+            </div>
             <p className="mt-3 text-sm text-muted">
               <a
                 href="https://cursor.com/@dadoeodo"
@@ -730,7 +770,14 @@ export function StatsDashboard({ stats, locale, cursorProfile }: StatsDashboardP
 
         {/* GitHub Contributions */}
         <div className="mt-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
-          <h3 className="mb-4 text-sm font-medium text-foreground">
+          <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-foreground">
+            <img
+              src="/icons/github.svg"
+              alt=""
+              width={16}
+              height={16}
+              className="size-4 shrink-0"
+            />
             {locale === "sk"
               ? "GitHub príspevky"
               : "GitHub contributions"}
@@ -744,7 +791,7 @@ export function StatsDashboard({ stats, locale, cursorProfile }: StatsDashboardP
                 ? "GitHub profil dadoedo — príspevky za posledných 12 mesiacov"
                 : "dadoedo GitHub profile — contributions in the last 12 months"
             }
-            className="block [&_svg]:max-w-full"
+            className={`block ${CALENDAR_FILL_CLASS}`}
           >
             <GitHubCalendar
               username="dadoedo"

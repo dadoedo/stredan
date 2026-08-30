@@ -12,13 +12,17 @@ const VARIANTS: { id: CursorCalendarVariant; label: string }[] = [
   { id: "models", label: "Models" },
 ];
 
-const THEMES = ["cursor", "github", "heat"] as const;
+const THEMES: { id: "cursor" | "dashboard" | "heat"; label: string }[] = [
+  { id: "cursor", label: "Public" },
+  { id: "dashboard", label: "Dashboard" },
+  { id: "heat", label: "Heat" },
+];
 
 export function CursorProfilePlayground() {
   const [handle, setHandle] = useState("dadoeodo");
   const [submitted, setSubmitted] = useState("dadoeodo");
   const [variant, setVariant] = useState<CursorCalendarVariant>("dashboard");
-  const [theme, setTheme] = useState<(typeof THEMES)[number]>("cursor");
+  const [theme, setTheme] = useState<(typeof THEMES)[number]["id"]>("cursor");
 
   const apiBase = useMemo(() => "/api/cursor-profile", []);
 
@@ -65,16 +69,16 @@ export function CursorProfilePlayground() {
       <div className="mt-2 flex flex-wrap gap-2">
         {THEMES.map((item) => (
           <button
-            key={item}
+            key={item.id}
             type="button"
-            onClick={() => setTheme(item)}
+            onClick={() => setTheme(item.id)}
             className={`rounded-full border px-3 py-1.5 text-sm ${
-              theme === item
+              theme === item.id
                 ? "border-foreground bg-foreground text-background"
                 : "border-border text-muted"
             }`}
           >
-            {item}
+            {item.label}
           </button>
         ))}
       </div>
