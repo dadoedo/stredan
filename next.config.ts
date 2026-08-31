@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   skipTrailingSlashRedirect: true,
   transpilePackages: ["react-cursor-calendar"],
+  serverExternalPackages: ["@resvg/resvg-js"],
   async rewrites() {
     return [
       {

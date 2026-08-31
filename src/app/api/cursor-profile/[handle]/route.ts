@@ -3,6 +3,7 @@ import {
   CursorProfileError,
   normalizeHandle,
 } from "react-cursor-calendar/server";
+import { cachedHeatmap } from "@/lib/cursor-heatmap-image";
 import {
   getCursorProfile,
   logCursorProfileRequest,
@@ -19,6 +20,20 @@ function corsHeaders(extra?: HeadersInit) {
   };
 }
 
+function parseHandleParam(raw: string): {
+  handle: string;
+  format: "json" | "svg" | "png";
+} {
+  const decoded = decodeURIComponent(raw);
+  if (decoded.endsWith(".svg")) {
+    return { handle: decoded.slice(0, -4), format: "svg" };
+  }
+  if (decoded.endsWith(".png")) {
+    return { handle: decoded.slice(0, -4), format: "png" };
+  }
+  return { handle: decoded, format: "json" };
+}
+
 export function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: corsHeaders() });
 }
@@ -28,13 +43,23 @@ export async function GET(
   context: { params: Promise<{ handle: string }> },
 ) {
   const { handle: raw } = await context.params;
+  const parsed = parseHandleParam(raw);
   let handle = "";
   try {
-    handle = normalizeHandle(raw);
+    handle = normalizeHandle(parsed.handle);
     const profile = await getCursorProfile(handle);
     await logCursorProfileRequest(handle);
-    return NextResponse.json(profile, {
+    if (parsed.format === "json") {
+      return NextResponse.json(profile, {
+        headers: corsHeaders({
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        }),
+      });
+    }
+    const image = await cachedHeatmap(handle, parsed.format, profile);
+    return new NextResponse(new Uint8Array(image.body), {
       headers: corsHeaders({
+        "Content-Type": image.contentType,
         "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
       }),
     });

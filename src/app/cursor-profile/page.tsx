@@ -39,10 +39,35 @@ export default function CursorProfilePage() {
           GET /v1/:handle
         </a>
         {" · "}
+        <a className="underline underline-offset-2" href="https://cursor-profile.stredan.sk/v1/dadoeodo.svg">
+          .svg
+        </a>
+        {" · "}
+        <a className="underline underline-offset-2" href="https://cursor-profile.stredan.sk/v1/dadoeodo.png">
+          .png
+        </a>
+        {" · "}
         <a className="underline underline-offset-2" href="/about">
           Used on /about
         </a>
       </p>
+
+      <section className="mt-12">
+        <h2 className="text-sm font-medium">Embed</h2>
+        <p className="mt-2 text-sm text-muted">
+          <code className="rounded bg-surface-2 px-1.5 py-0.5">
+            {`<img src="https://cursor-profile.stredan.sk/v1/dadoeodo.svg" />`}
+          </code>
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-surface p-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/api/cursor-profile/dadoeodo.svg"
+            alt="Cursor activity for @dadoeodo"
+            className="h-auto w-full max-w-3xl"
+          />
+        </div>
+      </section>
 
       <section className="mt-12">
         <h2 className="text-sm font-medium">Try a public handle</h2>
