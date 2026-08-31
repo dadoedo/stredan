@@ -40,8 +40,10 @@ function fillCalendarYear(
   const today = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
   );
+  const yesterday = new Date(today);
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
   const start = new Date(
-    Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 11, 1),
+    Date.UTC(yesterday.getUTCFullYear(), yesterday.getUTCMonth() - 11, 1),
   );
   while (start.getUTCDay() !== 0) {
     start.setUTCDate(start.getUTCDate() - 1);
@@ -49,7 +51,7 @@ function fillCalendarYear(
   const filled: CursorCalendarActivity[] = [];
   for (
     const cursor = new Date(start);
-    cursor <= today;
+    cursor <= yesterday;
     cursor.setUTCDate(cursor.getUTCDate() + 1)
   ) {
     const date = cursor.toISOString().slice(0, 10);

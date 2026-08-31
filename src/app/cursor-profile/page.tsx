@@ -55,6 +55,13 @@ export default function CursorProfilePage() {
       <section className="mt-12">
         <h2 className="text-sm font-medium">Embed</h2>
         <p className="mt-2 text-sm text-muted">
+          <code className="rounded bg-surface-2 px-1.5 py-0.5">.svg</code> is the
+          compact README widget.{" "}
+          <code className="rounded bg-surface-2 px-1.5 py-0.5">.png</code> is a
+          slightly taller card with name, join date, and streaks. Same grid;
+          days end on yesterday.
+        </p>
+        <p className="mt-2 text-sm text-muted">
           <code className="rounded bg-surface-2 px-1.5 py-0.5">
             {`<img src="https://cursor-profile.stredan.sk/v1/dadoeodo.svg" />`}
           </code>
@@ -64,6 +71,14 @@ export default function CursorProfilePage() {
           <img
             src="/api/cursor-profile/dadoeodo.svg"
             alt="Cursor activity for @dadoeodo"
+            className="h-auto w-full max-w-3xl"
+          />
+        </div>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-surface p-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/api/cursor-profile/dadoeodo.png"
+            alt="Cursor activity card for @dadoeodo"
             className="h-auto w-full max-w-3xl"
           />
         </div>
