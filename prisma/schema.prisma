@@ -405,3 +405,21 @@ model ExperimentDaily {
 
   @@unique([day, offerId, sendAccountId])
 }
+
+model CursorProfileSnapshot {
+  id              String   @id @default(cuid())
+  handle          String
+  capturedAt      DateTime @default(now())
+  displayName     String
+  joinedDate      String
+  totalTokens     BigInt
+  currentStreak   Int
+  longestStreak   Int
+  mostActiveMonth String
+  mostActiveDay   String
+  agentsLocal     Int
+  agentsCloud     Int
+  profile         Json
+
+  @@index([handle, capturedAt])
+}

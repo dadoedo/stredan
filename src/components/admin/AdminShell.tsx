@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   Activity,
   AtSign,
+  Calendar,
   FolderKanban,
   Grid3x3,
   LogOut,
@@ -29,6 +30,7 @@ const NAV = [
   { href: "/admin/runs", label: "Behania", icon: Activity },
   { href: "/admin/accounts", label: "Účty 1–5", icon: AtSign },
   { href: "/admin/projects", label: "Projekty", icon: FolderKanban },
+  { href: "/admin/cursor", label: "Cursor", icon: Calendar },
 ] as const;
 
 function NavLink({
