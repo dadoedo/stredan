@@ -406,6 +406,19 @@ model ExperimentDaily {
   @@unique([day, offerId, sendAccountId])
 }
 
+model CursorHandle {
+  handle            String   @id
+  displayName       String   @default("")
+  joinedDate        String   @default("")
+  firstSeenAt       DateTime @default(now())
+  lastSeenAt        DateTime @default(now())
+  requestCount      Int      @default(0)
+  lastTotalTokens   BigInt   @default(0)
+  lastCurrentStreak Int      @default(0)
+  lastLongestStreak Int      @default(0)
+  lastError         String?
+}
+
 model CursorProfileSnapshot {
   id              String   @id @default(cuid())
   handle          String
