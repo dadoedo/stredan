@@ -212,6 +212,11 @@ body {
   font-family: var(--font-dm-sans), system-ui, sans-serif;
 }
 
+/* Google leaves transparent areas in the appointment popup iframe. */
+iframe[src^="https://calendar.google.com/calendar/appointments/schedules/"] {
+  background-color: #fff;
+}
+
 :focus {
   outline: none;
 }
