@@ -21,6 +21,7 @@ Isolation:
 - A user sees and edits only their own databases, mailboxes, and API keys. They can add and test those, and create keys scoped to them.
 - A key can only reference its owner's resources. Wildcard scope (`*`) means every database or mailbox that owner has, not other tenants.
 - A superadmin sees every tenant in the dashboard (and can revoke any key) but a key they create is still limited to resources they own.
+- Two users may reuse the same database or mailbox key. The same user cannot. MCP resolves that key inside the API key's owner.
 - One `MASTER_ENCRYPTION_KEY` encrypts every secret. There is no per-user key.
 
 You can:
@@ -129,6 +130,8 @@ On each boot the backfill:
 4. Reattaches `sessions` and old audit rows to the matching user. API key hashes and scope JSON are not rewritten.
 
 Existing `smcp_` keys keep working. After the backfill they belong to the superadmin, so a `*` scope still sees the databases and mailboxes that were moved with them. Mailboxes and databases created later by invited users stay out of those keys.
+
+The boot also replaces the old global unique constraint on `database_targets.key` and `email_accounts.key` with a unique index on `(owner_id, key)`. An invited user can reuse a key that already belongs to someone else.
 
 Confirm `ADMIN_EMAIL` in `/root/agent-mcp/.env` matches the current admin email before the first boot of this version. A mismatch does not drop data: legacy admins are still copied as superadmins, and unowned rows go to the earliest superadmin when `ADMIN_EMAIL` has no user yet.
 

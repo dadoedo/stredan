@@ -33,7 +33,7 @@ CREATE INDEX IF NOT EXISTS sessions_expires_at_idx ON sessions (expires_at);
 
 CREATE TABLE IF NOT EXISTS database_targets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  key TEXT UNIQUE NOT NULL,
+  key TEXT NOT NULL,
   name TEXT NOT NULL,
   notes TEXT,
   enabled BOOLEAN NOT NULL DEFAULT true,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS database_environments (
 
 CREATE TABLE IF NOT EXISTS email_accounts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  key TEXT UNIQUE NOT NULL,
+  key TEXT NOT NULL,
   name TEXT NOT NULL,
   address TEXT NOT NULL,
   imap_host TEXT NOT NULL,
@@ -150,6 +150,33 @@ CREATE INDEX IF NOT EXISTS vault_secrets_owner_idx ON vault_secrets (owner_id);
 CREATE INDEX IF NOT EXISTS database_targets_owner_idx ON database_targets (owner_id);
 CREATE INDEX IF NOT EXISTS email_accounts_owner_idx ON email_accounts (owner_id);
 CREATE INDEX IF NOT EXISTS api_keys_owner_idx ON api_keys (owner_id);
+
+-- Keys are unique per owner. Drop the pre-tenancy global UNIQUE (key) so two
+-- tenants can reuse a key. MCP resolves the key inside the API key's owner.
+DO $$
+DECLARE
+  constraint_name text;
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY['database_targets', 'email_accounts']
+  LOOP
+    FOR constraint_name IN
+      SELECT con.conname
+      FROM pg_constraint con
+      JOIN pg_class rel ON rel.oid = con.conrelid
+      JOIN pg_namespace nsp ON nsp.oid = rel.relnamespace
+      WHERE nsp.nspname = 'public'
+        AND rel.relname = table_name
+        AND con.contype = 'u'
+        AND pg_get_constraintdef(con.oid) = 'UNIQUE (key)'
+    LOOP
+      EXECUTE format('ALTER TABLE %I DROP CONSTRAINT %I', table_name, constraint_name);
+    END LOOP;
+  END LOOP;
+END $$;
+
+CREATE UNIQUE INDEX IF NOT EXISTS database_targets_owner_key_idx ON database_targets (owner_id, key);
+CREATE UNIQUE INDEX IF NOT EXISTS email_accounts_owner_key_idx ON email_accounts (owner_id, key);
 
 ALTER TABLE audit_log ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES users (id) ON DELETE SET NULL;
 ALTER TABLE audit_log ADD COLUMN IF NOT EXISTS api_key_id UUID REFERENCES api_keys (id) ON DELETE SET NULL;

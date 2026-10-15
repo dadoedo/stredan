@@ -221,6 +221,40 @@ test("multi-user tenancy", async (t) => {
       assert.deepEqual([...config.databases.keys()], ["legacy-db"]);
       const emailConfig = await loadEmailConfig(lookedUp);
       assert.equal(emailConfig.accounts.get("legacy-box")?.password, "legacy-mailbox-secret");
+
+      await sql.unsafe(`
+        DROP INDEX IF EXISTS database_targets_owner_key_idx;
+        DROP INDEX IF EXISTS email_accounts_owner_key_idx;
+        ALTER TABLE database_targets ADD CONSTRAINT database_targets_key_key UNIQUE (key);
+        ALTER TABLE email_accounts ADD CONSTRAINT email_accounts_key_key UNIQUE (key);
+      `);
+      await migrate();
+
+      const leftover = await sql<{ n: number }[]>`
+        SELECT count(*)::int AS n
+        FROM pg_constraint con
+        JOIN pg_class rel ON rel.oid = con.conrelid
+        JOIN pg_namespace nsp ON nsp.oid = rel.relnamespace
+        WHERE nsp.nspname = 'public'
+          AND rel.relname IN ('database_targets', 'email_accounts')
+          AND con.contype = 'u'
+          AND pg_get_constraintdef(con.oid) = 'UNIQUE (key)'
+      `;
+      assert.equal(leftover[0].n, 0);
+      const indexes = await sql<{ indexname: string; indexdef: string }[]>`
+        SELECT indexname, indexdef FROM pg_indexes
+        WHERE schemaname = 'public'
+          AND indexname IN ('database_targets_owner_key_idx', 'email_accounts_owner_key_idx')
+        ORDER BY indexname
+      `;
+      assert.deepEqual(
+        indexes.map((row) => row.indexname),
+        ["database_targets_owner_key_idx", "email_accounts_owner_key_idx"]
+      );
+      assert.ok(indexes.every((row) => row.indexdef.includes("UNIQUE")));
+      const afterMigrate = await lookupApiKey(legacyKey);
+      assert.equal(afterMigrate?.ownerId, adminId);
+      assert.deepEqual([...(await loadPostgresConfig(afterMigrate!)).databases.keys()], ["legacy-db"]);
     });
 
     await t.test("dashboard and MCP deny cross-tenant access", async () => {
@@ -418,6 +452,102 @@ test("multi-user tenancy", async (t) => {
       const alphaMailConfig = await loadEmailConfig(alphaApiKey!);
       assert.deepEqual([...alphaMailConfig.accounts.keys()], ["alpha-box"]);
       assert.equal(alphaMailConfig.accounts.get("alpha-box")?.password, "alpha-mailbox-secret");
+
+      const sharedAlphaDb = await authed(alphaToken, "/databases", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          key: "shared-db",
+          name: "Shared Alpha",
+          env_name: "default",
+          permissions: "readonly",
+          connection_url: "postgres://alpha:alpha@127.0.0.1:1/shared-alpha",
+          ssl: "on",
+        }),
+      });
+      assert.equal(sharedAlphaDb.status, 302);
+      const sharedBravoDb = await authed(bravoToken, "/databases", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          key: "shared-db",
+          name: "Shared Bravo",
+          env_name: "default",
+          permissions: "readonly",
+          connection_url: "postgres://bravo:bravo@127.0.0.1:1/shared-bravo",
+          ssl: "on",
+        }),
+      });
+      assert.equal(sharedBravoDb.status, 302);
+      const sharedDbRows = await sql<{ owner_id: string }[]>`
+        SELECT owner_id FROM database_targets WHERE key = 'shared-db'
+      `;
+      assert.equal(sharedDbRows.length, 2);
+      const duplicateDb = await authed(alphaToken, "/databases", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          key: "shared-db",
+          name: "Shared Alpha Again",
+          env_name: "default",
+          permissions: "readonly",
+          connection_url: "postgres://alpha:alpha@127.0.0.1:1/shared-alpha-2",
+          ssl: "on",
+        }),
+      });
+      assert.equal(duplicateDb.status, 400);
+      assert.match(await duplicateDb.text(), /already in use/);
+
+      await addMailbox(alphaToken, "shared-box", "alpha-shared-secret");
+      await addMailbox(bravoToken, "shared-box", "bravo-shared-secret");
+      const sharedBoxRows = await sql<{ owner_id: string }[]>`
+        SELECT owner_id FROM email_accounts WHERE key = 'shared-box'
+      `;
+      assert.equal(sharedBoxRows.length, 2);
+      const duplicateBox = await authed(alphaToken, "/email", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          key: "shared-box",
+          name: "shared-box-again",
+          address: "shared-box-again@example.com",
+          imap_host: "imap.example.com",
+          imap_port: "993",
+          smtp_host: "smtp.example.com",
+          smtp_port: "465",
+          password: "alpha-shared-secret-2",
+          permissions: "readwrite",
+          imap_secure: "on",
+          smtp_secure: "on",
+          append_to_sent: "on",
+          sent_folder: "Sent",
+        }),
+      });
+      assert.equal(duplicateBox.status, 400);
+      assert.match(await duplicateBox.text(), /already in use/);
+
+      const bravoOwn = await authed(bravoToken, "/keys", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ label: "bravo-key", all_db: "on", all_email: "on" }),
+      });
+      const bravoCreated = new URL(bravoOwn.headers.get("location") ?? "", base).searchParams.get("created");
+      assert.ok(bravoCreated?.startsWith("smcp_"));
+      const bravoApiKey = await lookupApiKey(bravoCreated!);
+      const alphaShared = await loadPostgresConfig(alphaApiKey!);
+      const bravoShared = await loadPostgresConfig(bravoApiKey!);
+      assert.equal(
+        alphaShared.databases.get("shared-db")?.environments.get("default")?.connectionUrl,
+        "postgres://alpha:alpha@127.0.0.1:1/shared-alpha"
+      );
+      assert.equal(
+        bravoShared.databases.get("shared-db")?.environments.get("default")?.connectionUrl,
+        "postgres://bravo:bravo@127.0.0.1:1/shared-bravo"
+      );
+      assert.equal((await loadEmailConfig(alphaApiKey!)).accounts.get("shared-box")?.password, "alpha-shared-secret");
+      assert.equal((await loadEmailConfig(bravoApiKey!)).accounts.get("shared-box")?.password, "bravo-shared-secret");
+      assert.match(await (await authed(superToken, "/databases")).text(), /shared-db/);
+      assert.match(await (await authed(superToken, "/email")).text(), /shared-box@example.com/);
 
       const legacy = await lookupApiKey(legacyKey);
       const legacyConfig = await loadPostgresConfig(legacy!);
