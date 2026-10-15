@@ -1,4 +1,7 @@
--- Platform metadata for Stredan Agent MCP (idempotent).
+-- Platform metadata for Stredan Agent MCP.
+-- Applied on every boot; every statement must stay idempotent.
+-- Tenancy (users, owner_id) is appended after the original tables so existing
+-- databases migrate in place. Data backfill runs in src/db/migrate.ts.
 
 CREATE TABLE IF NOT EXISTS vault_secrets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -106,3 +109,53 @@ CREATE TABLE IF NOT EXISTS audit_log (
 );
 
 CREATE INDEX IF NOT EXISTS audit_log_created_at_idx ON audit_log (created_at DESC);
+
+-- Multi-user tenancy. users replaces admins as the login principal.
+-- Existing admins rows are copied forward by migrate.ts; admins is left in place
+-- so this script can still boot databases created before tenancy.
+
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('superadmin', 'user')),
+  totp_secret_id UUID REFERENCES vault_secrets (id),
+  totp_enabled BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS user_invites (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT NOT NULL,
+  token_hash TEXT UNIQUE NOT NULL,
+  role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('superadmin', 'user')),
+  invited_by UUID REFERENCES users (id) ON DELETE SET NULL,
+  expires_at TIMESTAMPTZ NOT NULL,
+  accepted_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS user_invites_email_idx ON user_invites (email);
+
+ALTER TABLE sessions ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES users (id) ON DELETE CASCADE;
+ALTER TABLE sessions ALTER COLUMN admin_id DROP NOT NULL;
+CREATE INDEX IF NOT EXISTS sessions_user_id_idx ON sessions (user_id);
+
+ALTER TABLE vault_secrets ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES users (id);
+ALTER TABLE database_targets ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES users (id);
+ALTER TABLE email_accounts ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES users (id);
+ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES users (id);
+
+CREATE INDEX IF NOT EXISTS vault_secrets_owner_idx ON vault_secrets (owner_id);
+CREATE INDEX IF NOT EXISTS database_targets_owner_idx ON database_targets (owner_id);
+CREATE INDEX IF NOT EXISTS email_accounts_owner_idx ON email_accounts (owner_id);
+CREATE INDEX IF NOT EXISTS api_keys_owner_idx ON api_keys (owner_id);
+
+ALTER TABLE audit_log ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES users (id) ON DELETE SET NULL;
+ALTER TABLE audit_log ADD COLUMN IF NOT EXISTS api_key_id UUID REFERENCES api_keys (id) ON DELETE SET NULL;
+ALTER TABLE audit_log ADD COLUMN IF NOT EXISTS success BOOLEAN;
+ALTER TABLE audit_log ADD COLUMN IF NOT EXISTS tool TEXT;
+ALTER TABLE audit_log ADD COLUMN IF NOT EXISTS target TEXT;
+
+CREATE INDEX IF NOT EXISTS audit_log_user_id_idx ON audit_log (user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS audit_log_api_key_id_idx ON audit_log (api_key_id, created_at DESC);

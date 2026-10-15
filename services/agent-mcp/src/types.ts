@@ -38,8 +38,11 @@ export interface EmailConfig {
   accounts: Map<string, ResolvedAccount>;
 }
 
+export type UserRole = "superadmin" | "user";
+
 export interface ApiKeyRecord {
   id: string;
+  ownerId: string;
   label: string;
   prefix: string;
   readonly: boolean;
@@ -47,10 +50,11 @@ export interface ApiKeyRecord {
   emailIds: string[] | "*";
 }
 
-export interface AdminSession {
+export interface UserSession {
   id: string;
-  adminId: string;
+  userId: string;
   email: string;
+  role: UserRole;
   pendingTotp: boolean;
   totpEnabled: boolean;
 }

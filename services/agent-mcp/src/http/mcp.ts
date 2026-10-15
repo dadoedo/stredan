@@ -1,7 +1,9 @@
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import type { Request, Response } from "express";
+import { audit } from "../audit.js";
 import { extractBearer, lookupApiKey } from "../auth/api-keys.js";
 import { createEmailMcp } from "../email/mcp.js";
+import type { ToolAudit } from "../mcp-audit.js";
 import { createPostgresMcp } from "../postgres/mcp.js";
 import { loadEmailConfig, loadPostgresConfig } from "../targets.js";
 
@@ -36,10 +38,21 @@ export async function handleMcpRequest(kind: "postgres" | "email", req: Request,
 
   res.setHeader("Access-Control-Allow-Origin", "*");
 
+  const toolAudit: ToolAudit = {
+    async record({ tool, target, success }) {
+      await audit(apiKey.ownerId, "mcp.tool", "api_key", apiKey.id, { kind }, {
+        apiKeyId: apiKey.id,
+        success,
+        tool,
+        target,
+      });
+    },
+  };
+
   const server =
     kind === "postgres"
-      ? createPostgresMcp(await loadPostgresConfig(apiKey))
-      : createEmailMcp(await loadEmailConfig(apiKey));
+      ? createPostgresMcp(await loadPostgresConfig(apiKey), toolAudit)
+      : createEmailMcp(await loadEmailConfig(apiKey), toolAudit);
 
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: undefined,

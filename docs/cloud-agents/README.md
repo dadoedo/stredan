@@ -8,7 +8,7 @@ Canonical docs for **Cursor Cloud Agents** across Stredan / AllDevs / Anderro / 
 |-----|----------------|
 | [environments.md](./environments.md) | Dashboard vs `.cursor/environment.json`, Install vs Start, how to edit, secrets |
 | [ssh.md](./ssh.md) | `stredan-cursor-agent` identity, host inventory, add/rotate keys, per-repo snippets |
-| [mcp.md](./mcp.md) | Remote Postgres + Email MCP URLs, dashboard, API keys, how agents should use them |
+| [mcp.md](./mcp.md) | Remote Postgres + Email MCP URLs, dashboard, API keys, tenancy, how agents should use them |
 | [../infrastructure.md](../infrastructure.md) | Marketing `stredan.sk` on **alldevs-hetzner** (separate from MCP host) |
 | [../../services/agent-mcp/README.md](../../services/agent-mcp/README.md) | Agent MCP platform deep dive (deploy, tools, vault) |
 
@@ -42,6 +42,15 @@ Canonical docs for **Cursor Cloud Agents** across Stredan / AllDevs / Anderro / 
 | Pozicto prod | `pozicto-prod` |
 | OffStudio / Stredan marketing / AllBook style stacks | `alldevs-hetzner` |
 | ClientUp | **out of scope** for agent SSH |
+
+## MCP dashboard accounts
+
+Setup and the boot-time migration are in [`services/agent-mcp/README.md`](../../services/agent-mcp/README.md). Short version:
+
+- `ADMIN_EMAIL` is the superadmin. On the first boot after tenancy ships, that user owns every existing mailbox, database, API key, and vault secret. Existing `smcp_` keys are not regenerated.
+- Superadmin invites other people from the dashboard. The one-time link is where they set a password and enroll TOTP.
+- Each user only sees their own targets. A key cannot point at another user's database or mailbox. `*` means "everything this key's owner owns".
+- Secrets stay under the single `MASTER_ENCRYPTION_KEY`.
 
 ## Default preferences for agents
 

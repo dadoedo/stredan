@@ -3,8 +3,10 @@ import type { NextFunction, Request, Response, Router } from "express";
 import { Router as createRouter } from "express";
 import { sql } from "../db/client.js";
 import { audit } from "../audit.js";
+import { foreignScopeIds, isSuperadmin } from "../auth/access.js";
 import { createApiKey, revokeApiKey } from "../auth/api-keys.js";
-import { verifyPassword } from "../auth/passwords.js";
+import { acceptInvite, createInvite, inviteUrl, peekInvite } from "../auth/invites.js";
+import { hashPassword, passwordIssues, verifyPassword } from "../auth/passwords.js";
 import { loginAllowed, recordLoginAttempt, remainingLoginAttempts } from "../auth/rate-limit.js";
 import {
   clearSessionCookie,
@@ -15,15 +17,15 @@ import {
   readSessionCookie,
   setSessionCookie,
 } from "../auth/sessions.js";
-import { generateTotpSecret, loadAdminTotpSecret, storeAdminTotpSecret, totpQrDataUrl, verifyTotp } from "../auth/totp.js";
+import { generateTotpSecret, loadUserTotpSecret, storeUserTotpSecret, totpQrDataUrl, verifyTotp } from "../auth/totp.js";
 import { esc, flashHtml, layout } from "./html.js";
-import { buildConnectionUrl, replaceSecret, secretHint, testPostgresConnection } from "../targets.js";
-import type { AdminSession, ApiKeyScope, Permissions } from "../types.js";
+import { buildConnectionUrl, readSecret, replaceSecret, secretHint, testPostgresConnection } from "../targets.js";
+import type { ApiKeyScope, Permissions, UserSession } from "../types.js";
 
 declare global {
   namespace Express {
     interface Request {
-      adminSession?: AdminSession;
+      userSession?: UserSession;
     }
   }
 }
@@ -51,6 +53,28 @@ function idParam(req: Request): string {
   return id;
 }
 
+function tokenParam(req: Request): string {
+  const value = req.params.token;
+  const token = Array.isArray(value) ? value[0] : value;
+  return typeof token === "string" ? token : "";
+}
+
+function idList(value: unknown): string[] {
+  const raw = Array.isArray(value) ? value : value == null || value === "" ? [] : [value];
+  return raw.map((item) => String(item));
+}
+
+function messageOf(error: unknown): string {
+  if (typeof error === "object" && error && "code" in error && (error as { code?: string }).code === "23505") {
+    return "That key is already in use";
+  }
+  return error instanceof Error ? error.message : String(error);
+}
+
+function visible(session: UserSession) {
+  return { all: isSuperadmin(session), userId: session.userId };
+}
+
 async function requireSession(req: Request, res: Response, next: NextFunction): Promise<void> {
   const token = readSessionCookie(req);
   if (!token) {
@@ -63,9 +87,17 @@ async function requireSession(req: Request, res: Response, next: NextFunction): 
     res.redirect("/login");
     return;
   }
-  req.adminSession = session;
+  req.userSession = session;
   if (session.pendingTotp && !req.path.startsWith("/login") && req.path !== "/logout" && req.path !== "/enroll-totp") {
     res.redirect(session.totpEnabled ? "/login/totp" : "/enroll-totp");
+    return;
+  }
+  next();
+}
+
+function requireSuperadmin(req: Request, res: Response, next: NextFunction): void {
+  if (req.userSession?.role !== "superadmin") {
+    res.status(403).type("text").send("Forbidden");
     return;
   }
   next();
@@ -75,7 +107,7 @@ export function dashboardRouter(): Router {
   const router = createRouter();
 
   router.get("/login", (req, res) => {
-    if (req.adminSession && !req.adminSession.pendingTotp) {
+    if (req.userSession && !req.userSession.pendingTotp) {
       res.redirect("/databases");
       return;
     }
@@ -85,7 +117,7 @@ export function dashboardRouter(): Router {
         body: `
           <div class="login">
             <h1>Sign in</h1>
-            <p class="lede">Password, then authenticator app. Single operator.</p>
+            <p class="lede">Password, then authenticator app.</p>
             ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
             <form class="card" method="post" action="/login">
               <label for="email">Email</label>
@@ -114,7 +146,7 @@ export function dashboardRouter(): Router {
     const email = String(req.body.email ?? "").trim().toLowerCase();
     const password = String(req.body.password ?? "");
     const rows = await sql<{ id: string; email: string; password_hash: string; totp_enabled: boolean }[]>`
-      SELECT id, email, password_hash, totp_enabled FROM admins WHERE email = ${email}
+      SELECT id, email, password_hash, totp_enabled FROM users WHERE email = ${email}
     `;
     const admin = rows[0];
     if (!admin || !(await verifyPassword(password, admin.password_hash))) {
@@ -123,7 +155,7 @@ export function dashboardRouter(): Router {
     }
     const token = await createSession(admin.id, true);
     setSessionCookie(res, token, true);
-    await audit(admin.id, "login.password");
+    await audit(admin.id, "login.password", "user", admin.id);
     res.redirect(admin.totp_enabled ? "/login/totp" : "/enroll-totp");
   });
 
@@ -131,7 +163,7 @@ export function dashboardRouter(): Router {
     res.type("html").send(
       layout({
         title: "Authenticator",
-        session: req.adminSession,
+        session: req.userSession,
         body: `
           <div class="login">
             <h1>Authenticator</h1>
@@ -148,27 +180,27 @@ export function dashboardRouter(): Router {
   });
 
   router.post("/login/totp", requireSession, async (req, res) => {
-    const session = req.adminSession!;
-    const secret = await loadAdminTotpSecret(session.adminId);
+    const session = req.userSession!;
+    const secret = await loadUserTotpSecret(session.userId);
     const code = String(req.body.code ?? "");
     if (!secret || !verifyTotp(secret, code)) {
       res.redirect(`/login/totp?error=${encodeURIComponent("Invalid authenticator code.")}`);
       return;
     }
     await promoteSession(session.id);
-    await audit(session.adminId, "login.totp");
+    await audit(session.userId, "login.totp", "user", session.userId);
     const token = readSessionCookie(req);
     if (token) setSessionCookie(res, token, false);
     res.redirect("/databases");
   });
 
   router.get("/enroll-totp", requireSession, async (req, res) => {
-    const session = req.adminSession!;
+    const session = req.userSession!;
     if (session.totpEnabled) {
       res.redirect("/login/totp");
       return;
     }
-    const generated = generateTotpSecret();
+    const generated = generateTotpSecret(session.email);
     res.cookie("agent_mcp_totp_tmp", generated.base32, {
       httpOnly: true,
       sameSite: "lax",
@@ -201,16 +233,16 @@ export function dashboardRouter(): Router {
   });
 
   router.post("/enroll-totp", requireSession, async (req, res) => {
-    const session = req.adminSession!;
+    const session = req.userSession!;
     const pending = String(req.cookies?.agent_mcp_totp_tmp ?? "");
     const code = String(req.body.code ?? "");
     if (!pending || !verifyTotp(pending, code)) {
       res.redirect("/enroll-totp");
       return;
     }
-    await storeAdminTotpSecret(session.adminId, pending);
+    await storeUserTotpSecret(session.userId, pending);
     await promoteSession(session.id);
-    await audit(session.adminId, "totp.enrolled");
+    await audit(session.userId, "totp.enrolled", "user", session.userId);
     res.clearCookie("agent_mcp_totp_tmp", { path: "/" });
     const token = readSessionCookie(req);
     if (token) setSessionCookie(res, token, false);
@@ -227,17 +259,22 @@ export function dashboardRouter(): Router {
   router.get("/", requireSession, (_req, res) => res.redirect("/databases"));
 
   router.get("/databases", requireSession, async (req, res) => {
+    const session = req.userSession!;
+    const scope = visible(session);
     const dbs = await sql<{
       id: string;
       key: string;
       name: string;
       enabled: boolean;
       env_count: number;
+      owner_email: string | null;
     }[]>`
-      SELECT t.id, t.key, t.name, t.enabled, count(e.id)::int AS env_count
+      SELECT t.id, t.key, t.name, t.enabled, count(e.id)::int AS env_count, u.email AS owner_email
       FROM database_targets t
       LEFT JOIN database_environments e ON e.database_id = t.id
-      GROUP BY t.id
+      LEFT JOIN users u ON u.id = t.owner_id
+      WHERE (${scope.all} OR t.owner_id = ${scope.userId})
+      GROUP BY t.id, u.email
       ORDER BY t.key
     `;
     const rows = dbs
@@ -246,24 +283,26 @@ export function dashboardRouter(): Router {
           <td><a href="/databases/${db.id}">${esc(db.key)}</a></td>
           <td>${esc(db.name)}</td>
           <td>${db.env_count}</td>
+          ${scope.all ? `<td class="muted">${esc(db.owner_email)}</td>` : ""}
           <td>${db.enabled ? '<span class="badge ok">on</span>' : '<span class="badge">off</span>'}</td>
         </tr>`
       )
       .join("");
+    const cols = scope.all ? 5 : 4;
     res.type("html").send(
       layout({
         title: "Databases",
-        session: req.adminSession,
+        session,
         active: "databases",
         body: `
           <h1>Postgres targets</h1>
-          <p class="lede">Connection secrets are encrypted at rest. After save, only a last-4 hint is shown.</p>
+          <p class="lede">Connection secrets are encrypted at rest with the platform key. After save, only a last-4 hint is shown. You only see databases you own${scope.all ? ", except as superadmin you see every tenant" : ""}.</p>
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
           <p><a class="btn" href="/databases/new">Add database</a></p>
           <div class="card" style="padding:0 8px">
             <table>
-              <thead><tr><th>Key</th><th>Name</th><th>Envs</th><th>Status</th></tr></thead>
-              <tbody>${rows || '<tr><td colspan="4" class="muted">None yet.</td></tr>'}</tbody>
+              <thead><tr><th>Key</th><th>Name</th><th>Envs</th>${scope.all ? "<th>Owner</th>" : ""}<th>Status</th></tr></thead>
+              <tbody>${rows || `<tr><td colspan="${cols}" class="muted">None yet.</td></tr>`}</tbody>
             </table>
           </div>`,
       })
@@ -274,7 +313,7 @@ export function dashboardRouter(): Router {
     res.type("html").send(
       layout({
         title: "Add database",
-        session: req.adminSession,
+        session: req.userSession,
         active: "databases",
         body: databaseForm({}),
       })
@@ -284,22 +323,22 @@ export function dashboardRouter(): Router {
   router.post("/databases", requireSession, async (req, res) => {
     try {
       const saved = await upsertDatabase(req, null);
-      await audit(req.adminSession!.adminId, "database.create", "database", saved.id, { key: saved.key });
+      await audit(req.userSession!.userId, "database.create", "database", saved.id, { key: saved.key });
       res.redirect(`/databases/${saved.id}?ok=${encodeURIComponent("Saved.")}`);
     } catch (error) {
       res.status(400).type("html").send(
         layout({
           title: "Add database",
-          session: req.adminSession,
+          session: req.userSession,
           active: "databases",
-          body: flashHtml("error", error instanceof Error ? error.message : String(error)) + databaseForm(req.body),
+          body: flashHtml("error", messageOf(error)) + databaseForm(req.body),
         })
       );
     }
   });
 
   router.get("/databases/:id", requireSession, async (req, res) => {
-    const db = await loadDatabase(idParam(req));
+    const db = await loadDatabase(idParam(req), req.userSession!);
     if (!db) {
       res.status(404).send("Not found");
       return;
@@ -307,7 +346,7 @@ export function dashboardRouter(): Router {
     res.type("html").send(
       layout({
         title: db.key,
-        session: req.adminSession,
+        session: req.userSession,
         active: "databases",
         body: `
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
@@ -325,35 +364,49 @@ export function dashboardRouter(): Router {
   });
 
   router.post("/databases/:id", requireSession, async (req, res) => {
+    const existing = await loadDatabase(idParam(req), req.userSession!);
+    if (!existing) {
+      res.status(404).type("text").send("Not found");
+      return;
+    }
     try {
       const saved = await upsertDatabase(req, idParam(req));
-      await audit(req.adminSession!.adminId, "database.update", "database", saved.id);
+      await audit(req.userSession!.userId, "database.update", "database", saved.id);
       res.redirect(`/databases/${saved.id}?ok=${encodeURIComponent("Updated.")}`);
     } catch (error) {
-      res.redirect(`/databases/${idParam(req)}?error=${encodeURIComponent(error instanceof Error ? error.message : String(error))}`);
+      res.redirect(`/databases/${idParam(req)}?error=${encodeURIComponent(messageOf(error))}`);
     }
   });
 
   router.post("/databases/:id/toggle", requireSession, async (req, res) => {
-    await sql`UPDATE database_targets SET enabled = NOT enabled, updated_at = now() WHERE id = ${idParam(req)}`;
-    await audit(req.adminSession!.adminId, "database.toggle", "database", idParam(req));
+    const session = req.userSession!;
+    const scope = visible(session);
+    const updated = await sql`
+      UPDATE database_targets SET enabled = NOT enabled, updated_at = now()
+      WHERE id = ${idParam(req)} AND (${scope.all} OR owner_id = ${scope.userId})
+    `;
+    if (updated.count === 0) {
+      res.status(404).type("text").send("Not found");
+      return;
+    }
+    await audit(session.userId, "database.toggle", "database", idParam(req));
     res.redirect(`/databases/${idParam(req)}?ok=${encodeURIComponent("Status updated.")}`);
   });
 
   router.post("/databases/:id/test", requireSession, async (req, res) => {
-    const envRows = await sql<{ connection_url_secret_id: string | null }[]>`
-      SELECT connection_url_secret_id FROM database_environments
-      WHERE database_id = ${idParam(req)}
-      ORDER BY name LIMIT 1
-    `;
-    const secretId = envRows[0]?.connection_url_secret_id;
-    if (!secretId) {
+    const session = req.userSession!;
+    const db = await loadDatabase(idParam(req), session);
+    if (!db) {
+      res.status(404).type("text").send("Not found");
+      return;
+    }
+    if (!db.connection_url_secret_id || !db.owner_id) {
       res.redirect(`/databases/${idParam(req)}?error=${encodeURIComponent("No connection stored yet.")}`);
       return;
     }
-    const { readSecret } = await import("../targets.js");
-    const url = await readSecret(secretId);
+    const url = await readSecret(db.connection_url_secret_id, db.owner_id);
     const result = await testPostgresConnection(url);
+    await audit(session.userId, "database.test", "database", db.id, { ok: result.ok });
     if (result.ok) {
       res.redirect(`/databases/${idParam(req)}?ok=${encodeURIComponent("Connection succeeded.")}`);
     } else {
@@ -362,6 +415,8 @@ export function dashboardRouter(): Router {
   });
 
   router.get("/email", requireSession, async (req, res) => {
+    const session = req.userSession!;
+    const scope = visible(session);
     const accounts = await sql<{
       id: string;
       key: string;
@@ -369,14 +424,20 @@ export function dashboardRouter(): Router {
       address: string;
       permissions: string;
       enabled: boolean;
+      owner_email: string | null;
     }[]>`
-      SELECT id, key, name, address, permissions, enabled FROM email_accounts ORDER BY key
+      SELECT e.id, e.key, e.name, e.address, e.permissions, e.enabled, u.email AS owner_email
+      FROM email_accounts e
+      LEFT JOIN users u ON u.id = e.owner_id
+      WHERE (${scope.all} OR e.owner_id = ${scope.userId})
+      ORDER BY e.key
     `;
     const rows = accounts
       .map(
         (a) => `<tr>
           <td><a href="/email/${a.id}">${esc(a.key)}</a></td>
           <td>${esc(a.address)}</td>
+          ${scope.all ? `<td class="muted">${esc(a.owner_email)}</td>` : ""}
           <td><span class="badge">${esc(a.permissions)}</span></td>
           <td>${a.enabled ? '<span class="badge ok">on</span>' : '<span class="badge">off</span>'}</td>
         </tr>`
@@ -385,7 +446,7 @@ export function dashboardRouter(): Router {
     res.type("html").send(
       layout({
         title: "Email",
-        session: req.adminSession,
+        session: req.userSession,
         active: "email",
         body: `
           <h1>Mailboxes</h1>
@@ -394,8 +455,8 @@ export function dashboardRouter(): Router {
           <p><a class="btn" href="/email/new">Add mailbox</a></p>
           <div class="card" style="padding:0 8px">
             <table>
-              <thead><tr><th>Key</th><th>Address</th><th>Perms</th><th>Status</th></tr></thead>
-              <tbody>${rows || '<tr><td colspan="4" class="muted">None yet.</td></tr>'}</tbody>
+              <thead><tr><th>Key</th><th>Address</th>${scope.all ? "<th>Owner</th>" : ""}<th>Perms</th><th>Status</th></tr></thead>
+              <tbody>${rows || `<tr><td colspan="${scope.all ? 5 : 4}" class="muted">None yet.</td></tr>`}</tbody>
             </table>
           </div>`,
       })
@@ -403,28 +464,28 @@ export function dashboardRouter(): Router {
   });
 
   router.get("/email/new", requireSession, (req, res) => {
-    res.type("html").send(layout({ title: "Add mailbox", session: req.adminSession, active: "email", body: emailForm({}) }));
+    res.type("html").send(layout({ title: "Add mailbox", session: req.userSession, active: "email", body: emailForm({}) }));
   });
 
   router.post("/email", requireSession, async (req, res) => {
     try {
       const saved = await upsertEmail(req, null);
-      await audit(req.adminSession!.adminId, "email.create", "email", saved.id, { key: saved.key });
+      await audit(req.userSession!.userId, "email.create", "email", saved.id, { key: saved.key });
       res.redirect(`/email/${saved.id}?ok=${encodeURIComponent("Saved.")}`);
     } catch (error) {
       res.status(400).type("html").send(
         layout({
           title: "Add mailbox",
-          session: req.adminSession,
+          session: req.userSession,
           active: "email",
-          body: flashHtml("error", error instanceof Error ? error.message : String(error)) + emailForm(req.body),
+          body: flashHtml("error", messageOf(error)) + emailForm(req.body),
         })
       );
     }
   });
 
   router.get("/email/:id", requireSession, async (req, res) => {
-    const account = await loadEmail(idParam(req));
+    const account = await loadEmail(idParam(req), req.userSession!);
     if (!account) {
       res.status(404).send("Not found");
       return;
@@ -432,7 +493,7 @@ export function dashboardRouter(): Router {
     res.type("html").send(
       layout({
         title: account.key,
-        session: req.adminSession,
+        session: req.userSession,
         active: "email",
         body: `
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
@@ -448,29 +509,47 @@ export function dashboardRouter(): Router {
   });
 
   router.post("/email/:id", requireSession, async (req, res) => {
+    const existing = await loadEmail(idParam(req), req.userSession!);
+    if (!existing) {
+      res.status(404).type("text").send("Not found");
+      return;
+    }
     try {
       const saved = await upsertEmail(req, idParam(req));
-      await audit(req.adminSession!.adminId, "email.update", "email", saved.id);
+      await audit(req.userSession!.userId, "email.update", "email", saved.id);
       res.redirect(`/email/${saved.id}?ok=${encodeURIComponent("Updated.")}`);
     } catch (error) {
-      res.redirect(`/email/${idParam(req)}?error=${encodeURIComponent(error instanceof Error ? error.message : String(error))}`);
+      res.redirect(`/email/${idParam(req)}?error=${encodeURIComponent(messageOf(error))}`);
     }
   });
 
   router.post("/email/:id/toggle", requireSession, async (req, res) => {
-    await sql`UPDATE email_accounts SET enabled = NOT enabled, updated_at = now() WHERE id = ${idParam(req)}`;
-    await audit(req.adminSession!.adminId, "email.toggle", "email", idParam(req));
+    const session = req.userSession!;
+    const scope = visible(session);
+    const updated = await sql`
+      UPDATE email_accounts SET enabled = NOT enabled, updated_at = now()
+      WHERE id = ${idParam(req)} AND (${scope.all} OR owner_id = ${scope.userId})
+    `;
+    if (updated.count === 0) {
+      res.status(404).type("text").send("Not found");
+      return;
+    }
+    await audit(session.userId, "email.toggle", "email", idParam(req));
     res.redirect(`/email/${idParam(req)}?ok=${encodeURIComponent("Status updated.")}`);
   });
 
   router.post("/email/:id/test", requireSession, async (req, res) => {
-    const account = await loadEmail(idParam(req));
-    if (!account?.password_secret_id) {
+    const session = req.userSession!;
+    const account = await loadEmail(idParam(req), session);
+    if (!account) {
+      res.status(404).type("text").send("Not found");
+      return;
+    }
+    if (!account.password_secret_id || !account.owner_id) {
       res.redirect(`/email/${idParam(req)}?error=${encodeURIComponent("No password stored.")}`);
       return;
     }
-    const { readSecret } = await import("../targets.js");
-    const password = await readSecret(account.password_secret_id);
+    const password = await readSecret(account.password_secret_id, account.owner_id);
     try {
       const client = new ImapFlow({
         host: account.imap_host,
@@ -482,13 +561,17 @@ export function dashboardRouter(): Router {
       client.on("error", () => {});
       await client.connect();
       await client.logout().catch(() => {});
+      await audit(session.userId, "email.test", "email", account.id, { ok: true });
       res.redirect(`/email/${idParam(req)}?ok=${encodeURIComponent("IMAP connection succeeded.")}`);
     } catch (error) {
+      await audit(session.userId, "email.test", "email", account.id, { ok: false });
       res.redirect(`/email/${idParam(req)}?error=${encodeURIComponent(error instanceof Error ? error.message : String(error))}`);
     }
   });
 
   router.get("/keys", requireSession, async (req, res) => {
+    const session = req.userSession!;
+    const scope = visible(session);
     const keys = await sql<{
       id: string;
       label: string;
@@ -497,17 +580,26 @@ export function dashboardRouter(): Router {
       revoked_at: Date | null;
       last_used_at: Date | null;
       created_at: Date;
+      owner_email: string | null;
     }[]>`
-      SELECT id, label, key_prefix, scopes, revoked_at, last_used_at, created_at
-      FROM api_keys ORDER BY created_at DESC
+      SELECT k.id, k.label, k.key_prefix, k.scopes, k.revoked_at, k.last_used_at, k.created_at, u.email AS owner_email
+      FROM api_keys k
+      LEFT JOIN users u ON u.id = k.owner_id
+      WHERE (${scope.all} OR k.owner_id = ${scope.userId})
+      ORDER BY k.created_at DESC
     `;
-    const dbs = await sql<{ id: string; key: string }[]>`SELECT id, key FROM database_targets ORDER BY key`;
-    const emails = await sql<{ id: string; key: string }[]>`SELECT id, key FROM email_accounts ORDER BY key`;
+    const dbs = await sql<{ id: string; key: string }[]>`
+      SELECT id, key FROM database_targets WHERE owner_id = ${session.userId} ORDER BY key
+    `;
+    const emails = await sql<{ id: string; key: string }[]>`
+      SELECT id, key FROM email_accounts WHERE owner_id = ${session.userId} ORDER BY key
+    `;
     const rows = keys
       .map((k) => {
         const scopes = (k.scopes ?? {}) as { readonly?: boolean };
         return `<tr>
           <td>${esc(k.label)}</td>
+          ${scope.all ? `<td class="muted">${esc(k.owner_email)}</td>` : ""}
           <td class="muted">${esc(k.key_prefix)}…</td>
           <td>${scopes.readonly ? '<span class="badge warn">readonly</span>' : '<span class="badge">readwrite</span>'}</td>
           <td>${k.revoked_at ? '<span class="badge danger">revoked</span>' : '<span class="badge ok">active</span>'}</td>
@@ -520,24 +612,26 @@ export function dashboardRouter(): Router {
     const emailChecks = emails
       .map((e) => `<div class="check"><input type="checkbox" name="email" value="${esc(e.id)}" /><label>${esc(e.key)}</label></div>`)
       .join("");
+    const colSpan = scope.all ? 7 : 6;
     res.type("html").send(
       layout({
         title: "API keys",
-        session: req.adminSession,
+        session,
         active: "keys",
         body: `
           <h1>API keys</h1>
-          <p class="lede">Bearer tokens for Cursor Team MCP. Hashed at rest. The plaintext is shown once.</p>
+          <p class="lede">Bearer tokens for Cursor Team MCP. Hashed at rest. The plaintext is shown once. A key can only reference databases and mailboxes you own. “All” means every resource you own, not other users'.</p>
           ${req.query.created ? flashHtml("warn", "Copy this key now. It will not be shown again.") + `<div class="secret">${esc(String(req.query.created))}</div>` : ""}
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
+          ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
           <div class="card">
             <h2>Create key</h2>
             <form method="post" action="/keys">
               <label>Label</label>
               <input name="label" required placeholder="Cursor Cloud Agents" />
               <div class="check"><input type="checkbox" name="readonly" /><label>Force readonly (even if a target is readwrite)</label></div>
-              <div class="check"><input type="checkbox" name="all_db" checked /><label>All databases</label></div>
-              <div class="check"><input type="checkbox" name="all_email" checked /><label>All mailboxes</label></div>
+              <div class="check"><input type="checkbox" name="all_db" checked /><label>All of your databases</label></div>
+              <div class="check"><input type="checkbox" name="all_email" checked /><label>All of your mailboxes</label></div>
               <p class="muted">Or pick specific targets (uncheck “all” first):</p>
               <div class="grid grid-2">
                 <div><strong>Databases</strong>${dbChecks || '<p class="muted">None</p>'}</div>
@@ -549,8 +643,8 @@ export function dashboardRouter(): Router {
           <h2>Existing</h2>
           <div class="card" style="padding:0 8px">
             <table>
-              <thead><tr><th>Label</th><th>Prefix</th><th>Mode</th><th>Status</th><th>Last used</th><th></th></tr></thead>
-              <tbody>${rows || '<tr><td colspan="6" class="muted">None yet.</td></tr>'}</tbody>
+              <thead><tr><th>Label</th>${scope.all ? "<th>Owner</th>" : ""}<th>Prefix</th><th>Mode</th><th>Status</th><th>Last used</th><th></th></tr></thead>
+              <tbody>${rows || `<tr><td colspan="${colSpan}" class="muted">None yet.</td></tr>`}</tbody>
             </table>
           </div>`,
       })
@@ -558,63 +652,250 @@ export function dashboardRouter(): Router {
   });
 
   router.post("/keys", requireSession, async (req, res) => {
+    const session = req.userSession!;
     const label = String(req.body.label ?? "").trim();
     if (!label) {
       res.redirect("/keys");
       return;
     }
     const scopes: ApiKeyScope = {
-      databases: bool(req.body.all_db) ? "*" : [].concat(req.body.db || []),
-      emails: bool(req.body.all_email) ? "*" : [].concat(req.body.email || []),
+      databases: bool(req.body.all_db) ? "*" : idList(req.body.db),
+      emails: bool(req.body.all_email) ? "*" : idList(req.body.email),
       readonly: bool(req.body.readonly),
     };
-    const created = await createApiKey(label, scopes);
-    await audit(req.adminSession!.adminId, "apikey.create", "api_key", created.id, { label });
+    try {
+      const problem = await foreignScopeIds(session.userId, scopes);
+      if (problem) {
+        res.redirect(`/keys?error=${encodeURIComponent(problem)}`);
+        return;
+      }
+    } catch {
+      res.redirect(`/keys?error=${encodeURIComponent("A key can only reference its owner's databases and mailboxes")}`);
+      return;
+    }
+    const created = await createApiKey(label, scopes, session.userId);
+    await audit(session.userId, "apikey.create", "api_key", created.id, { label });
     res.redirect(`/keys?created=${encodeURIComponent(created.plaintext)}`);
   });
 
   router.post("/keys/:id/revoke", requireSession, async (req, res) => {
+    const session = req.userSession!;
+    const scope = visible(session);
+    const rows = await sql<{ id: string }[]>`
+      SELECT id FROM api_keys
+      WHERE id = ${idParam(req)} AND (${scope.all} OR owner_id = ${scope.userId})
+    `;
+    if (!rows[0]) {
+      res.status(404).type("text").send("Not found");
+      return;
+    }
     await revokeApiKey(idParam(req));
-    await audit(req.adminSession!.adminId, "apikey.revoke", "api_key", idParam(req));
+    await audit(session.userId, "apikey.revoke", "api_key", idParam(req));
     res.redirect(`/keys?ok=${encodeURIComponent("Key revoked.")}`);
   });
 
   router.get("/audit", requireSession, async (req, res) => {
-    const rows = await sql<{ action: string; entity_type: string | null; created_at: Date; email: string | null }[]>`
-      SELECT a.action, a.entity_type, a.created_at, adm.email
+    const session = req.userSession!;
+    const scope = visible(session);
+    const rows = await sql<{
+      action: string;
+      entity_type: string | null;
+      created_at: Date;
+      email: string | null;
+      tool: string | null;
+      target: string | null;
+      success: boolean | null;
+    }[]>`
+      SELECT a.action, a.entity_type, a.created_at, u.email, a.tool, a.target, a.success
       FROM audit_log a
-      LEFT JOIN admins adm ON adm.id = a.admin_id
+      LEFT JOIN users u ON u.id = a.user_id
+      WHERE (
+        ${scope.all}
+        OR a.user_id = ${scope.userId}
+        OR a.api_key_id IN (SELECT id FROM api_keys WHERE owner_id = ${scope.userId})
+      )
       ORDER BY a.created_at DESC
-      LIMIT 100
+      LIMIT 200
     `;
     const body = rows
-      .map(
-        (r) => `<tr>
+      .map((r) => {
+        const outcome = r.success === true ? "ok" : r.success === false ? "fail" : "";
+        return `<tr>
           <td class="muted">${esc(new Date(r.created_at).toISOString())}</td>
           <td>${esc(r.email)}</td>
           <td>${esc(r.action)}</td>
+          <td class="muted">${esc(r.tool)}</td>
+          <td class="muted">${esc(r.target)}</td>
+          <td>${outcome ? `<span class="badge ${outcome === "ok" ? "ok" : "danger"}">${outcome}</span>` : ""}</td>
           <td class="muted">${esc(r.entity_type)}</td>
-        </tr>`
-      )
+        </tr>`;
+      })
       .join("");
     res.type("html").send(
       layout({
         title: "Audit",
-        session: req.adminSession,
+        session,
         active: "audit",
         body: `
           <h1>Audit log</h1>
+          <p class="lede">${scope.all ? "Every user action and API-key tool call." : "Your dashboard actions and tool calls made with your API keys."}</p>
           <div class="card" style="padding:0 8px">
             <table>
-              <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Entity</th></tr></thead>
-              <tbody>${body || '<tr><td colspan="4" class="muted">Empty.</td></tr>'}</tbody>
+              <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Tool</th><th>Target</th><th>Result</th><th>Entity</th></tr></thead>
+              <tbody>${body || '<tr><td colspan="7" class="muted">Empty.</td></tr>'}</tbody>
             </table>
           </div>`,
       })
     );
   });
 
+  router.get("/users", requireSession, requireSuperadmin, async (req, res) => {
+    const users = await sql<{ id: string; email: string; role: string; totp_enabled: boolean; created_at: Date }[]>`
+      SELECT id, email, role, totp_enabled, created_at FROM users ORDER BY created_at
+    `;
+    const invites = await sql<{ email: string; expires_at: Date; created_at: Date }[]>`
+      SELECT email, expires_at, created_at FROM user_invites
+      WHERE accepted_at IS NULL AND expires_at > now()
+      ORDER BY created_at DESC
+    `;
+    const userRows = users
+      .map(
+        (u) => `<tr>
+          <td>${esc(u.email)}</td>
+          <td><span class="badge">${esc(u.role)}</span></td>
+          <td>${u.totp_enabled ? '<span class="badge ok">on</span>' : '<span class="badge warn">pending</span>'}</td>
+          <td class="muted">${esc(new Date(u.created_at).toISOString())}</td>
+        </tr>`
+      )
+      .join("");
+    const inviteRows = invites
+      .map(
+        (i) => `<tr>
+          <td>${esc(i.email)}</td>
+          <td class="muted">${esc(new Date(i.expires_at).toISOString())}</td>
+        </tr>`
+      )
+      .join("");
+    res.type("html").send(
+      layout({
+        title: "Users",
+        session: req.userSession,
+        active: "users",
+        body: `
+          <h1>Users</h1>
+          <p class="lede">Invite a person with a one-time link. They choose a password and enroll an authenticator. Each user only sees their own mailboxes, databases, and keys.</p>
+          ${req.query.invite ? flashHtml("warn", "Copy this invite link now. It will not be shown again.") + `<div class="secret">${esc(String(req.query.invite))}</div>` : ""}
+          ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
+          ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
+          <div class="card">
+            <h2>Invite</h2>
+            <form method="post" action="/users/invites">
+              <label>Email</label>
+              <input name="email" type="email" required placeholder="name@company.com" />
+              <div class="actions"><button type="submit">Create invite link</button></div>
+            </form>
+          </div>
+          <h2>Accounts</h2>
+          <div class="card" style="padding:0 8px">
+            <table>
+              <thead><tr><th>Email</th><th>Role</th><th>TOTP</th><th>Created</th></tr></thead>
+              <tbody>${userRows}</tbody>
+            </table>
+          </div>
+          <h2>Pending invites</h2>
+          <div class="card" style="padding:0 8px">
+            <table>
+              <thead><tr><th>Email</th><th>Expires</th></tr></thead>
+              <tbody>${inviteRows || '<tr><td colspan="2" class="muted">None.</td></tr>'}</tbody>
+            </table>
+          </div>`,
+      })
+    );
+  });
+
+  router.post("/users/invites", requireSession, requireSuperadmin, async (req, res) => {
+    const session = req.userSession!;
+    try {
+      const created = await createInvite(String(req.body.email ?? ""), session.userId);
+      await audit(session.userId, "user.invite", "user_invite", undefined, {
+        email: String(req.body.email ?? "").trim().toLowerCase(),
+      });
+      res.redirect(`/users?invite=${encodeURIComponent(inviteUrl(created.token))}`);
+    } catch (error) {
+      res.redirect(`/users?error=${encodeURIComponent(messageOf(error))}`);
+    }
+  });
+
+  router.get("/invite/:token", async (req, res) => {
+    const invite = await peekInvite(tokenParam(req));
+    if (!invite) {
+      res.status(404).type("html").send(
+        layout({
+          title: "Invite",
+          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p></div>`,
+        })
+      );
+      return;
+    }
+    res.type("html").send(layout({ title: "Accept invite", body: inviteForm(invite.email, tokenParam(req), req.query.error ? String(req.query.error) : "") }));
+  });
+
+  router.post("/invite/:token", async (req, res) => {
+    const token = tokenParam(req);
+    const invite = await peekInvite(token);
+    if (!invite) {
+      res.status(404).type("html").send(
+        layout({
+          title: "Invite",
+          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p></div>`,
+        })
+      );
+      return;
+    }
+    const password = String(req.body.password ?? "");
+    const confirm = String(req.body.confirm ?? "");
+    const issue = passwordIssues(password);
+    if (issue || password !== confirm) {
+      const message = issue ?? "Passwords do not match";
+      res.status(400).type("html").send(layout({ title: "Accept invite", body: inviteForm(invite.email, token, message) }));
+      return;
+    }
+    const accepted = await acceptInvite(token, await hashPassword(password));
+    if (!accepted) {
+      res.status(404).type("html").send(
+        layout({
+          title: "Invite",
+          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p></div>`,
+        })
+      );
+      return;
+    }
+    const existing = readSessionCookie(req);
+    if (existing) await destroySession(existing);
+    const sessionToken = await createSession(accepted.userId, true);
+    setSessionCookie(res, sessionToken, true);
+    await audit(accepted.userId, "invite.accept", "user", accepted.userId);
+    res.redirect("/enroll-totp");
+  });
+
   return router;
+}
+
+function inviteForm(email: string, token: string, error: string): string {
+  return `
+    <div class="login">
+      <h1>Join</h1>
+      <p class="lede">Set a password for ${esc(email)}, then enroll an authenticator on the next screen. This link works once.</p>
+      ${error ? flashHtml("error", error) : ""}
+      <form class="card" method="post" action="/invite/${esc(token)}">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" required minlength="12" />
+        <label for="confirm">Confirm password</label>
+        <input id="confirm" name="confirm" type="password" autocomplete="new-password" required minlength="12" />
+        <p class="muted">At least 12 characters, with a letter and a number.</p>
+        <div class="actions"><button type="submit">Continue</button></div>
+      </form>
+    </div>`;
 }
 
 function databaseForm(values: Record<string, unknown>, id?: string): string {
@@ -707,14 +988,20 @@ function emailForm(values: Record<string, unknown>, id?: string): string {
     </form>`;
 }
 
-async function loadDatabase(id: string) {
+async function loadDatabase(id: string, session: UserSession) {
+  const scope = visible(session);
   const rows = await sql<{
     id: string;
     key: string;
     name: string;
     notes: string | null;
     enabled: boolean;
-  }[]>`SELECT id, key, name, notes, enabled FROM database_targets WHERE id = ${id}`;
+    owner_id: string | null;
+  }[]>`
+    SELECT id, key, name, notes, enabled, owner_id
+    FROM database_targets
+    WHERE id = ${id} AND (${scope.all} OR owner_id = ${scope.userId})
+  `;
   const db = rows[0];
   if (!db) return null;
   const env = (
@@ -727,8 +1014,9 @@ async function loadDatabase(id: string) {
       ssl: boolean;
       permissions: string;
       secret_hint: string | null;
+      connection_url_secret_id: string | null;
     }[]>`
-      SELECT name, host, port, database_name, username, ssl, permissions, secret_hint
+      SELECT name, host, port, database_name, username, ssl, permissions, secret_hint, connection_url_secret_id
       FROM database_environments WHERE database_id = ${id} ORDER BY name LIMIT 1
     `
   )[0];
@@ -742,10 +1030,12 @@ async function loadDatabase(id: string) {
     ssl: env?.ssl,
     permissions: env?.permissions,
     secret_hint: env?.secret_hint,
+    connection_url_secret_id: env?.connection_url_secret_id ?? null,
   };
 }
 
-async function loadEmail(id: string) {
+async function loadEmail(id: string, session: UserSession) {
+  const scope = visible(session);
   const rows = await sql<{
     id: string;
     key: string;
@@ -766,11 +1056,17 @@ async function loadEmail(id: string) {
     sent_folder: string;
     notes: string | null;
     enabled: boolean;
-  }[]>`SELECT * FROM email_accounts WHERE id = ${id}`;
+    owner_id: string | null;
+  }[]>`
+    SELECT * FROM email_accounts
+    WHERE id = ${id} AND (${scope.all} OR owner_id = ${scope.userId})
+  `;
   return rows[0] ?? null;
 }
 
 async function upsertDatabase(req: Request, id: string | null): Promise<{ id: string; key: string }> {
+  const session = req.userSession!;
+  const scope = visible(session);
   const key = String(req.body.key ?? "").trim();
   const name = String(req.body.name ?? "").trim();
   if (!key || !name) throw new Error("Key and name are required");
@@ -779,19 +1075,27 @@ async function upsertDatabase(req: Request, id: string | null): Promise<{ id: st
   const connectionUrlField = String(req.body.connection_url ?? "");
 
   let targetId = id;
+  let ownerId = session.userId;
   if (!targetId) {
     const inserted = await sql<{ id: string }[]>`
-      INSERT INTO database_targets (key, name, notes)
-      VALUES (${key}, ${name}, ${String(req.body.notes ?? "") || null})
+      INSERT INTO database_targets (key, name, notes, owner_id)
+      VALUES (${key}, ${name}, ${String(req.body.notes ?? "") || null}, ${ownerId})
       RETURNING id
     `;
     targetId = inserted[0].id;
   } else {
-    await sql`
+    const existingOwner = await sql<{ owner_id: string | null }[]>`
+      SELECT owner_id FROM database_targets
+      WHERE id = ${targetId} AND (${scope.all} OR owner_id = ${scope.userId})
+    `;
+    if (!existingOwner[0]?.owner_id) throw new Error("Not found");
+    ownerId = existingOwner[0].owner_id;
+    const updated = await sql`
       UPDATE database_targets
       SET name = ${name}, notes = ${String(req.body.notes ?? "") || null}, updated_at = now()
-      WHERE id = ${targetId}
+      WHERE id = ${targetId} AND owner_id = ${ownerId}
     `;
+    if (updated.count === 0) throw new Error("Not found");
   }
 
   const existing = await sql<{ id: string; connection_url_secret_id: string | null }[]>`
@@ -816,7 +1120,7 @@ async function upsertDatabase(req: Request, id: string | null): Promise<{ id: st
   let secretId = existing[0]?.connection_url_secret_id ?? null;
   let hint = existing.length ? (await sql<{ secret_hint: string | null }[]>`SELECT secret_hint FROM database_environments WHERE id = ${existing[0].id}`)[0]?.secret_hint : null;
   if (url) {
-    secretId = await replaceSecret(secretId, url);
+    secretId = await replaceSecret(secretId, url, ownerId);
     hint = secretHint(url);
   }
   if (!secretId) throw new Error("A connection URL or host credentials are required");
@@ -855,6 +1159,8 @@ async function upsertDatabase(req: Request, id: string | null): Promise<{ id: st
 }
 
 async function upsertEmail(req: Request, id: string | null): Promise<{ id: string; key: string }> {
+  const session = req.userSession!;
+  const scope = visible(session);
   const key = String(req.body.key ?? "").trim();
   const name = String(req.body.name ?? "").trim();
   const address = String(req.body.address ?? "").trim();
@@ -863,15 +1169,19 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
 
   let secretId: string | null = null;
   let hint: string | null = null;
+  let ownerId = session.userId;
   if (id) {
-    const existing = await sql<{ password_secret_id: string | null; secret_hint: string | null }[]>`
-      SELECT password_secret_id, secret_hint FROM email_accounts WHERE id = ${id}
+    const existing = await sql<{ password_secret_id: string | null; secret_hint: string | null; owner_id: string | null }[]>`
+      SELECT password_secret_id, secret_hint, owner_id FROM email_accounts
+      WHERE id = ${id} AND (${scope.all} OR owner_id = ${scope.userId})
     `;
-    secretId = existing[0]?.password_secret_id ?? null;
-    hint = existing[0]?.secret_hint ?? null;
+    if (!existing[0]?.owner_id) throw new Error("Not found");
+    secretId = existing[0].password_secret_id;
+    hint = existing[0].secret_hint;
+    ownerId = existing[0].owner_id;
   }
   if (password) {
-    secretId = await replaceSecret(secretId, password);
+    secretId = await replaceSecret(secretId, password, ownerId);
     hint = secretHint(password);
   }
   if (!secretId) throw new Error("Password is required");
@@ -899,19 +1209,19 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
       INSERT INTO email_accounts (
         key, name, address, imap_host, imap_port, imap_secure, smtp_host, smtp_port, smtp_secure,
         imap_user, smtp_user,
-        password_secret_id, secret_hint, permissions, append_to_sent, sent_folder, notes
+        password_secret_id, secret_hint, permissions, append_to_sent, sent_folder, notes, owner_id
       ) VALUES (
         ${fields.key}, ${fields.name}, ${fields.address}, ${fields.imap_host}, ${fields.imap_port}, ${fields.imap_secure},
         ${fields.smtp_host}, ${fields.smtp_port}, ${fields.smtp_secure},
         ${fields.imap_user}, ${fields.smtp_user},
         ${secretId}, ${hint}, ${fields.permissions},
-        ${fields.append_to_sent}, ${fields.sent_folder}, ${fields.notes}
+        ${fields.append_to_sent}, ${fields.sent_folder}, ${fields.notes}, ${ownerId}
       ) RETURNING id
     `;
     return { id: inserted[0].id, key };
   }
 
-  await sql`
+  const updated = await sql`
     UPDATE email_accounts SET
       name = ${fields.name},
       address = ${fields.address},
@@ -930,7 +1240,8 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
       sent_folder = ${fields.sent_folder},
       notes = ${fields.notes},
       updated_at = now()
-    WHERE id = ${id}
+    WHERE id = ${id} AND owner_id = ${ownerId}
   `;
+  if (updated.count === 0) throw new Error("Not found");
   return { id, key };
 }

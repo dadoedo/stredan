@@ -7,7 +7,8 @@
     "build": "tsc && mkdir -p dist/db && cp src/db/schema.sql dist/db/schema.sql",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit",
+    "test": "DATABASE_URL=\"${DATABASE_URL:-postgres://agentmcp:agentmcp@127.0.0.1:5432/agent_mcp_test}\" MASTER_ENCRYPTION_KEY=\"${MASTER_ENCRYPTION_KEY:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}\" SESSION_SECRET=\"${SESSION_SECRET:-test-session-secret}\" ADMIN_EMAIL=\"${ADMIN_EMAIL:-admin@example.com}\" COOKIE_SECURE=false PUBLIC_DASHBOARD_URL=\"${PUBLIC_DASHBOARD_URL:-http://127.0.0.1:3010}\" tsx --test --test-concurrency=1 test/**/*.test.ts"
   },
   "engines": {
     "node": ">=22"
