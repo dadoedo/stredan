@@ -2,7 +2,7 @@ import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import type { Request, Response } from "express";
 import { sql } from "../db/client.js";
 import { env } from "../env.js";
-import type { AdminSession } from "../types.js";
+import type { UserRole, UserSession } from "../types.js";
 
 const COOKIE = "agent_mcp_sid";
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
@@ -16,12 +16,12 @@ export function newToken(): string {
   return randomBytes(32).toString("base64url");
 }
 
-export async function createSession(adminId: string, pendingTotp: boolean): Promise<string> {
+export async function createSession(userId: string, pendingTotp: boolean): Promise<string> {
   const token = newToken();
   const ttl = pendingTotp ? PENDING_TTL_MS : SESSION_TTL_MS;
   await sql`
-    INSERT INTO sessions (admin_id, token_hash, pending_totp, expires_at)
-    VALUES (${adminId}, ${hashToken(token)}, ${pendingTotp}, ${new Date(Date.now() + ttl)})
+    INSERT INTO sessions (user_id, token_hash, pending_totp, expires_at)
+    VALUES (${userId}, ${hashToken(token)}, ${pendingTotp}, ${new Date(Date.now() + ttl)})
   `;
   return token;
 }
@@ -38,20 +38,27 @@ export async function destroySession(token: string): Promise<void> {
   await sql`DELETE FROM sessions WHERE token_hash = ${hashToken(token)}`;
 }
 
-export async function loadSession(token: string): Promise<AdminSession | null> {
-  const rows = await sql<AdminSession[]>`
+export async function loadSession(token: string): Promise<UserSession | null> {
+  const rows = await sql<UserSession[]>`
     SELECT
       s.id,
-      a.id AS "adminId",
-      a.email,
+      u.id AS "userId",
+      u.email,
+      u.role,
       s.pending_totp AS "pendingTotp",
-      a.totp_enabled AS "totpEnabled"
+      u.totp_enabled AS "totpEnabled"
     FROM sessions s
-    JOIN admins a ON a.id = s.admin_id
+    JOIN users u ON u.id = s.user_id
     WHERE s.token_hash = ${hashToken(token)}
       AND s.expires_at > now()
   `;
-  return rows[0] ?? null;
+  const row = rows[0];
+  if (!row || !isRole(row.role)) return null;
+  return row;
+}
+
+function isRole(value: string): value is UserRole {
+  return value === "superadmin" || value === "user";
 }
 
 export function readSessionCookie(req: Request): string | undefined {

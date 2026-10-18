@@ -24,29 +24,30 @@ function asPermissions(value: string): Permissions {
   return value === "readwrite" ? "readwrite" : "readonly";
 }
 
-export async function storeSecret(plaintext: string): Promise<string> {
+export async function storeSecret(plaintext: string, ownerId: string): Promise<string> {
   const blob = encrypt(plaintext);
   const rows = await sql<{ id: string }[]>`
-    INSERT INTO vault_secrets (ciphertext, nonce)
-    VALUES (${blob.ciphertext}, ${blob.nonce})
+    INSERT INTO vault_secrets (ciphertext, nonce, owner_id)
+    VALUES (${blob.ciphertext}, ${blob.nonce}, ${ownerId})
     RETURNING id
   `;
   return rows[0].id;
 }
 
-export async function replaceSecret(oldId: string | null, plaintext: string): Promise<string> {
-  const id = await storeSecret(plaintext);
+export async function replaceSecret(oldId: string | null, plaintext: string, ownerId: string): Promise<string> {
+  const id = await storeSecret(plaintext, ownerId);
   if (oldId) {
     await sql`DELETE FROM vault_secrets WHERE id = ${oldId}`;
   }
   return id;
 }
 
-export async function readSecret(id: string): Promise<string> {
-  const rows = await sql<{ ciphertext: Buffer; nonce: Buffer }[]>`
-    SELECT ciphertext, nonce FROM vault_secrets WHERE id = ${id}
+export async function readSecret(id: string, ownerId?: string): Promise<string> {
+  const rows = await sql<{ ciphertext: Buffer; nonce: Buffer; owner_id: string | null }[]>`
+    SELECT ciphertext, nonce, owner_id FROM vault_secrets WHERE id = ${id}
   `;
   if (rows.length === 0) throw new Error("Secret not found");
+  if (ownerId && rows[0].owner_id !== ownerId) throw new Error("Secret not found");
   return decrypt({ ciphertext: rows[0].ciphertext, nonce: rows[0].nonce });
 }
 
@@ -84,7 +85,7 @@ export async function loadPostgresConfig(key: ApiKeyRecord): Promise<PostgresCon
   }[]>`
     SELECT id, key, name, notes, enabled
     FROM database_targets
-    WHERE enabled = true
+    WHERE enabled = true AND owner_id = ${key.ownerId}
     ORDER BY key
   `;
 
@@ -106,7 +107,7 @@ export async function loadPostgresConfig(key: ApiKeyRecord): Promise<PostgresCon
     const environments = new Map<string, ResolvedEnvironment>();
     for (const envRow of envs) {
       if (!envRow.connection_url_secret_id) continue;
-      const connectionUrl = await readSecret(envRow.connection_url_secret_id);
+      const connectionUrl = await readSecret(envRow.connection_url_secret_id, key.ownerId);
       environments.set(envRow.name, {
         id: envRow.id,
         name: envRow.name,
@@ -155,14 +156,14 @@ export async function loadEmailConfig(key: ApiKeyRecord): Promise<EmailConfig> {
       imap_user, smtp_user,
       password_secret_id, permissions, append_to_sent, sent_folder
     FROM email_accounts
-    WHERE enabled = true
+    WHERE enabled = true AND owner_id = ${key.ownerId}
     ORDER BY key
   `;
 
   for (const row of rows) {
     if (!inScope(key.emailIds, row.id, row.key)) continue;
     if (!row.password_secret_id) continue;
-    const password = await readSecret(row.password_secret_id);
+    const password = await readSecret(row.password_secret_id, key.ownerId);
     accounts.set(row.key, {
       id: row.id,
       key: row.key,

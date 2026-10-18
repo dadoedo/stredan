@@ -5,11 +5,11 @@ import { sql } from "../db/client.js";
 
 const ISSUER = "mcp.stredan.sk";
 
-export function generateTotpSecret(): { base32: string; uri: string } {
+export function generateTotpSecret(accountLabel: string): { base32: string; uri: string } {
   const secret = new Secret({ size: 20 });
   const totp = new TOTP({
     issuer: ISSUER,
-    label: "David",
+    label: accountLabel,
     algorithm: "SHA1",
     digits: 6,
     period: 30,
@@ -25,7 +25,7 @@ export async function totpQrDataUrl(uri: string): Promise<string> {
 export function verifyTotp(base32: string, token: string): boolean {
   const totp = new TOTP({
     issuer: ISSUER,
-    label: "David",
+    label: "user",
     algorithm: "SHA1",
     digits: 6,
     period: 30,
@@ -34,32 +34,32 @@ export function verifyTotp(base32: string, token: string): boolean {
   return totp.validate({ token: token.replace(/\s+/g, ""), window: 1 }) !== null;
 }
 
-export async function loadAdminTotpSecret(adminId: string): Promise<string | null> {
+export async function loadUserTotpSecret(userId: string): Promise<string | null> {
   const rows = await sql<{ ciphertext: Buffer; nonce: Buffer }[]>`
     SELECT v.ciphertext, v.nonce
-    FROM admins a
-    JOIN vault_secrets v ON v.id = a.totp_secret_id
-    WHERE a.id = ${adminId}
+    FROM users u
+    JOIN vault_secrets v ON v.id = u.totp_secret_id
+    WHERE u.id = ${userId}
   `;
   if (rows.length === 0) return null;
   return decrypt({ ciphertext: rows[0].ciphertext, nonce: rows[0].nonce });
 }
 
-export async function storeAdminTotpSecret(adminId: string, base32: string): Promise<void> {
+export async function storeUserTotpSecret(userId: string, base32: string): Promise<void> {
   const blob = encrypt(base32);
   await sql.begin(async (tx) => {
     const inserted = await tx<{ id: string }[]>`
-      INSERT INTO vault_secrets (ciphertext, nonce)
-      VALUES (${blob.ciphertext}, ${blob.nonce})
+      INSERT INTO vault_secrets (ciphertext, nonce, owner_id)
+      VALUES (${blob.ciphertext}, ${blob.nonce}, ${userId})
       RETURNING id
     `;
     const old = await tx<{ totp_secret_id: string | null }[]>`
-      SELECT totp_secret_id FROM admins WHERE id = ${adminId}
+      SELECT totp_secret_id FROM users WHERE id = ${userId}
     `;
     await tx`
-      UPDATE admins
+      UPDATE users
       SET totp_secret_id = ${inserted[0].id}, totp_enabled = true
-      WHERE id = ${adminId}
+      WHERE id = ${userId}
     `;
     if (old[0]?.totp_secret_id) {
       await tx`DELETE FROM vault_secrets WHERE id = ${old[0].totp_secret_id}`;

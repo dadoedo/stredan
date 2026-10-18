@@ -45,7 +45,7 @@ Cursor → [Integrations & MCP](https://cursor.com/dashboard/integrations) (Team
 }
 ```
 
-Create/revoke keys in the MCP dashboard (scoped to DB ids / mailbox ids; optional force-readonly). Plaintext key shown once.
+Create/revoke keys in the MCP dashboard (scoped to that user's DB ids / mailbox ids; optional force-readonly). Plaintext key shown once. A key cannot include another user's targets. Wildcard scope is every resource the key owner has.
 
 Without `Authorization` → **401**.
 
@@ -64,12 +64,18 @@ Some IMAP providers block datacenter IPs — if dashboard “Test IMAP” fails,
 
 ---
 
+## Accounts
+
+The dashboard is multi-user. The bootstrapped `ADMIN_EMAIL` is superadmin and can invite others (one-time link, then password + TOTP). Users only see their own databases, mailboxes, and keys. Superadmin sees all tenants in the UI. Tool calls are audited with key id, owner, tool, target, and success.
+
+Migration runs when the app boots. It does not rotate `MASTER_ENCRYPTION_KEY` and does not change existing key secrets. Details: [`services/agent-mcp/README.md`](../../services/agent-mcp/README.md).
+
 ## Adding a DB or mailbox
 
-1. Log into https://mcp.stredan.sk (password + TOTP).
+1. Log into https://mcp.stredan.sk (email + password, then TOTP). New users need an invite from the superadmin.
 2. Create target → paste connection URL / IMAP+SMTP fields → save (secret encrypted; UI shows last-4 only).
 3. Use **Test connection**.
-4. Ensure API keys used by Cloud Agents include the new target in their scope (or create a new key).
+4. Ensure API keys used by Cloud Agents include the new target in their scope (or create a new key). A key only lists targets owned by that key's user, so an existing superadmin key does not automatically gain a mailbox a different user just added.
 5. No redeploy required for config changes (hot reload from platform DB).
 
 Platform code/deploy changes: see `services/agent-mcp/` + CI on `main`.

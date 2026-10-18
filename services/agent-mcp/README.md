@@ -12,15 +12,25 @@ Host: `stredan-hetzner` (`178.105.3.145`), edge-caddy, compose in `/root/agent-m
 
 ## Dashboard
 
-Single admin (`ADMIN_EMAIL`). Sign-in is password then TOTP (forced on first login). Sessions are httpOnly cookies.
+Sign-in is email + password, then TOTP (forced on first login). Sessions are httpOnly cookies.
+
+The first account is the superadmin (`ADMIN_EMAIL` + `ADMIN_PASSWORD` on an empty `users` table). A superadmin invites everyone else from **Users**. The invite is a one-time link (`PUBLIC_DASHBOARD_URL/invite/...`, 7 days). The invitee sets a password (at least 12 characters, with a letter and a number) and enrolls TOTP. Invited accounts are role `user`.
+
+Isolation:
+
+- A user sees and edits only their own databases, mailboxes, and API keys. They can add and test those, and create keys scoped to them.
+- A key can only reference its owner's resources. Wildcard scope (`*`) means every database or mailbox that owner has, not other tenants.
+- A superadmin sees every tenant in the dashboard (and can revoke any key) but a key they create is still limited to resources they own.
+- Two users may reuse the same database or mailbox key. The same user cannot. MCP resolves that key inside the API key's owner.
+- One `MASTER_ENCRYPTION_KEY` encrypts every secret. There is no per-user key.
 
 You can:
 
 - Add / edit / disable Postgres databases (URL or host fields). Passwords encrypted at rest (AES-256-GCM). Last-4 hint only after save.
 - Add / edit / disable IMAP/SMTP mailboxes the same way.
-- Create scoped Bearer API keys (which DBs / mailboxes, optional force-readonly). Plaintext shown once.
+- Create scoped Bearer API keys (which of your DBs / mailboxes, optional force-readonly). Plaintext shown once.
 - Test Postgres and IMAP connectivity.
-- Read an audit log of admin actions.
+- Read an audit log of your actions. Tool calls record key id, owner, tool, target, time, and success. Superadmin sees everyone's log.
 
 ## Cursor Team MCP
 
@@ -76,7 +86,7 @@ Some IMAP providers block datacenter IPs; if Test IMAP fails from the dashboard,
 
 ## Secrets
 
-`MASTER_ENCRYPTION_KEY` is 32 bytes (64 hex chars). It never lives in git. Changing it makes existing ciphertext unreadable.
+`MASTER_ENCRYPTION_KEY` is 32 bytes (64 hex chars), shared by every tenant. It never lives in git. Changing it makes existing ciphertext unreadable. Do not rotate it as part of the tenancy upgrade.
 
 `.env` on the server is created on first CI deploy from GitHub Environment secrets and is **not** overwritten later. Rotate by editing `/root/agent-mcp/.env` (and the matching GitHub secrets if you re-bootstrap).
 
@@ -96,8 +106,8 @@ Push to `main` under `services/agent-mcp/**` (or this workflow file) → GitHub 
 | `POSTGRES_PASSWORD` | Platform DB password (first boot) |
 | `MASTER_ENCRYPTION_KEY` | AES key (first boot) |
 | `SESSION_SECRET` | Cookie signing (first boot) |
-| `ADMIN_EMAIL` | Bootstrap admin |
-| `ADMIN_PASSWORD` | Bootstrap password |
+| `ADMIN_EMAIL` | Bootstrap superadmin, and the owner assigned to pre-tenancy rows |
+| `ADMIN_PASSWORD` | Bootstrap password (only when `users` is empty) |
 
 ### Environment variables
 
@@ -107,6 +117,25 @@ Push to `main` under `services/agent-mcp/**` (or this workflow file) → GitHub 
 | `COMPOSE_FILE` | `deploy/docker-compose.prod.yml` |
 | `APP_URL` | `https://mcp.stredan.sk` |
 | `IMAGE_TAG` | `prod` |
+
+## Tenancy migration
+
+`migrate()` runs on process start before the server listens. It is idempotent (`CREATE` / `ADD COLUMN IF NOT EXISTS`, then a data backfill). No manual SQL.
+
+On each boot the backfill:
+
+1. Copies each legacy `admins` row into `users` as `superadmin` (same id, password hash, and TOTP secret). A later boot does not overwrite a password or TOTP that already exists on `users`.
+2. Sets `ADMIN_EMAIL` to `superadmin` when that user exists.
+3. Assigns every `email_accounts`, `database_targets`, `api_keys`, and `vault_secrets` row with a null `owner_id` to that superadmin (or, if `ADMIN_EMAIL` is not a user yet, the earliest superadmin).
+4. Reattaches `sessions` and old audit rows to the matching user. API key hashes and scope JSON are not rewritten.
+
+Existing `smcp_` keys keep working. After the backfill they belong to the superadmin, so a `*` scope still sees the databases and mailboxes that were moved with them. Mailboxes and databases created later by invited users stay out of those keys.
+
+The boot also replaces the old global unique constraint on `database_targets.key` and `email_accounts.key` with a unique index on `(owner_id, key)`. An invited user can reuse a key that already belongs to someone else.
+
+Confirm `ADMIN_EMAIL` in `/root/agent-mcp/.env` matches the current admin email before the first boot of this version. A mismatch does not drop data: legacy admins are still copied as superadmins, and unowned rows go to the earliest superadmin when `ADMIN_EMAIL` has no user yet.
+
+Invites need `PUBLIC_DASHBOARD_URL` (already set in production) so the one-time link points at the dashboard. No new environment variables.
 
 ## Local
 
@@ -121,6 +150,8 @@ docker compose -f deploy/docker-compose.yml up --build
 ```
 
 Or `DATABASE_URL=postgres://… npm run dev` against a local Postgres.
+
+`npm test` applies the schema to a database whose name contains `agent_mcp_test` (default `postgres://agentmcp:agentmcp@127.0.0.1:5432/agent_mcp_test`) and checks tenant isolation. `npm run typecheck` covers `src` and `test`.
 
 ## DNS
 

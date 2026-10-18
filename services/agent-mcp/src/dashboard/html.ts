@@ -1,4 +1,4 @@
-import type { AdminSession } from "../types.js";
+import type { UserSession } from "../types.js";
 
 export function esc(s: unknown): string {
   return String(s ?? "")
@@ -79,7 +79,7 @@ hr.sep { border: 0; border-top: 1px solid var(--line); margin: 24px 0; }
 
 export function layout(opts: {
   title: string;
-  session?: AdminSession | null;
+  session?: UserSession | null;
   active?: string;
   body: string;
 }): string {
@@ -90,6 +90,8 @@ export function layout(opts: {
         <a class="${opts.active === "email" ? "active" : ""}" href="/email">Email</a>
         <a class="${opts.active === "keys" ? "active" : ""}" href="/keys">API keys</a>
         <a class="${opts.active === "audit" ? "active" : ""}" href="/audit">Audit</a>
+        ${opts.session.role === "superadmin" ? `<a class="${opts.active === "users" ? "active" : ""}" href="/users">Users</a>` : ""}
+        <span class="meta">${esc(opts.session.email)}</span>
         <form method="post" action="/logout" style="display:inline"><button class="ghost" type="submit">Log out</button></form>
       </nav>`
     : "";

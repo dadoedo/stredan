@@ -1,4 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { recordTool, targetFromArgs, type ToolAudit } from "../mcp-audit.js";
 import type { PostgresConfig } from "../types.js";
 import {
   getSchema,
@@ -32,7 +33,7 @@ function errorResult(error: unknown) {
   };
 }
 
-export function createPostgresMcp(config: PostgresConfig): McpServer {
+export function createPostgresMcp(config: PostgresConfig, audit?: ToolAudit): McpServer {
   const server = new McpServer({
     name: "stredan-postgres-mcp",
     version: "1.0.0",
@@ -42,65 +43,69 @@ export function createPostgresMcp(config: PostgresConfig): McpServer {
     "list_databases",
     "List configured Postgres databases visible to this API key, with permissions and environments.",
     listDatabasesSchema.shape,
-    async () => jsonText(listDatabases(config))
+    async () => recordTool(audit, "list_databases", null, async () => jsonText(listDatabases(config)))
   );
 
   server.tool(
     "query",
     "Execute a SQL query on a specified database and environment. Readonly keys/databases reject writes. For lead enrichment writes, prefer upsert_lead_enrichment (one lead per call).",
     querySchema.shape,
-    async (args) => {
-      const input = querySchema.parse(args);
-      const result = await query(config, input);
-      if (!result.success) return errorResult(result.error);
-      return jsonText({ rowCount: result.rowCount, rows: result.rows });
-    }
+    async (args) =>
+      recordTool(audit, "query", targetFromArgs(args), async () => {
+        const input = querySchema.parse(args);
+        const result = await query(config, input);
+        if (!result.success) return errorResult(result.error);
+        return jsonText({ rowCount: result.rowCount, rows: result.rows });
+      })
   );
 
   server.tool(
     "upsert_lead_enrichment",
     "Idempotent write for one enriched lead: LeadEnrichment + LeadContact + LeadScore, then Lead.status last. Use after each lead (or each ~10-lead research batch). Replaces bulk SQL via query tool.",
     upsertLeadEnrichmentSchema.shape,
-    async (args) => {
-      const input = upsertLeadEnrichmentSchema.parse(args);
-      const result = await upsertLeadEnrichment(config, input);
-      if (!result.success) return errorResult(result.error);
-      return jsonText(result);
-    }
+    async (args) =>
+      recordTool(audit, "upsert_lead_enrichment", targetFromArgs(args), async () => {
+        const input = upsertLeadEnrichmentSchema.parse(args);
+        const result = await upsertLeadEnrichment(config, input);
+        if (!result.success) return errorResult(result.error);
+        return jsonText(result);
+      })
   );
 
   server.tool(
     "get_schema",
     "Get schema for a database, including tables, columns, indexes, and foreign keys.",
     getSchemaSchema.shape,
-    async (args) => {
-      const input = getSchemaSchema.parse(args);
-      const result = await getSchema(config, input);
-      if (!result.success) return errorResult(result.error);
-      return jsonText({
-        database: result.database,
-        environment: result.environment,
-        schema: result.schemaName,
-        tables: result.tables,
-      });
-    }
+    async (args) =>
+      recordTool(audit, "get_schema", targetFromArgs(args), async () => {
+        const input = getSchemaSchema.parse(args);
+        const result = await getSchema(config, input);
+        if (!result.success) return errorResult(result.error);
+        return jsonText({
+          database: result.database,
+          environment: result.environment,
+          schema: result.schemaName,
+          tables: result.tables,
+        });
+      })
   );
 
   server.tool(
     "list_tables",
     "List all tables in a database schema.",
     listTablesSchema.shape,
-    async (args) => {
-      const input = listTablesSchema.parse(args);
-      const result = await listTablesTool(config, input);
-      if (!result.success) return errorResult(result.error);
-      return jsonText({
-        database: result.database,
-        environment: result.environment,
-        schema: result.schemaName,
-        tables: result.tables,
-      });
-    }
+    async (args) =>
+      recordTool(audit, "list_tables", targetFromArgs(args), async () => {
+        const input = listTablesSchema.parse(args);
+        const result = await listTablesTool(config, input);
+        if (!result.success) return errorResult(result.error);
+        return jsonText({
+          database: result.database,
+          environment: result.environment,
+          schema: result.schemaName,
+          tables: result.tables,
+        });
+      })
   );
 
   server.resource("schema", "postgres://{database}/{environment}/schema", async (uri) => {

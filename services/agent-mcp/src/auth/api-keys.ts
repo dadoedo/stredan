@@ -29,18 +29,19 @@ export async function lookupApiKey(bearer: string): Promise<ApiKeyRecord | null>
   const hash = hashApiKey(key);
   const rows = await sql<{
     id: string;
+    owner_id: string | null;
     label: string;
     key_prefix: string;
     key_hash: string;
     scopes: unknown;
   }[]>`
-    SELECT id, label, key_prefix, key_hash, scopes
+    SELECT id, owner_id, label, key_prefix, key_hash, scopes
     FROM api_keys
     WHERE key_hash = ${hash}
       AND revoked_at IS NULL
   `;
   const row = rows[0];
-  if (!row) return null;
+  if (!row?.owner_id) return null;
   const expected = Buffer.from(row.key_hash, "hex");
   const actual = Buffer.from(hash, "hex");
   if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
@@ -48,6 +49,7 @@ export async function lookupApiKey(bearer: string): Promise<ApiKeyRecord | null>
   void sql`UPDATE api_keys SET last_used_at = now() WHERE id = ${row.id}`.catch(() => {});
   return {
     id: row.id,
+    ownerId: row.owner_id,
     label: row.label,
     prefix: row.key_prefix,
     readonly: scopes.readonly,
@@ -62,12 +64,16 @@ export function extractBearer(header: string | undefined): string | null {
   return match ? match[1].trim() : null;
 }
 
-export async function createApiKey(label: string, scopes: ApiKeyScope): Promise<{ id: string; plaintext: string }> {
+export async function createApiKey(
+  label: string,
+  scopes: ApiKeyScope,
+  ownerId: string
+): Promise<{ id: string; plaintext: string }> {
   const plaintext = generateApiKey();
   const prefix = plaintext.slice(0, 12);
   const rows = await sql<{ id: string }[]>`
-    INSERT INTO api_keys (label, key_hash, key_prefix, scopes)
-    VALUES (${label}, ${hashApiKey(plaintext)}, ${prefix}, ${sql.json(scopes as never)})
+    INSERT INTO api_keys (label, key_hash, key_prefix, scopes, owner_id)
+    VALUES (${label}, ${hashApiKey(plaintext)}, ${prefix}, ${sql.json(scopes as never)}, ${ownerId})
     RETURNING id
   `;
   return { id: rows[0].id, plaintext };
