@@ -4,7 +4,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY tsconfig.json ./
 COPY src ./src
-RUN npm run build && mkdir -p dist/db && cp src/db/schema.sql dist/db/schema.sql
+RUN npm run build && mkdir -p dist/db/migrations && cp src/db/schema.sql dist/db/schema.sql && cp src/db/migrations/*.sql dist/db/migrations/
 
 FROM node:22-bookworm-slim
 WORKDIR /app

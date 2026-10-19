@@ -71,6 +71,29 @@ function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
+function checkAttr(values: Record<string, unknown>, name: string, fallback: boolean, posted: boolean): string {
+  if (Object.prototype.hasOwnProperty.call(values, name)) {
+    const value = values[name];
+    if (value === undefined || value === null || value === "") {
+      if (posted) return "";
+      return fallback ? "checked" : "";
+    }
+    const on = value === true || value === "on" || value === "true";
+    return on ? "checked" : "";
+  }
+  if (posted) return "";
+  return fallback ? "checked" : "";
+}
+
+function invalidAttr(errors: Record<string, string>, name: string): string {
+  return errors[name] ? ` aria-invalid="true"` : "";
+}
+
+function fieldError(name: string, errors: Record<string, string>, requiredMessage: string): string {
+  if (errors[name]) return `<p class="field-error is-visible" id="${name}-error">${esc(errors[name])}</p>`;
+  return `<p class="field-error" id="${name}-error">${esc(requiredMessage)}</p>`;
+}
+
 function visible(session: UserSession) {
   return { all: isSuperadmin(session), userId: session.userId };
 }
@@ -111,6 +134,7 @@ export function dashboardRouter(): Router {
       res.redirect("/databases");
       return;
     }
+    const loginError = req.query.error ? String(req.query.error) : "";
     res.type("html").send(
       layout({
         title: "Sign in",
@@ -118,12 +142,18 @@ export function dashboardRouter(): Router {
           <div class="login">
             <h1>Sign in</h1>
             <p class="lede">Password, then authenticator app.</p>
-            ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
+            ${loginError ? flashHtml("error", loginError) : ""}
             <form class="card" method="post" action="/login">
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" autocomplete="username" required />
-              <label for="password">Password</label>
-              <input id="password" name="password" type="password" autocomplete="current-password" required />
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="username" required ${loginError ? 'aria-invalid="true"' : ""} aria-describedby="email-error" />
+                ${fieldError("email", loginError ? { email: "Check the email and password, then try again." } : {}, "Enter your email.")}
+              </div>
+              <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required ${loginError ? 'aria-invalid="true"' : ""} aria-describedby="password-error" />
+                ${fieldError("password", {}, "Enter your password.")}
+              </div>
               <div class="actions"><button type="submit">Continue</button></div>
             </form>
           </div>`,
@@ -137,7 +167,11 @@ export function dashboardRouter(): Router {
       res.status(429).type("html").send(
         layout({
           title: "Sign in",
-          body: flashHtml("error", "Too many attempts. Try again in 15 minutes."),
+          body: `
+            <div class="login">
+              <h1>Sign in</h1>
+              ${flashHtml("error", "Too many attempts. Try again in 15 minutes.")}
+            </div>`,
         })
       );
       return;
@@ -170,8 +204,12 @@ export function dashboardRouter(): Router {
             <p class="lede">Enter the 6-digit code from your authenticator app.</p>
             ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
             <form class="card" method="post" action="/login/totp">
-              <label for="code">TOTP code</label>
-              <input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" required pattern="[0-9 ]{6,8}" />
+              <div class="field">
+                <label for="code">TOTP code</label>
+                <input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" required pattern="[0-9 ]{6,8}" ${req.query.error ? 'aria-invalid="true"' : ""} aria-describedby="code-help code-error" />
+                <p class="help" id="code-help">Six digits. Spaces are fine.</p>
+                ${fieldError("code", req.query.error ? { code: "That code was not accepted." } : {}, "Enter the 6-digit code.")}
+              </div>
               <div class="actions"><button type="submit">Verify</button></div>
             </form>
           </div>`,
@@ -218,12 +256,15 @@ export function dashboardRouter(): Router {
             <h1>Protect this console</h1>
             <p class="lede">Scan with an authenticator app, then enter a code to finish enrollment. The secret is stored encrypted and never shown again.</p>
             <div class="card">
-              <img alt="TOTP QR code" src="${qr}" width="220" height="220" />
-              <p class="muted">If you cannot scan, use this secret:</p>
+              <img class="qr" alt="TOTP QR code" src="${qr}" width="220" height="220" />
+              <p class="help">If you cannot scan, type this secret into the app:</p>
               <div class="secret">${esc(generated.base32)}</div>
               <form method="post" action="/enroll-totp">
-                <label for="code">First code</label>
-                <input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" required />
+                <div class="field">
+                  <label for="code">First code</label>
+                  <input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" required pattern="[0-9 ]{6,8}" aria-describedby="code-error" />
+                  ${fieldError("code", {}, "Enter the first code from your app.")}
+                </div>
                 <div class="actions"><button type="submit">Enable TOTP</button></div>
               </form>
             </div>
@@ -295,14 +336,18 @@ export function dashboardRouter(): Router {
         session,
         active: "databases",
         body: `
-          <h1>Postgres targets</h1>
-          <p class="lede">Connection secrets are encrypted at rest with the platform key. After save, only a last-4 hint is shown. You only see databases you own${scope.all ? ", except as superadmin you see every tenant" : ""}.</p>
+          <div class="page-head">
+            <div>
+              <h1>Postgres targets</h1>
+              <p class="lede">Connection secrets are encrypted at rest with the platform key. After save, only a last-4 hint is shown. You only see databases you own${scope.all ? ". As superadmin you also see every tenant." : "."}</p>
+            </div>
+            <a class="btn" href="/databases/new">Add database</a>
+          </div>
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
-          <p><a class="btn" href="/databases/new">Add database</a></p>
-          <div class="card" style="padding:0 8px">
+          <div class="table-wrap">
             <table>
               <thead><tr><th>Key</th><th>Name</th><th>Envs</th>${scope.all ? "<th>Owner</th>" : ""}<th>Status</th></tr></thead>
-              <tbody>${rows || `<tr><td colspan="${cols}" class="muted">None yet.</td></tr>`}</tbody>
+              <tbody>${rows || `<tr><td colspan="${cols}" class="empty">No databases yet. Add one to query it from Cursor.</td></tr>`}</tbody>
             </table>
           </div>`,
       })
@@ -331,7 +376,7 @@ export function dashboardRouter(): Router {
           title: "Add database",
           session: req.userSession,
           active: "databases",
-          body: flashHtml("error", messageOf(error)) + databaseForm(req.body),
+          body: flashHtml("error", messageOf(error)) + databaseForm(req.body, undefined, true, messageOf(error)),
         })
       );
     }
@@ -352,13 +397,14 @@ export function dashboardRouter(): Router {
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
           ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
           ${databaseForm(db, db.id)}
-          <hr class="sep" />
-          <form method="post" action="/databases/${db.id}/test">
-            <button class="ghost" type="submit">Test connection</button>
-          </form>
-          <form method="post" action="/databases/${db.id}/toggle" style="margin-top:8px">
-            <button class="ghost" type="submit">${db.enabled ? "Disable" : "Enable"}</button>
-          </form>`,
+          <div class="toolbar">
+            <form method="post" action="/databases/${db.id}/test">
+              <button class="ghost" type="submit">Test connection</button>
+            </form>
+            <form method="post" action="/databases/${db.id}/toggle">
+              <button class="${db.enabled ? "danger" : "ghost"}" type="submit">${db.enabled ? "Disable" : "Enable"}</button>
+            </form>
+          </div>`,
       })
     );
   });
@@ -449,14 +495,18 @@ export function dashboardRouter(): Router {
         session: req.userSession,
         active: "email",
         body: `
-          <h1>Mailboxes</h1>
-          <p class="lede">IMAP/SMTP passwords are encrypted. Datacenter IPs are sometimes blocked by providers — test after save.</p>
+          <div class="page-head">
+            <div>
+              <h1>Mailboxes</h1>
+              <p class="lede">IMAP and SMTP passwords are encrypted. Use port 587 with STARTTLS. Port 465 is blocked on this server. Test IMAP after save — some providers block datacenter IPs.</p>
+            </div>
+            <a class="btn" href="/email/new">Add mailbox</a>
+          </div>
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
-          <p><a class="btn" href="/email/new">Add mailbox</a></p>
-          <div class="card" style="padding:0 8px">
+          <div class="table-wrap">
             <table>
-              <thead><tr><th>Key</th><th>Address</th>${scope.all ? "<th>Owner</th>" : ""}<th>Perms</th><th>Status</th></tr></thead>
-              <tbody>${rows || `<tr><td colspan="${scope.all ? 5 : 4}" class="muted">None yet.</td></tr>`}</tbody>
+              <thead><tr><th>Key</th><th>Address</th>${scope.all ? "<th>Owner</th>" : ""}<th>Permissions</th><th>Status</th></tr></thead>
+              <tbody>${rows || `<tr><td colspan="${scope.all ? 5 : 4}" class="empty">No mailboxes yet. Add one to read and send mail from Cursor.</td></tr>`}</tbody>
             </table>
           </div>`,
       })
@@ -478,7 +528,7 @@ export function dashboardRouter(): Router {
           title: "Add mailbox",
           session: req.userSession,
           active: "email",
-          body: flashHtml("error", messageOf(error)) + emailForm(req.body),
+          body: flashHtml("error", messageOf(error)) + emailForm(req.body, undefined, true, messageOf(error)),
         })
       );
     }
@@ -499,11 +549,12 @@ export function dashboardRouter(): Router {
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
           ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
           ${emailForm(account, account.id)}
-          <hr class="sep" />
-          <form method="post" action="/email/${account.id}/test"><button class="ghost" type="submit">Test IMAP</button></form>
-          <form method="post" action="/email/${account.id}/toggle" style="margin-top:8px">
-            <button class="ghost" type="submit">${account.enabled ? "Disable" : "Enable"}</button>
-          </form>`,
+          <div class="toolbar">
+            <form method="post" action="/email/${account.id}/test"><button class="ghost" type="submit">Test IMAP</button></form>
+            <form method="post" action="/email/${account.id}/toggle">
+              <button class="${account.enabled ? "danger" : "ghost"}" type="submit">${account.enabled ? "Disable" : "Enable"}</button>
+            </form>
+          </div>`,
       })
     );
   });
@@ -608,9 +659,17 @@ export function dashboardRouter(): Router {
         </tr>`;
       })
       .join("");
-    const dbChecks = dbs.map((d) => `<div class="check"><input type="checkbox" name="db" value="${esc(d.id)}" /><label>${esc(d.key)}</label></div>`).join("");
+    const dbChecks = dbs
+      .map(
+        (d) =>
+          `<div class="check"><input id="db-${esc(d.id)}" type="checkbox" name="db" value="${esc(d.id)}" /><label for="db-${esc(d.id)}">${esc(d.key)}</label></div>`
+      )
+      .join("");
     const emailChecks = emails
-      .map((e) => `<div class="check"><input type="checkbox" name="email" value="${esc(e.id)}" /><label>${esc(e.key)}</label></div>`)
+      .map(
+        (e) =>
+          `<div class="check"><input id="mail-${esc(e.id)}" type="checkbox" name="email" value="${esc(e.id)}" /><label for="mail-${esc(e.id)}">${esc(e.key)}</label></div>`
+      )
       .join("");
     const colSpan = scope.all ? 7 : 6;
     res.type("html").send(
@@ -619,32 +678,40 @@ export function dashboardRouter(): Router {
         session,
         active: "keys",
         body: `
-          <h1>API keys</h1>
-          <p class="lede">Bearer tokens for Cursor Team MCP. Hashed at rest. The plaintext is shown once. A key can only reference databases and mailboxes you own. “All” means every resource you own, not other users'.</p>
+          <div class="page-head">
+            <div>
+              <h1>API keys</h1>
+              <p class="lede">Bearer tokens for Cursor Team MCP. Hashed at rest. The plaintext is shown once. A key can only reference databases and mailboxes you own. “All” means every resource you own, not other users'.</p>
+            </div>
+          </div>
           ${req.query.created ? flashHtml("warn", "Copy this key now. It will not be shown again.") + `<div class="secret">${esc(String(req.query.created))}</div>` : ""}
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
           ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
           <div class="card">
             <h2>Create key</h2>
             <form method="post" action="/keys">
-              <label>Label</label>
-              <input name="label" required placeholder="Cursor Cloud Agents" />
-              <div class="check"><input type="checkbox" name="readonly" /><label>Force readonly (even if a target is readwrite)</label></div>
-              <div class="check"><input type="checkbox" name="all_db" checked /><label>All of your databases</label></div>
-              <div class="check"><input type="checkbox" name="all_email" checked /><label>All of your mailboxes</label></div>
-              <p class="muted">Or pick specific targets (uncheck “all” first):</p>
+              <div class="field">
+                <label for="label">Label</label>
+                <input id="label" name="label" required placeholder="Cursor Cloud Agents" aria-describedby="label-help label-error" />
+                <p class="help" id="label-help">A name you will recognize in the table below.</p>
+                ${fieldError("label", {}, "Enter a label.")}
+              </div>
+              <div class="check"><input id="readonly" type="checkbox" name="readonly" /><label for="readonly">Force readonly (even if a target is readwrite)</label></div>
+              <div class="check"><input id="all_db" type="checkbox" name="all_db" checked /><label for="all_db">All of your databases</label></div>
+              <div class="check"><input id="all_email" type="checkbox" name="all_email" checked /><label for="all_email">All of your mailboxes</label></div>
+              <p class="help">Or pick specific targets. Uncheck “all” first, or the specific boxes are ignored.</p>
               <div class="grid grid-2">
-                <div><strong>Databases</strong>${dbChecks || '<p class="muted">None</p>'}</div>
-                <div><strong>Email</strong>${emailChecks || '<p class="muted">None</p>'}</div>
+                <fieldset><legend>Databases</legend>${dbChecks || '<p class="help">None yet.</p>'}</fieldset>
+                <fieldset><legend>Email</legend>${emailChecks || '<p class="help">None yet.</p>'}</fieldset>
               </div>
               <div class="actions"><button type="submit">Create key</button></div>
             </form>
           </div>
-          <h2>Existing</h2>
-          <div class="card" style="padding:0 8px">
+          <h2 class="section-title">Existing keys</h2>
+          <div class="table-wrap">
             <table>
-              <thead><tr><th>Label</th>${scope.all ? "<th>Owner</th>" : ""}<th>Prefix</th><th>Mode</th><th>Status</th><th>Last used</th><th></th></tr></thead>
-              <tbody>${rows || `<tr><td colspan="${colSpan}" class="muted">None yet.</td></tr>`}</tbody>
+              <thead><tr><th>Label</th>${scope.all ? "<th>Owner</th>" : ""}<th>Prefix</th><th>Mode</th><th>Status</th><th>Last used</th><th>Action</th></tr></thead>
+              <tbody>${rows || `<tr><td colspan="${colSpan}" class="empty">No API keys yet.</td></tr>`}</tbody>
             </table>
           </div>`,
       })
@@ -737,12 +804,16 @@ export function dashboardRouter(): Router {
         session,
         active: "audit",
         body: `
-          <h1>Audit log</h1>
-          <p class="lede">${scope.all ? "Every user action and API-key tool call." : "Your dashboard actions and tool calls made with your API keys."}</p>
-          <div class="card" style="padding:0 8px">
+          <div class="page-head">
+            <div>
+              <h1>Audit log</h1>
+              <p class="lede">${scope.all ? "Every user action and API-key tool call." : "Your dashboard actions and tool calls made with your API keys."}</p>
+            </div>
+          </div>
+          <div class="table-wrap">
             <table>
               <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Tool</th><th>Target</th><th>Result</th><th>Entity</th></tr></thead>
-              <tbody>${body || '<tr><td colspan="7" class="muted">Empty.</td></tr>'}</tbody>
+              <tbody>${body || '<tr><td colspan="7" class="empty">No audit events yet.</td></tr>'}</tbody>
             </table>
           </div>`,
       })
@@ -782,31 +853,39 @@ export function dashboardRouter(): Router {
         session: req.userSession,
         active: "users",
         body: `
-          <h1>Users</h1>
-          <p class="lede">Invite a person with a one-time link. They choose a password and enroll an authenticator. Each user only sees their own mailboxes, databases, and keys.</p>
+          <div class="page-head">
+            <div>
+              <h1>Users</h1>
+              <p class="lede">Invite a person with a one-time link. They choose a password and enroll an authenticator. Each user only sees their own mailboxes, databases, and keys.</p>
+            </div>
+          </div>
           ${req.query.invite ? flashHtml("warn", "Copy this invite link now. It will not be shown again.") + `<div class="secret">${esc(String(req.query.invite))}</div>` : ""}
           ${req.query.ok ? flashHtml("ok", String(req.query.ok)) : ""}
           ${req.query.error ? flashHtml("error", String(req.query.error)) : ""}
           <div class="card">
             <h2>Invite</h2>
             <form method="post" action="/users/invites">
-              <label>Email</label>
-              <input name="email" type="email" required placeholder="name@company.com" />
+              <div class="field">
+                <label for="invite-email">Email</label>
+                <input id="invite-email" name="email" type="email" required placeholder="name@company.com" aria-describedby="invite-email-help invite-email-error" ${req.query.error ? 'aria-invalid="true"' : ""} />
+                <p class="help" id="invite-email-help">The link expires in 7 days and works once.</p>
+                ${fieldError("invite-email", req.query.error ? { "invite-email": String(req.query.error) } : {}, "Enter an email address.")}
+              </div>
               <div class="actions"><button type="submit">Create invite link</button></div>
             </form>
           </div>
-          <h2>Accounts</h2>
-          <div class="card" style="padding:0 8px">
+          <h2 class="section-title">Accounts</h2>
+          <div class="table-wrap">
             <table>
               <thead><tr><th>Email</th><th>Role</th><th>TOTP</th><th>Created</th></tr></thead>
-              <tbody>${userRows}</tbody>
+              <tbody>${userRows || '<tr><td colspan="4" class="empty">No accounts yet.</td></tr>'}</tbody>
             </table>
           </div>
-          <h2>Pending invites</h2>
-          <div class="card" style="padding:0 8px">
+          <h2 class="section-title">Pending invites</h2>
+          <div class="table-wrap">
             <table>
               <thead><tr><th>Email</th><th>Expires</th></tr></thead>
-              <tbody>${inviteRows || '<tr><td colspan="2" class="muted">None.</td></tr>'}</tbody>
+              <tbody>${inviteRows || '<tr><td colspan="2" class="empty">No pending invites.</td></tr>'}</tbody>
             </table>
           </div>`,
       })
@@ -832,7 +911,7 @@ export function dashboardRouter(): Router {
       res.status(404).type("html").send(
         layout({
           title: "Invite",
-          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p></div>`,
+          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p>${flashHtml("error", "Ask a superadmin for a new invite link.")}</div>`,
         })
       );
       return;
@@ -847,7 +926,7 @@ export function dashboardRouter(): Router {
       res.status(404).type("html").send(
         layout({
           title: "Invite",
-          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p></div>`,
+          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p>${flashHtml("error", "Ask a superadmin for a new invite link.")}</div>`,
         })
       );
       return;
@@ -865,7 +944,7 @@ export function dashboardRouter(): Router {
       res.status(404).type("html").send(
         layout({
           title: "Invite",
-          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p></div>`,
+          body: `<div class="login"><h1>Invite unavailable</h1><p class="lede">This link is invalid, expired, or already used.</p>${flashHtml("error", "Ask a superadmin for a new invite link.")}</div>`,
         })
       );
       return;
@@ -882,110 +961,237 @@ export function dashboardRouter(): Router {
 }
 
 function inviteForm(email: string, token: string, error: string): string {
+  const passwordError = error && error !== "Passwords do not match" ? error : "";
+  const confirmError = error === "Passwords do not match" ? error : "";
   return `
     <div class="login">
       <h1>Join</h1>
       <p class="lede">Set a password for ${esc(email)}, then enroll an authenticator on the next screen. This link works once.</p>
       ${error ? flashHtml("error", error) : ""}
       <form class="card" method="post" action="/invite/${esc(token)}">
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" autocomplete="new-password" required minlength="12" />
-        <label for="confirm">Confirm password</label>
-        <input id="confirm" name="confirm" type="password" autocomplete="new-password" required minlength="12" />
-        <p class="muted">At least 12 characters, with a letter and a number.</p>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="new-password" required minlength="12" ${passwordError ? 'aria-invalid="true"' : ""} aria-describedby="password-help password-error" />
+          <p class="help" id="password-help">At least 12 characters, with a letter and a number.</p>
+          ${fieldError("password", passwordError ? { password: passwordError } : {}, "Enter a password of at least 12 characters.")}
+        </div>
+        <div class="field">
+          <label for="confirm">Confirm password</label>
+          <input id="confirm" name="confirm" type="password" autocomplete="new-password" required minlength="12" ${confirmError ? 'aria-invalid="true"' : ""} aria-describedby="confirm-error" />
+          ${fieldError("confirm", confirmError ? { confirm: confirmError } : {}, "Confirm the password.")}
+        </div>
         <div class="actions"><button type="submit">Continue</button></div>
       </form>
-    </div>`;
+    </div>
+    <script>
+      (function () {
+        var form = document.querySelector('form[action^="/invite/"]');
+        if (!form) return;
+        form.addEventListener("submit", function (event) {
+          var mismatch = form.password.value !== form.confirm.value;
+          form.confirm.setCustomValidity(mismatch ? "Passwords do not match" : "");
+          if (mismatch) {
+            event.preventDefault();
+            form.confirm.reportValidity();
+          }
+        });
+        form.confirm.addEventListener("input", function () { form.confirm.setCustomValidity(""); });
+      })();
+    </script>`;
 }
 
-function databaseForm(values: Record<string, unknown>, id?: string): string {
+function databaseFieldErrors(message: string): Record<string, string> {
+  if (!message) return {};
+  if (message === "That key is already in use") return { key: message };
+  if (message === "Key and name are required") return { key: message, name: message };
+  if (message === "A connection URL or host credentials are required") return { connection_url: message };
+  return {};
+}
+
+function databaseForm(values: Record<string, unknown>, id?: string, posted = false, error = ""): string {
   const action = id ? `/databases/${id}` : "/databases";
+  const errors = databaseFieldErrors(error);
   return `
-    <h1>${id ? "Edit database" : "Add database"}</h1>
+    <div class="page-head">
+      <div>
+        <h1>${id ? "Edit database" : "Add database"}</h1>
+        <p class="lede">Save a Postgres target. The password or connection URL is encrypted and only a last-4 hint is shown afterwards.</p>
+      </div>
+    </div>
     <form class="card" method="post" action="${action}">
+      <h2>Target</h2>
       <div class="row">
-        <div>
-          <label>Key</label>
-          <input name="key" required value="${esc(values.key)}" placeholder="app-prod" ${id ? "readonly" : ""} />
+        <div class="field">
+          <label for="key">Key</label>
+          <input id="key" name="key" required value="${esc(values.key)}" placeholder="app-prod" ${id ? "readonly" : ""} ${invalidAttr(errors, "key")} aria-describedby="key-help key-error" />
+          <p class="help" id="key-help">${id ? "The key cannot be changed after create." : "Used by agents to choose this database. Unique to your account."}</p>
+          ${fieldError("key", errors, "Enter a key.")}
         </div>
-        <div>
-          <label>Name</label>
-          <input name="name" required value="${esc(values.name)}" />
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" required value="${esc(values.name)}" ${invalidAttr(errors, "name")} aria-describedby="name-error" />
+          ${fieldError("name", errors, "Enter a name.")}
         </div>
       </div>
-      <label>Notes</label>
-      <textarea name="notes">${esc(values.notes)}</textarea>
-      <h2>Environment</h2>
+      <div class="field">
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes">${esc(values.notes)}</textarea>
+      </div>
+      <h2 class="section-title">Environment</h2>
       <div class="row">
-        <div>
-          <label>Environment name</label>
-          <input name="env_name" value="${esc(values.env_name ?? "default")}" />
+        <div class="field">
+          <label for="env_name">Environment name</label>
+          <input id="env_name" name="env_name" value="${esc(values.env_name ?? "default")}" aria-describedby="env_name-help" />
+          <p class="help" id="env_name-help">Agents ask for this name. Most targets only need default.</p>
         </div>
-        <div>
-          <label>Permissions</label>
-          <select name="permissions">
+        <div class="field">
+          <label for="permissions">Permissions</label>
+          <select id="permissions" name="permissions">
             <option value="readonly" ${values.permissions !== "readwrite" ? "selected" : ""}>readonly</option>
             <option value="readwrite" ${values.permissions === "readwrite" ? "selected" : ""}>readwrite</option>
           </select>
         </div>
       </div>
-      <label>Connection URL (optional if host fields are set)</label>
-      <input name="connection_url" type="password" autocomplete="off" placeholder="${values.secret_hint ? "stored " + esc(values.secret_hint) + " — paste to replace" : "postgres://user:pass@host:5432/db"}" />
+      <div class="field">
+        <label for="connection_url">Connection URL</label>
+        <input id="connection_url" name="connection_url" type="password" autocomplete="off" placeholder="${values.secret_hint ? "stored " + esc(values.secret_hint) + " — paste to replace" : "postgres://user:pass@host:5432/db"}" ${invalidAttr(errors, "connection_url")} aria-describedby="connection_url-help connection_url-error" />
+        <p class="help" id="connection_url-help">Optional when host, database, username, and password are set.</p>
+        ${fieldError("connection_url", errors, "Enter a connection URL or host credentials.")}
+      </div>
       <div class="row-3">
-        <div><label>Host</label><input name="host" value="${esc(values.host)}" /></div>
-        <div><label>Port</label><input name="port" type="number" value="${esc(values.port ?? 5432)}" /></div>
-        <div><label>Database</label><input name="database_name" value="${esc(values.database_name)}" /></div>
+        <div class="field"><label for="host">Host</label><input id="host" name="host" value="${esc(values.host)}" /></div>
+        <div class="field"><label for="port">Port</label><input id="port" name="port" type="number" min="1" max="65535" value="${esc(values.port ?? 5432)}" /></div>
+        <div class="field"><label for="database_name">Database</label><input id="database_name" name="database_name" value="${esc(values.database_name)}" /></div>
       </div>
       <div class="row">
-        <div><label>Username</label><input name="username" value="${esc(values.username)}" /></div>
-        <div><label>Password</label><input name="password" type="password" autocomplete="new-password" placeholder="${values.secret_hint ? "leave blank to keep" : ""}" /></div>
+        <div class="field"><label for="username">Username</label><input id="username" name="username" value="${esc(values.username)}" autocomplete="off" /></div>
+        <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="new-password" placeholder="${values.secret_hint ? "leave blank to keep" : ""}" /></div>
       </div>
-      <div class="check"><input type="checkbox" name="ssl" ${values.ssl === false ? "" : "checked"} /><label>SSL</label></div>
+      <div class="check"><input id="ssl" type="checkbox" name="ssl" ${checkAttr(values, "ssl", true, posted)} /><label for="ssl">Require SSL</label></div>
       <div class="actions"><button type="submit">Save</button><a class="btn ghost" href="/databases">Cancel</a></div>
     </form>`;
 }
 
-function emailForm(values: Record<string, unknown>, id?: string): string {
+function emailFieldErrors(message: string): Record<string, string> {
+  if (!message) return {};
+  if (message === "That key is already in use") return { key: message };
+  if (message === "Password is required") return { password: message };
+  if (message === "Key, name, and address are required") return { key: message, name: message, address: message };
+  return {};
+}
+
+function emailForm(values: Record<string, unknown>, id?: string, posted = false, error = ""): string {
   const action = id ? `/email/${id}` : "/email";
+  const errors = emailFieldErrors(error);
+  const smtpPort = values.smtp_port === undefined || values.smtp_port === "" ? 587 : values.smtp_port;
+  const portBlocked = String(smtpPort) === "465";
   return `
-    <h1>${id ? "Edit mailbox" : "Add mailbox"}</h1>
+    <div class="page-head">
+      <div>
+        <h1>${id ? "Edit mailbox" : "Add mailbox"}</h1>
+        <p class="lede">Use 587 + TLS (STARTTLS). Port 465 is blocked on this server.</p>
+      </div>
+    </div>
     <form class="card" method="post" action="${action}">
+      <h2>Mailbox</h2>
       <div class="row">
-        <div><label>Key</label><input name="key" required value="${esc(values.key)}" ${id ? "readonly" : ""} /></div>
-        <div><label>Name</label><input name="name" required value="${esc(values.name)}" /></div>
+        <div class="field">
+          <label for="key">Key</label>
+          <input id="key" name="key" required value="${esc(values.key)}" ${id ? "readonly" : ""} ${invalidAttr(errors, "key")} aria-describedby="key-help key-error" />
+          <p class="help" id="key-help">${id ? "The key cannot be changed after create." : "Agents use this key to pick the mailbox."}</p>
+          ${fieldError("key", errors, "Enter a key.")}
+        </div>
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" required value="${esc(values.name)}" ${invalidAttr(errors, "name")} aria-describedby="name-error" />
+          ${fieldError("name", errors, "Enter a name.")}
+        </div>
       </div>
-      <label>Address</label>
-      <input name="address" type="email" required value="${esc(values.address)}" />
+      <div class="field">
+        <label for="address">Address</label>
+        <input id="address" name="address" type="email" required value="${esc(values.address)}" ${invalidAttr(errors, "address")} aria-describedby="address-error" autocomplete="off" />
+        ${fieldError("address", errors, "Enter an email address.")}
+      </div>
+      <h2 class="section-title">Incoming mail (IMAP)</h2>
       <div class="row-3">
-        <div><label>IMAP host</label><input name="imap_host" required value="${esc(values.imap_host)}" /></div>
-        <div><label>IMAP port</label><input name="imap_port" type="number" value="${esc(values.imap_port ?? 993)}" /></div>
-        <div><label>SMTP host</label><input name="smtp_host" required value="${esc(values.smtp_host)}" /></div>
+        <div class="field">
+          <label for="imap_host">IMAP host</label>
+          <input id="imap_host" name="imap_host" required value="${esc(values.imap_host)}" aria-describedby="imap_host-error" />
+          ${fieldError("imap_host", {}, "Enter the IMAP host.")}
+        </div>
+        <div class="field">
+          <label for="imap_port">IMAP port</label>
+          <input id="imap_port" name="imap_port" type="number" min="1" max="65535" value="${esc(values.imap_port ?? 993)}" />
+        </div>
+        <div class="field">
+          <label for="imap_user">IMAP user</label>
+          <input id="imap_user" name="imap_user" value="${esc(values.imap_user)}" placeholder="defaults to address" aria-describedby="imap_user-help" />
+          <p class="help" id="imap_user-help">Leave blank to sign in as the address above.</p>
+        </div>
+      </div>
+      <div class="check"><input id="imap_secure" type="checkbox" name="imap_secure" ${checkAttr(values, "imap_secure", true, posted)} /><label for="imap_secure">IMAP implicit TLS</label></div>
+      <h2 class="section-title">Outgoing mail (SMTP)</h2>
+      <div class="row">
+        <div class="field">
+          <label for="smtp_host">SMTP host</label>
+          <input id="smtp_host" name="smtp_host" required value="${esc(values.smtp_host)}" aria-describedby="smtp_host-error" />
+          ${fieldError("smtp_host", {}, "Enter the SMTP host.")}
+        </div>
+        <div class="field">
+          <label for="smtp_user">SMTP user</label>
+          <input id="smtp_user" name="smtp_user" value="${esc(values.smtp_user)}" placeholder="resend, or leave blank" aria-describedby="smtp_user-help" />
+          <p class="help" id="smtp_user-help">Leave blank to sign in as the address above.</p>
+        </div>
       </div>
       <div class="row">
-        <div><label>IMAP user (blank = address)</label><input name="imap_user" value="${esc(values.imap_user)}" placeholder="defaults to address" /></div>
-        <div><label>SMTP user (blank = address)</label><input name="smtp_user" value="${esc(values.smtp_user)}" placeholder="resend, or leave blank" /></div>
-      </div>
-      <div class="row">
-        <div><label>SMTP port</label><input name="smtp_port" type="number" value="${esc(values.smtp_port ?? 465)}" /></div>
-        <div>
-          <label>Permissions</label>
-          <select name="permissions">
+        <div class="field">
+          <label for="smtp_port">SMTP port</label>
+          <input id="smtp_port" name="smtp_port" type="number" min="1" max="65535" required value="${esc(smtpPort)}" aria-describedby="smtp_port-help smtp-465-warn smtp_port-error" />
+          <p class="help" id="smtp_port-help">Use 587 + TLS (STARTTLS). Port 465 is blocked on this server.</p>
+          <div class="flash warn field-warn" id="smtp-465-warn" role="status" ${portBlocked ? "" : "hidden"}>Port 465 is blocked on this server. Use 587 with STARTTLS and leave SMTP secure unchecked.</div>
+          ${fieldError("smtp_port", {}, "Enter an SMTP port.")}
+        </div>
+        <div class="field">
+          <label for="permissions">Permissions</label>
+          <select id="permissions" name="permissions">
             <option value="readwrite" ${values.permissions !== "readonly" ? "selected" : ""}>readwrite</option>
             <option value="readonly" ${values.permissions === "readonly" ? "selected" : ""}>readonly</option>
           </select>
+          <p class="help">Readonly blocks send, reply, mark, and move.</p>
         </div>
       </div>
-      <div class="check"><input type="checkbox" name="imap_secure" ${values.imap_secure === false ? "" : "checked"} /><label>IMAP TLS</label></div>
-      <div class="check"><input type="checkbox" name="smtp_secure" ${values.smtp_secure === false ? "" : "checked"} /><label>SMTP TLS</label></div>
-      <label>Password ${values.secret_hint ? `(stored ${esc(values.secret_hint)})` : ""}</label>
-      <input name="password" type="password" autocomplete="new-password" ${id ? "" : "required"} placeholder="${id ? "leave blank to keep" : ""}" />
-      <div class="check"><input type="checkbox" name="append_to_sent" ${values.append_to_sent === false ? "" : "checked"} /><label>Append sent copies to IMAP Sent folder</label></div>
-      <label>Sent folder</label>
-      <input name="sent_folder" value="${esc(values.sent_folder ?? "Sent")}" />
-      <label>Notes</label>
-      <textarea name="notes">${esc(values.notes)}</textarea>
+      <div class="check">
+        <input id="smtp_secure" type="checkbox" name="smtp_secure" ${checkAttr(values, "smtp_secure", false, posted)} />
+        <label for="smtp_secure">SMTP secure (implicit TLS)</label>
+      </div>
+      <p class="help">Leave SMTP secure unchecked for STARTTLS on port 587. Check it only when the provider requires implicit TLS.</p>
+      <h2 class="section-title">Password and sent mail</h2>
+      <div class="field">
+        <label for="password">Password ${values.secret_hint ? `(stored ${esc(values.secret_hint)})` : ""}</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" ${id ? "" : "required"} placeholder="${id ? "leave blank to keep" : ""}" ${invalidAttr(errors, "password")} aria-describedby="password-error" />
+        ${fieldError("password", errors, "Enter the mailbox password.")}
+      </div>
+      <div class="check"><input id="append_to_sent" type="checkbox" name="append_to_sent" ${checkAttr(values, "append_to_sent", true, posted)} /><label for="append_to_sent">Append sent copies to the IMAP Sent folder</label></div>
+      <div class="field">
+        <label for="sent_folder">Sent folder</label>
+        <input id="sent_folder" name="sent_folder" value="${esc(values.sent_folder ?? "Sent")}" />
+      </div>
+      <div class="field">
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes">${esc(values.notes)}</textarea>
+      </div>
       <div class="actions"><button type="submit">Save</button><a class="btn ghost" href="/email">Cancel</a></div>
-    </form>`;
+    </form>
+    <script>
+      (function () {
+        var port = document.getElementById("smtp_port");
+        var warn = document.getElementById("smtp-465-warn");
+        if (!port || !warn) return;
+        var sync = function () { warn.hidden = String(port.value).trim() !== "465"; };
+        port.addEventListener("input", sync);
+        sync();
+      })();
+    </script>`;
 }
 
 async function loadDatabase(id: string, session: UserSession) {
@@ -1215,7 +1421,7 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
     imap_port: Number(req.body.imap_port || 993),
     imap_secure: bool(req.body.imap_secure),
     smtp_host: String(req.body.smtp_host ?? "").trim(),
-    smtp_port: Number(req.body.smtp_port || 465),
+    smtp_port: Number(req.body.smtp_port || 587),
     smtp_secure: bool(req.body.smtp_secure),
     imap_user: String(req.body.imap_user ?? "").trim() || null,
     smtp_user: String(req.body.smtp_user ?? "").trim() || null,

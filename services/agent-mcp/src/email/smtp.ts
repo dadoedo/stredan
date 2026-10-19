@@ -4,12 +4,12 @@ import { appendMessage } from "./imap.js";
 
 const transporterPool = new Map<string, Transporter>();
 
-function getTransporter(account: ResolvedAccount): Transporter {
-  const key = `${account.key}:${account.smtp.host}:${account.smtp.port}:${account.smtp.user}`;
-  const existing = transporterPool.get(key);
-  if (existing) return existing;
+export const SMTP_CONNECTION_TIMEOUT_MS = 15_000;
+export const SMTP_GREETING_TIMEOUT_MS = 15_000;
+export const SMTP_SOCKET_TIMEOUT_MS = 30_000;
 
-  const transporter = nodemailer.createTransport({
+export function smtpTransportOptions(account: ResolvedAccount): nodemailer.TransportOptions & Record<string, unknown> {
+  return {
     host: account.smtp.host,
     port: account.smtp.port,
     secure: account.smtp.secure,
@@ -21,7 +21,37 @@ function getTransporter(account: ResolvedAccount): Transporter {
     pool: true,
     maxConnections: 3,
     maxMessages: 100,
-  });
+    connectionTimeout: SMTP_CONNECTION_TIMEOUT_MS,
+    greetingTimeout: SMTP_GREETING_TIMEOUT_MS,
+    socketTimeout: SMTP_SOCKET_TIMEOUT_MS,
+  };
+}
+
+function isSmtpTimeout(error: unknown): boolean {
+  if (!error || typeof error !== "object") return false;
+  const code = "code" in error && typeof error.code === "string" ? error.code : "";
+  const message = error instanceof Error ? error.message : "";
+  if (code === "ETIMEDOUT" || code === "ESOCKETTIMEDOUT") return true;
+  return /timeout|timed out|greeting never received/i.test(message);
+}
+
+/** Maps nodemailer connection timeouts to a message that names the likely blocked port. */
+export function explainSmtpError(error: unknown, target: { host: string; port: number }): Error {
+  const original = error instanceof Error ? error : new Error(String(error));
+  if (!isSmtpTimeout(original)) return original;
+  const friendly = new Error(
+    `Could not connect to SMTP ${target.host}:${target.port} within 15s — port may be blocked; try 587 with STARTTLS`
+  );
+  friendly.cause = original;
+  return friendly;
+}
+
+function getTransporter(account: ResolvedAccount): Transporter {
+  const key = `${account.key}:${account.smtp.host}:${account.smtp.port}:${account.smtp.user}:${account.smtp.secure}`;
+  const existing = transporterPool.get(key);
+  if (existing) return existing;
+
+  const transporter = nodemailer.createTransport(smtpTransportOptions(account));
 
   transporterPool.set(key, transporter);
   return transporter;
@@ -70,25 +100,30 @@ export async function sendViaSmtp(
     headers["References"] = options.references.join(" ");
   }
 
-  const info = await transporter.sendMail({
-    from: formatAddress({ name: account.name, address: account.address }),
-    to: options.to.map(formatAddress),
-    cc: options.cc?.map(formatAddress),
-    bcc: options.bcc?.map(formatAddress),
-    subject: options.subject,
-    text: options.text,
-    html: options.html,
-    replyTo: options.replyTo ? formatAddress(options.replyTo) : undefined,
-    inReplyTo: options.inReplyTo,
-    references: options.references,
-    headers,
-    attachments: options.attachments?.map((a) => ({
-      filename: a.filename,
-      content: a.content,
-      contentType: a.contentType,
-      encoding: a.encoding ?? "base64",
-    })),
-  });
+  let info;
+  try {
+    info = await transporter.sendMail({
+      from: formatAddress({ name: account.name, address: account.address }),
+      to: options.to.map(formatAddress),
+      cc: options.cc?.map(formatAddress),
+      bcc: options.bcc?.map(formatAddress),
+      subject: options.subject,
+      text: options.text,
+      html: options.html,
+      replyTo: options.replyTo ? formatAddress(options.replyTo) : undefined,
+      inReplyTo: options.inReplyTo,
+      references: options.references,
+      headers,
+      attachments: options.attachments?.map((a) => ({
+        filename: a.filename,
+        content: a.content,
+        contentType: a.contentType,
+        encoding: a.encoding ?? "base64",
+      })),
+    });
+  } catch (error) {
+    throw explainSmtpError(error, account.smtp);
+  }
 
   let appendedToSent = false;
   let appendError: string | undefined;

@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { env } from "../env.js";
@@ -19,9 +19,34 @@ function schemaPath(): string {
   throw new Error(`schema.sql not found. Tried: ${candidates.join(", ")}`);
 }
 
+function migrationDir(): string {
+  const candidates = [
+    join(here, "migrations"),
+    join(here, "../../src/db/migrations"),
+    join(process.cwd(), "src/db/migrations"),
+    join(process.cwd(), "dist/db/migrations"),
+  ];
+  for (const path of candidates) {
+    if (existsSync(path)) return path;
+  }
+  throw new Error(`db migrations not found. Tried: ${candidates.join(", ")}`);
+}
+
+async function applyMigrations(): Promise<void> {
+  const dir = migrationDir();
+  const files = readdirSync(dir)
+    .filter((name) => name.endsWith(".sql"))
+    .sort();
+  for (const name of files) {
+    const sqlText = readFileSync(join(dir, name), "utf8");
+    await sql.unsafe(sqlText);
+  }
+}
+
 export async function migrate(): Promise<void> {
   const schema = readFileSync(schemaPath(), "utf8");
   await sql.unsafe(schema);
+  await applyMigrations();
   await backfillTenancy();
 }
 

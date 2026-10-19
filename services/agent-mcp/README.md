@@ -137,6 +137,12 @@ Confirm `ADMIN_EMAIL` in `/root/agent-mcp/.env` matches the current admin email 
 
 Invites need `PUBLIC_DASHBOARD_URL` (already set in production) so the one-time link points at the dashboard. No new environment variables.
 
+## SMTP
+
+The Hetzner host blocks outbound ports 25 and 465. Port 587 with STARTTLS works. New mailboxes default to `smtp_port` 587 and `smtp_secure` false (STARTTLS, not implicit TLS). The add/edit form explains that and warns when port 465 is selected.
+
+`migrate()` applies `src/db/migrations/20261019_smtp_defaults.sql` on boot. That migration only changes the column defaults. Existing mailbox rows keep their stored port and secure flag. SMTP connections time out after 15 seconds and report that the port may be blocked.
+
 ## Local
 
 ```bash

@@ -69,8 +69,10 @@ CREATE TABLE IF NOT EXISTS email_accounts (
   imap_port INTEGER NOT NULL DEFAULT 993,
   imap_secure BOOLEAN NOT NULL DEFAULT true,
   smtp_host TEXT NOT NULL,
-  smtp_port INTEGER NOT NULL DEFAULT 465,
-  smtp_secure BOOLEAN NOT NULL DEFAULT true,
+  -- Fresh databases. Existing databases pick up the same defaults from
+  -- migrations/20261019_smtp_defaults.sql, which does not rewrite rows.
+  smtp_port INTEGER NOT NULL DEFAULT 587,
+  smtp_secure BOOLEAN NOT NULL DEFAULT false,
   imap_user TEXT,
   smtp_user TEXT,
   password_secret_id UUID REFERENCES vault_secrets (id),
