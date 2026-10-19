@@ -1,4 +1,4 @@
-import postgres from "postgres";
+import postgres, { type Sql, type TransactionSql } from "postgres";
 import { sql } from "./db/client.js";
 import { decrypt, encrypt, secretHint } from "./vault.js";
 import type {
@@ -24,9 +24,13 @@ function asPermissions(value: string): Permissions {
   return value === "readwrite" ? "readwrite" : "readonly";
 }
 
-export async function storeSecret(plaintext: string, ownerId: string): Promise<string> {
+export async function insertVaultSecret(
+  executor: Sql | TransactionSql,
+  plaintext: string,
+  ownerId: string
+): Promise<string> {
   const blob = encrypt(plaintext);
-  const rows = await sql<{ id: string }[]>`
+  const rows = await executor<{ id: string }[]>`
     INSERT INTO vault_secrets (ciphertext, nonce, owner_id)
     VALUES (${blob.ciphertext}, ${blob.nonce}, ${ownerId})
     RETURNING id
@@ -34,12 +38,8 @@ export async function storeSecret(plaintext: string, ownerId: string): Promise<s
   return rows[0].id;
 }
 
-export async function replaceSecret(oldId: string | null, plaintext: string, ownerId: string): Promise<string> {
-  const id = await storeSecret(plaintext, ownerId);
-  if (oldId) {
-    await sql`DELETE FROM vault_secrets WHERE id = ${oldId}`;
-  }
-  return id;
+export async function storeSecret(plaintext: string, ownerId: string): Promise<string> {
+  return insertVaultSecret(sql, plaintext, ownerId);
 }
 
 export async function readSecret(id: string, ownerId?: string): Promise<string> {
