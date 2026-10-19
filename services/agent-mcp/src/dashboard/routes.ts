@@ -19,7 +19,7 @@ import {
 } from "../auth/sessions.js";
 import { generateTotpSecret, loadUserTotpSecret, storeUserTotpSecret, totpQrDataUrl, verifyTotp } from "../auth/totp.js";
 import { esc, flashHtml, layout } from "./html.js";
-import { buildConnectionUrl, readSecret, replaceSecret, secretHint, testPostgresConnection } from "../targets.js";
+import { buildConnectionUrl, insertVaultSecret, readSecret, secretHint, storeSecret, testPostgresConnection } from "../targets.js";
 import type { ApiKeyScope, Permissions, UserSession } from "../types.js";
 
 declare global {
@@ -1119,41 +1119,67 @@ async function upsertDatabase(req: Request, id: string | null): Promise<{ id: st
 
   let secretId = existing[0]?.connection_url_secret_id ?? null;
   let hint = existing.length ? (await sql<{ secret_hint: string | null }[]>`SELECT secret_hint FROM database_environments WHERE id = ${existing[0].id}`)[0]?.secret_hint : null;
+  let envWritten = false;
   if (url) {
-    secretId = await replaceSecret(secretId, url, ownerId);
     hint = secretHint(url);
+    const oldSecretId = secretId;
+    if (existing[0] && oldSecretId) {
+      await sql.begin(async (tx) => {
+        const newSecretId = await insertVaultSecret(tx, url, ownerId);
+        await tx`
+          UPDATE database_environments SET
+            host = ${String(req.body.host ?? "") || null},
+            port = ${Number(req.body.port || 5432)},
+            database_name = ${String(req.body.database_name ?? "") || null},
+            username = ${String(req.body.username ?? "") || null},
+            ssl = ${bool(req.body.ssl)},
+            connection_url_secret_id = ${newSecretId},
+            secret_hint = ${hint},
+            permissions = ${asPerm(req.body.permissions)},
+            updated_at = now()
+          WHERE id = ${existing[0].id}
+        `;
+        await tx`DELETE FROM vault_secrets WHERE id = ${oldSecretId}`;
+        secretId = newSecretId;
+      });
+      envWritten = true;
+    } else {
+      secretId = await storeSecret(url, ownerId);
+    }
   }
   if (!secretId) throw new Error("A connection URL or host credentials are required");
 
-  if (existing[0]) {
-    await sql`
-      UPDATE database_environments SET
-        host = ${String(req.body.host ?? "") || null},
-        port = ${Number(req.body.port || 5432)},
-        database_name = ${String(req.body.database_name ?? "") || null},
-        username = ${String(req.body.username ?? "") || null},
-        ssl = ${bool(req.body.ssl)},
-        connection_url_secret_id = ${secretId},
-        secret_hint = ${hint},
-        permissions = ${asPerm(req.body.permissions)},
-        updated_at = now()
-      WHERE id = ${existing[0].id}
-    `;
-  } else {
-    await sql`
-      INSERT INTO database_environments (
-        database_id, name, host, port, database_name, username, ssl,
-        connection_url_secret_id, secret_hint, permissions
-      ) VALUES (
-        ${targetId}, ${envName},
-        ${String(req.body.host ?? "") || null},
-        ${Number(req.body.port || 5432)},
-        ${String(req.body.database_name ?? "") || null},
-        ${String(req.body.username ?? "") || null},
-        ${bool(req.body.ssl)},
-        ${secretId}, ${hint}, ${asPerm(req.body.permissions)}
-      )
-    `;
+  if (!envWritten) {
+    if (existing[0]) {
+      await sql`
+        UPDATE database_environments SET
+          host = ${String(req.body.host ?? "") || null},
+          port = ${Number(req.body.port || 5432)},
+          database_name = ${String(req.body.database_name ?? "") || null},
+          username = ${String(req.body.username ?? "") || null},
+          ssl = ${bool(req.body.ssl)},
+          connection_url_secret_id = ${secretId},
+          secret_hint = ${hint},
+          permissions = ${asPerm(req.body.permissions)},
+          updated_at = now()
+        WHERE id = ${existing[0].id}
+      `;
+    } else {
+      await sql`
+        INSERT INTO database_environments (
+          database_id, name, host, port, database_name, username, ssl,
+          connection_url_secret_id, secret_hint, permissions
+        ) VALUES (
+          ${targetId}, ${envName},
+          ${String(req.body.host ?? "") || null},
+          ${Number(req.body.port || 5432)},
+          ${String(req.body.database_name ?? "") || null},
+          ${String(req.body.username ?? "") || null},
+          ${bool(req.body.ssl)},
+          ${secretId}, ${hint}, ${asPerm(req.body.permissions)}
+        )
+      `;
+    }
   }
   return { id: targetId, key };
 }
@@ -1180,11 +1206,6 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
     hint = existing[0].secret_hint;
     ownerId = existing[0].owner_id;
   }
-  if (password) {
-    secretId = await replaceSecret(secretId, password, ownerId);
-    hint = secretHint(password);
-  }
-  if (!secretId) throw new Error("Password is required");
 
   const fields = {
     key,
@@ -1203,6 +1224,43 @@ async function upsertEmail(req: Request, id: string | null): Promise<{ id: strin
     sent_folder: String(req.body.sent_folder ?? "Sent") || "Sent",
     notes: String(req.body.notes ?? "") || null,
   };
+
+  if (password) {
+    hint = secretHint(password);
+    const oldSecretId = secretId;
+    if (id && oldSecretId) {
+      await sql.begin(async (tx) => {
+        const newSecretId = await insertVaultSecret(tx, password, ownerId);
+        const updated = await tx`
+          UPDATE email_accounts SET
+            name = ${fields.name},
+            address = ${fields.address},
+            imap_host = ${fields.imap_host},
+            imap_port = ${fields.imap_port},
+            imap_secure = ${fields.imap_secure},
+            smtp_host = ${fields.smtp_host},
+            smtp_port = ${fields.smtp_port},
+            smtp_secure = ${fields.smtp_secure},
+            imap_user = ${fields.imap_user},
+            smtp_user = ${fields.smtp_user},
+            password_secret_id = ${newSecretId},
+            secret_hint = ${hint},
+            permissions = ${fields.permissions},
+            append_to_sent = ${fields.append_to_sent},
+            sent_folder = ${fields.sent_folder},
+            notes = ${fields.notes},
+            updated_at = now()
+          WHERE id = ${id} AND owner_id = ${ownerId}
+        `;
+        if (updated.count === 0) throw new Error("Not found");
+        await tx`DELETE FROM vault_secrets WHERE id = ${oldSecretId}`;
+        secretId = newSecretId;
+      });
+      return { id, key };
+    }
+    secretId = await storeSecret(password, ownerId);
+  }
+  if (!secretId) throw new Error("Password is required");
 
   if (!id) {
     const inserted = await sql<{ id: string }[]>`
