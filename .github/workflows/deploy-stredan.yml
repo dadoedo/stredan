@@ -10,6 +10,7 @@ on:
       - "prisma.config.ts"
       - "package.json"
       - "package-lock.json"
+      - ".nvmrc"
       - "Dockerfile"
       - ".dockerignore"
       - "next.config.ts"
