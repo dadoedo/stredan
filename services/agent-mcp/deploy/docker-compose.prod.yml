@@ -49,10 +49,16 @@ services:
       start_period: 25s
     networks:
       - agent_mcp_net
+      # Private route to the AskData (healthapp) Postgres for the
+      # stredan_mcp_rw database target. Never publish that DB publicly.
+      - healthapp_net
 
 networks:
   agent_mcp_net:
     name: agent_mcp_net
+    external: true
+  healthapp_net:
+    name: healthapp_net
     external: true
 
 volumes:

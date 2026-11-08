@@ -176,3 +176,5 @@ HostCreators WebAdmin (NS for `stredan.sk`). `rd.stredan.sk` is the existing pat
 The MCP container can open TCP to Neon, other Hetzner hosts, and published host ports via `host.docker.internal`. Example for a DB published on the same machine at `127.0.0.1:5433`:
 
 `postgres://user:pass@host.docker.internal:5433/dbname`
+
+Production `agent-mcp-app` also joins the external Docker network `healthapp_net` (see `deploy/docker-compose.prod.yml`) so it can reach the AskData Postgres container (`healthapp-postgres-1:5432`) on the same Hetzner host without publishing that database. The network is created and owned by the healthapp stack; deploy checks that it exists before `docker compose up`.

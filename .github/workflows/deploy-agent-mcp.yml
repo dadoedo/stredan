@@ -127,6 +127,14 @@ jobs:
             docker network inspect agent_mcp_net >/dev/null 2>&1 || docker network create agent_mcp_net
             docker network connect agent_mcp_net edge-caddy 2>/dev/null || true
 
+            if ! docker network inspect healthapp_net >/dev/null 2>&1; then
+              echo "Missing external Docker network healthapp_net."
+              echo "The agent-mcp app joins it to reach AskData Postgres (healthapp-postgres-1) on the private Docker network."
+              echo "Create it by running the healthapp stack on this host, or: docker network create healthapp_net"
+              echo "Then ensure healthapp Postgres is attached to that network before relying on MCP database targets there."
+              exit 1
+            fi
+
             if [[ -f /root/edge/docker-compose.yml ]] && ! grep -q agent_mcp_net /root/edge/docker-compose.yml; then
               python3 - <<'PY'
             from pathlib import Path
