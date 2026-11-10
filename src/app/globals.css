@@ -441,18 +441,13 @@ button.agency-btn-secondary:disabled {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: 2.75rem 0 0;
   background: var(--paper);
 }
 
 .agency-hero-media img {
   display: block;
   width: 100%;
-  height: min(72vw, 440px);
-  object-fit: cover;
-  object-position: 78% 28%;
+  height: auto;
 }
 
 .agency-hero-copy {
@@ -465,8 +460,86 @@ button.agency-btn-secondary:disabled {
   max-width: 40rem;
 }
 
+.agency-hero-title-short {
+  display: none;
+}
+
 .agency-hero-mail {
   margin-top: 0.85rem;
+}
+
+.agency-hero-detail {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  .agency-hero .agency-shell {
+    position: absolute;
+    inset: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .agency-hero-copy {
+    width: min(58%, 13.5rem);
+  }
+
+  .agency-hero .agency-kicker,
+  .agency-hero .agency-lede,
+  .agency-hero .agency-hero-mail,
+  .agency-hero .agency-cta-note {
+    /* Keep the detail-block mail link visible. */
+    display: none;
+  }
+
+  .agency-hero-title-full {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .agency-hero-title-short {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .agency-hero .agency-h1 {
+    margin-top: 0;
+    max-width: none;
+    font-size: clamp(1.35rem, 5.6vw, 1.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .agency-hero .agency-cta-row {
+    margin-top: 0.85rem;
+    max-width: 78%;
+  }
+
+  .agency-hero .agency-btn-primary {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.82rem;
+    line-height: 1.25;
+  }
+
+  .agency-hero-detail {
+    display: block;
+    padding: 0.35rem 0 1.5rem;
+  }
+
+  .agency-hero-detail .agency-lede {
+    margin-top: 0.85rem;
+    font-size: 1rem;
+  }
 }
 
 .agency-cta-note {
@@ -492,6 +565,7 @@ button.agency-btn-secondary:disabled {
 
   .agency-hero-media img {
     height: 100%;
+    object-fit: cover;
     object-position: right center;
   }
 

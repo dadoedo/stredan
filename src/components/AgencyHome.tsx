@@ -225,7 +225,7 @@ export function AgencyHome({ locale }: { locale: Locale }) {
           <img
             src="/team/david-hero.webp"
             srcSet="/team/david-hero-720.webp 720w, /team/david-hero-960.webp 960w, /team/david-hero.webp 1280w"
-            sizes="(max-width: 959px) 100vw, 100vw"
+            sizes="100vw"
             alt={t.heroAlt}
             width={1280}
             height={720}
@@ -235,7 +235,14 @@ export function AgencyHome({ locale }: { locale: Locale }) {
         <div className="agency-shell">
           <div className="agency-hero-copy">
             <p className="agency-kicker">{t.kicker}</p>
-            <h1 className="agency-h1">{t.headline}</h1>
+            <h1 className="agency-h1">
+              <span className="agency-hero-title-full">{t.headline}</span>
+              <span className="agency-hero-title-short" aria-hidden="true">
+                {t.mobileTitle[0]}
+                <br />
+                {t.mobileTitle[1]}
+              </span>
+            </h1>
             <p className="agency-lede">{t.lede}</p>
             <div className="agency-cta-row">
               <IntroCallButton locale={locale} location="hero" />
@@ -251,6 +258,19 @@ export function AgencyHome({ locale }: { locale: Locale }) {
           </div>
         </div>
       </section>
+      <div className="agency-hero-detail">
+        <div className="agency-shell">
+          <p className="agency-lede">{t.lede}</p>
+          <AgencyEmailButton
+            href="mailto:david@stredan.sk"
+            className="agency-text-link agency-hero-mail"
+            location="hero-detail"
+          >
+            {t.email}
+          </AgencyEmailButton>
+          <p className="agency-cta-note">{t.note}</p>
+        </div>
+      </div>
 
       <section className="agency-trust" aria-labelledby="founder-heading">
         <div className="agency-shell">

@@ -4,6 +4,7 @@ export const homeCopy = {
   sk: {
     kicker: "Jeden proces, nie celá firma naraz",
     headline: "Vyberieme jeden proces, ktorý vás brzdí, a nasadíme naň agenta.",
+    mobileTitle: ["Jeden proces.", "Jeden agent."],
     lede: "Dohodneme jednu konkrétnu prácu, ktorú dnes niekto skladá medzi e-mailom, tabuľkou a systémom. Agenta na ňu postavíme a odovzdáme. Platí sa jednorazová implementácia a konzultácia. Predplatné modelu, API, hosting a prípadná ďalšia podpora sú osobitne.",
     cta: "Vybrať termín úvodného hovoru",
     email: "Alebo napíšte na david@stredan.sk",
@@ -129,6 +130,7 @@ export const homeCopy = {
   en: {
     kicker: "One process, not the whole company at once",
     headline: "We take the one process that slows you down and put an agent on it.",
+    mobileTitle: ["One process.", "One agent."],
     lede: "We agree one concrete job someone still pieces together across email, a spreadsheet, and a system. We build the agent for it and hand it over. You pay a one-off implementation fee, plus consultation. Model subscriptions, API use, hosting, and any later support sit beside that fee.",
     cta: "Choose a time for an intro call",
     email: "Or write to david@stredan.sk",

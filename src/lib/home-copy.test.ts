@@ -42,6 +42,8 @@ describe("public marketing copy", () => {
       homeCopy.sk.cta,
       "Vybrať termín úvodného hovoru",
     );
+    assert.deepEqual(homeCopy.sk.mobileTitle, ["Jeden proces.", "Jeden agent."]);
+    assert.deepEqual(homeCopy.en.mobileTitle, ["One process.", "One agent."]);
     assert.equal(homeCopy.sk.auditCta, "Napísať ohľadom auditu");
     assert.equal(
       PUBLIC_OFFERS.find((offer) => offer.slug === "ai-audit")?.cta.sk,
