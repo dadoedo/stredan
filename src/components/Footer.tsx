@@ -18,8 +18,8 @@ export default function Footer({ locale }: { locale: Locale }) {
               <TrackedAnchor
                 href="mailto:david@stredan.sk"
                 className={linkClass}
-                event="contact_started"
-                eventProps={{ location: "footer", method: "email" }}
+                event="contact_email_clicked"
+                eventProps={{ location: "footer", intent: "open_mailto" }}
               >
                 Email
               </TrackedAnchor>
@@ -54,6 +54,11 @@ export default function Footer({ locale }: { locale: Locale }) {
             </p>
             <p className="mt-1 text-xs">
               Trieda SNP 1707/59, 974 01 Banská Bystrica
+            </p>
+            <p className="mt-3 text-xs">
+              <a href="/privacy" className={linkClass}>
+                {locale === "sk" ? "Ochrana súkromia" : "Privacy"}
+              </a>
             </p>
           </div>
         </div>

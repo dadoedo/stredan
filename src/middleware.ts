@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { LOCALE_COOKIE } from "@/lib/locale";
+import { resolveRequestLocale } from "@/lib/locale-preference";
 
 function isCursorProfileHost(host: string) {
   const hostname = host.split(":")[0];
@@ -34,17 +35,19 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
 
-  const locale = request.cookies.get(LOCALE_COOKIE)?.value;
-  if (!locale || (locale !== "en" && locale !== "sk")) {
-    const acceptLanguage = request.headers.get("accept-language") ?? "";
-    const preferred = acceptLanguage.includes("sk") ? "sk" : "en";
-    const response = NextResponse.next();
-    response.cookies.set(LOCALE_COOKIE, preferred, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-    });
-    return response;
+  const saved = request.cookies.get(LOCALE_COOKIE)?.value;
+  if (saved === "en" || saved === "sk") {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  const locale = resolveRequestLocale(
+    saved,
+    request.headers.get("accept-language"),
+  );
+  const response = NextResponse.next();
+  response.cookies.set(LOCALE_COOKIE, locale, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+  return response;
 }

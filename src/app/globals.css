@@ -64,6 +64,7 @@
   --mist: #5c5854;
   --line: #e4dfd8;
   --mark: #e11d2e;
+  --mark-text: #9b1224;
   --panel: #ffffff;
 }
 
@@ -250,12 +251,13 @@ iframe[src^="https://calendar.google.com/calendar/appointments/schedules/"] {
 
 .agency-h1 {
   margin-top: 1rem;
-  max-width: 16ch;
-  font-size: clamp(2.75rem, 6.5vw, 5rem);
+  max-width: 18ch;
+  font-size: clamp(2.05rem, 4.2vw, 3.35rem);
   font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.04em;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
   color: var(--ink);
+  text-wrap: balance;
 }
 
 .agency-h2 {
@@ -269,9 +271,9 @@ iframe[src^="https://calendar.google.com/calendar/appointments/schedules/"] {
 
 .agency-lede {
   margin-top: 1.25rem;
-  max-width: 40ch;
+  max-width: 42rem;
   font-size: 1.125rem;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--mist);
 }
 
@@ -324,9 +326,27 @@ iframe[src^="https://calendar.google.com/calendar/appointments/schedules/"] {
   -webkit-text-fill-color: #fff;
 }
 
+.agency-btn-primary,
+.agency-btn-secondary {
+  max-width: 100%;
+  white-space: normal;
+  text-align: left;
+}
+
+button.agency-btn-primary {
+  cursor: pointer;
+  font-family: inherit;
+  color: #fff;
+}
+
+button.agency-btn-primary:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
 .agency-btn-primary:hover,
 .agency-btn-primary:focus-visible {
-  background-color: var(--mark);
+  background-color: var(--mark-text);
   color: #fff;
 }
 
@@ -400,7 +420,7 @@ button.agency-btn-secondary:disabled {
 .agency-text-link {
   display: inline-flex;
   margin-top: 1.25rem;
-  color: var(--mark);
+  color: var(--mark-text);
   font-size: 0.95rem;
   font-weight: 600;
   text-decoration: underline;
@@ -421,63 +441,99 @@ button.agency-btn-secondary:disabled {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: 5rem 0 3.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 2.75rem 0 0;
   background: var(--paper);
 }
 
-.agency-hero::before,
-.agency-hero::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(72px);
-  will-change: transform;
+.agency-hero-media img {
+  display: block;
+  width: 100%;
+  height: min(72vw, 440px);
+  object-fit: cover;
+  object-position: 78% 28%;
 }
 
-.agency-hero::before {
-  top: -18%;
-  right: -8%;
-  width: min(58vw, 540px);
-  height: min(58vw, 540px);
-  background: radial-gradient(
-    circle,
-    rgba(225, 29, 46, 0.07) 0%,
-    rgba(225, 29, 46, 0.02) 42%,
-    transparent 72%
-  );
-  animation: agency-hero-drift-a 26s ease-in-out infinite alternate;
+.agency-hero-copy {
+  min-width: 0;
 }
 
-.agency-hero::after {
-  bottom: -20%;
-  left: -10%;
-  width: min(50vw, 460px);
-  height: min(50vw, 460px);
-  background: radial-gradient(
-    circle,
-    rgba(228, 223, 216, 0.95) 0%,
-    rgba(247, 245, 242, 0.45) 45%,
-    transparent 72%
-  );
-  animation: agency-hero-drift-b 32s ease-in-out infinite alternate;
+.agency-hero .agency-h1,
+.agency-hero .agency-lede,
+.agency-hero .agency-cta-note {
+  max-width: 40rem;
 }
 
-.agency-hero .agency-shell {
-  position: relative;
-  z-index: 1;
+.agency-hero-mail {
+  margin-top: 0.85rem;
 }
 
-@media (min-width: 640px) {
+.agency-cta-note {
+  margin-top: 0.85rem;
+  max-width: 46rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--mist);
+}
+
+@media (min-width: 960px) {
   .agency-hero {
-    padding: 6.5rem 0 4.5rem;
+    min-height: 40rem;
+    justify-content: center;
+    padding: 4.5rem 0;
+  }
+
+  .agency-hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .agency-hero-media img {
+    height: 100%;
+    object-position: right center;
+  }
+
+  .agency-hero .agency-shell {
+    position: relative;
+    z-index: 1;
+  }
+
+  .agency-hero-copy {
+    width: min(32rem, 42vw);
   }
 }
 
-.agency-hero .agency-metrics-grid {
-  margin-top: 3.25rem;
-  padding-top: 2rem;
+.agency-trust {
+  padding: 2.75rem 0 3.25rem;
   border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.agency-trust-card {
+  display: grid;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.agency-trust-card img {
+  width: 132px;
+  height: 132px;
+  object-fit: cover;
+  object-position: center 18%;
+}
+
+@media (min-width: 720px) {
+  .agency-trust-card {
+    grid-template-columns: 148px minmax(0, 1fr);
+    gap: 1.75rem;
+  }
+
+  .agency-trust-card img {
+    width: 148px;
+    height: 148px;
+  }
 }
 
 .agency-logos {
@@ -721,7 +777,7 @@ button.agency-btn-secondary:disabled {
 
 @media (min-width: 800px) {
   .agency-steps {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
   }
 }
@@ -731,7 +787,7 @@ button.agency-btn-secondary:disabled {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--mark);
+  color: var(--mark-text);
 }
 
 .agency-steps h3 {
@@ -879,7 +935,7 @@ button.agency-btn-secondary:disabled {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: var(--mark);
+  color: var(--mark-text);
 }
 
 .agency-offer-name {
@@ -1002,12 +1058,192 @@ button.agency-btn-secondary:disabled {
   transform: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce), (scripting: none) {
   .agency-reveal {
     opacity: 1;
     transform: none;
     transition: none;
   }
+}
+
+.agency-logo-caption {
+  margin: 0 auto 0.75rem;
+  max-width: 1180px;
+  padding-inline: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--mist);
+}
+
+.agency-bounds {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.agency-bounds h3,
+.agency-bounds dt {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.agency-bounds ul {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.agency-bounds li,
+.agency-bounds dd {
+  margin: 0.45rem 0 0;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--line);
+  line-height: 1.5;
+}
+
+.agency-bounds-out li {
+  border-left-color: var(--mark);
+}
+
+@media (min-width: 800px) {
+  .agency-bounds {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+.agency-paths {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.agency-path {
+  min-width: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 1.15rem;
+}
+
+.agency-path h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.agency-path p {
+  margin-top: 0.55rem;
+  max-width: 52ch;
+  color: var(--mist);
+  line-height: 1.55;
+}
+
+@media (min-width: 800px) {
+  .agency-paths {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.agency-examples {
+  padding: 4rem 0;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.agency-examples-grid {
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+.agency-example {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 1.1rem 1.15rem;
+}
+
+.agency-example-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mark-text);
+}
+
+.agency-example h3 {
+  margin-top: 0.45rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.agency-example p:last-child {
+  margin-top: 0.4rem;
+  color: var(--mist);
+  line-height: 1.5;
+}
+
+@media (min-width: 800px) {
+  .agency-examples-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.agency-faq-section {
+  padding: 4rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.agency-faq {
+  margin-top: 1.25rem;
+  max-width: 46rem;
+}
+
+.agency-faq details {
+  border-top: 1px solid var(--line);
+}
+
+.agency-faq summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.25rem;
+  padding: 0.85rem 0;
+  font-weight: 650;
+  font-size: 1.05rem;
+}
+
+.agency-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.agency-faq summary::after {
+  content: "+";
+  color: var(--mark-text);
+  font-weight: 600;
+}
+
+.agency-faq details[open] summary::after {
+  content: "–";
+}
+
+.agency-faq details p {
+  margin: 0 0 1rem;
+  color: var(--mist);
+  line-height: 1.6;
+}
+
+#ponuka,
+#postup,
+#priklady,
+#work,
+#otazky,
+#kontakt {
+  scroll-margin-top: 5rem;
 }
 
 .agency-page {

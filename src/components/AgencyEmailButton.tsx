@@ -7,20 +7,26 @@ export function AgencyEmailButton({
   href,
   children,
   className = "agency-btn-primary",
-  event = "contact_started",
-  eventProps,
+  location,
+  offer,
 }: {
   href: string;
   children: React.ReactNode;
   className?: string;
-  event?: string;
-  eventProps?: Record<string, unknown>;
+  location: string;
+  offer?: string;
 }) {
   return (
     <a
       href={href}
       className={className}
-      onClick={() => trackEvent(event, eventProps)}
+      onClick={() =>
+        trackEvent("contact_email_clicked", {
+          location,
+          offer,
+          intent: "open_mailto",
+        })
+      }
     >
       <Mail className="agency-btn-icon" aria-hidden />
       {children}

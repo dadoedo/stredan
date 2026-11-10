@@ -94,7 +94,7 @@ export function BookingCallButton({
   label: string;
   className?: string;
   campaign?: string;
-  eventProps?: Record<string, unknown>;
+  eventProps?: { location: string; offer?: string };
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [popupReady, setPopupReady] = useState(false);
@@ -139,10 +139,11 @@ export function BookingCallButton({
   }, [label, campaign, useDirectPage]);
 
   const openBooking = () => {
-    trackEvent("contact_started", {
-      method: "booking",
+    trackEvent("booking_opened", {
+      location: eventProps?.location,
+      offer: eventProps?.offer,
       campaign,
-      ...eventProps,
+      intent: "open_scheduler",
     });
 
     const url = bookingPopupUrl(campaign);

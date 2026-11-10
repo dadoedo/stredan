@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
 import { getLocale } from "@/lib/locale";
+import { absoluteUrl } from "@/lib/site";
 
 const booksContent = {
   en: {
@@ -58,6 +59,8 @@ export async function generateMetadata() {
   return {
     title: c.title,
     description: c.intro,
+    alternates: { canonical: absoluteUrl("/books") },
+    openGraph: { url: absoluteUrl("/books") },
   };
 }
 

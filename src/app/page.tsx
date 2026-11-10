@@ -1,121 +1,34 @@
+import type { Metadata } from "next";
 import { AgencyHome } from "@/components/AgencyHome";
 import { SiteShell } from "@/components/SiteShell";
 import { getLocale } from "@/lib/locale";
-import { getActiveOffers, type OfferPublic } from "@/lib/offers";
+import { routeMetadata } from "@/lib/site";
 
-const FALLBACK_SK: OfferPublic[] = [
-  {
-    code: "A",
-    slug: "ai-audit",
-    name: "AI Opportunity Audit",
-    oneLiner:
-      "Za 14 dní zmapujeme procesy a dostanete plán: čo stavať, kúpiť, alebo vynechať.",
-    cta: "Objednať AI audit",
-    priceHint: null,
-    landingPath: "/offers/ai-audit",
-  },
-  {
-    code: "B",
-    slug: "pilot-agent",
-    name: "Pilot AI Agent",
-    oneLiner:
-      "Jeden agent na konkrétny proces. V prevádzke do 4–6 týždňov.",
-    cta: "Spustiť pilot",
-    priceHint: null,
-    landingPath: "/offers/pilot-agent",
-  },
-  {
-    code: "C",
-    slug: "shadow-ai",
-    name: "Firemné AI pod kontrolou",
-    oneLiner:
-      "AI s pravidlami a vašimi dátami, nie nekontrolovaný ChatGPT v prehliadači.",
-    cta: "Zabezpečiť AI",
-    priceHint: null,
-    landingPath: "/offers/shadow-ai",
-  },
-  {
-    code: "D",
-    slug: "ai-integration",
-    name: "AI do existujúcich systémov",
-    oneLiner: "Napojenie AI na CRM, ERP a e-maily. Bez ďalšieho softvéru navyše.",
-    cta: "Napojiť AI",
-    priceHint: null,
-    landingPath: "/offers/ai-integration",
-  },
-  {
-    code: "E",
-    slug: "custom-ai-app",
-    name: "Vlastná AI aplikácia",
-    oneLiner: "Vlastný systém s AI vnútri: CRM, portál, vyhodnocovanie dát.",
-    cta: "Konzultácia",
-    priceHint: null,
-    landingPath: "/offers/custom-ai-app",
-  },
-];
-
-const FALLBACK_EN: OfferPublic[] = [
-  {
-    code: "A",
-    slug: "ai-audit",
-    name: "AI Opportunity Audit",
-    oneLiner: "In 14 days: a written plan for what to build, buy, or skip.",
-    cta: "Book an AI audit",
-    priceHint: null,
-    landingPath: "/offers/ai-audit",
-  },
-  {
-    code: "B",
-    slug: "pilot-agent",
-    name: "Pilot AI Agent",
-    oneLiner: "One production agent for one workflow. Live in 4–6 weeks.",
-    cta: "Start a pilot",
-    priceHint: null,
-    landingPath: "/offers/pilot-agent",
-  },
-  {
-    code: "C",
-    slug: "shadow-ai",
-    name: "Company AI under control",
-    oneLiner: "AI with rules and your data, not uncontrolled ChatGPT.",
-    cta: "Secure company AI",
-    priceHint: null,
-    landingPath: "/offers/shadow-ai",
-  },
-  {
-    code: "D",
-    slug: "ai-integration",
-    name: "AI into existing systems",
-    oneLiner: "Wire AI into CRM, ERP and email. No extra software stack.",
-    cta: "Connect AI",
-    priceHint: null,
-    landingPath: "/offers/ai-integration",
-  },
-  {
-    code: "E",
-    slug: "custom-ai-app",
-    name: "Custom AI application",
-    oneLiner: "A custom system with AI inside: CRM, portal, data evaluation.",
-    cta: "Book a consult",
-    priceHint: null,
-    landingPath: "/offers/custom-ai-app",
-  },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  if (locale === "en") {
+    return routeMetadata({
+      path: "/",
+      locale,
+      title: "One agent for one process | Stredan",
+      description:
+        "A one-off implementation of one AI agent for one concrete company process, plus consultation. Model subscriptions, API use, hosting, and support are separate.",
+    });
+  }
+  return routeMetadata({
+    path: "/",
+    locale,
+    title: "Jeden agent na jeden proces | Stredan",
+    description:
+      "Jednorazovo nasadíme jedného AI agenta na jeden konkrétny proces vo firme. Konzultácia patrí k implementácii. Predplatné modelu, API, hosting a podpora sú osobitne.",
+  });
+}
 
 export default async function AgencyHomePage() {
   const locale = await getLocale();
-
-  let offers: OfferPublic[] = locale === "sk" ? FALLBACK_SK : FALLBACK_EN;
-  try {
-    const fromDb = await getActiveOffers(locale);
-    if (fromDb.length > 0) offers = fromDb;
-  } catch {
-    // keep fallback
-  }
-
   return (
     <SiteShell locale={locale}>
-      <AgencyHome locale={locale} offers={offers} />
+      <AgencyHome locale={locale} />
     </SiteShell>
   );
 }

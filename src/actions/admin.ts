@@ -10,6 +10,7 @@ import {
   captureServerEvent,
   getPostHogClient,
   getPostHogDistinctId,
+  serverAnalyticsAllowed,
 } from "@/lib/posthog-server";
 
 export async function login(formData: FormData) {
@@ -27,13 +28,15 @@ export async function login(formData: FormData) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   });
-  const distinctId = await getPostHogDistinctId();
-  const posthog = getPostHogClient();
-  posthog?.identify({
-    distinctId,
-    properties: { role: "admin" },
-  });
-  await captureServerEvent("admin_login_succeeded", { role: "admin" }, distinctId);
+  if (await serverAnalyticsAllowed()) {
+    const distinctId = await getPostHogDistinctId();
+    const posthog = getPostHogClient();
+    posthog?.identify({
+      distinctId,
+      properties: { role: "admin" },
+    });
+    await captureServerEvent("admin_login_succeeded", { role: "admin" }, distinctId);
+  }
   redirect("/admin/matrix");
 }
 
