@@ -1,5 +1,6 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { PostHog } from "posthog-node";
+import { analyticsAllowed } from "@/lib/analytics-policy";
 
 let client: PostHog | null = null;
 
@@ -36,11 +37,22 @@ export async function getPostHogDistinctId(): Promise<string> {
   }
 }
 
+export async function serverAnalyticsAllowed(): Promise<boolean> {
+  if (process.env.NODE_ENV !== "production") return false;
+  const host = (await headers()).get("host") ?? "";
+  return analyticsAllowed({
+    nodeEnv: "production",
+    hostname: host,
+    optedOut: false,
+  });
+}
+
 export async function captureServerEvent(
   event: string,
   properties?: Record<string, unknown>,
   distinctId?: string,
 ) {
+  if (!(await serverAnalyticsAllowed())) return;
   const ph = getPostHogClient();
   if (!ph) return;
   ph.capture({

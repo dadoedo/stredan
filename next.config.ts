@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  agentRules: false,
   skipTrailingSlashRedirect: true,
   transpilePackages: ["react-cursor-calendar"],
   serverExternalPackages: ["@resvg/resvg-js"],

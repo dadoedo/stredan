@@ -4,6 +4,7 @@ import "./globals.css";
 import { getLocale } from "@/lib/locale";
 import LocaleScript from "@/components/LocaleScript";
 import { SkipLink } from "@/components/SkipLink";
+import { OG_IMAGE, SITE_ORIGIN } from "@/lib/site";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -15,13 +16,16 @@ const dmSans = DM_Sans({
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const isSk = locale === "sk";
+  const title = isSk
+    ? "Jeden agent na jeden proces | Stredan"
+    : "One agent for one process | Stredan";
+  const description = isSk
+    ? "Jednorazovo nasadíme jedného AI agenta na jeden konkrétny proces vo firme. Konzultácia patrí k implementácii."
+    : "A one-off implementation of one AI agent for one concrete company process, plus consultation.";
   return {
-    title: isSk
-      ? "Stredan: AI, ktoré znižuje prácu"
-      : "Stredan: AI that cuts work",
-    description: isSk
-      ? "AI agenti a workflow pre slovenské SME. Od auditu po produkciu, s merateľným výsledkom."
-      : "AI agents and workflows for Slovak SMEs. From audit to production, with measurable results.",
+    metadataBase: new URL(SITE_ORIGIN),
+    title,
+    description,
     icons: {
       icon: [
         { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -31,17 +35,16 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     manifest: "/site.webmanifest",
     openGraph: {
-      title: isSk
-        ? "Stredan: AI, ktoré znižuje prácu"
-        : "Stredan: AI that cuts work",
-      description: isSk
-        ? "AI agenti a workflow pre slovenské SME. Od auditu po produkciu."
-        : "AI agents and workflows for Slovak SMEs. From audit to production.",
-      url: "https://stredan.sk",
+      title,
+      description,
       siteName: "Stredan",
       locale: isSk ? "sk_SK" : "en_US",
       type: "website",
-      images: [{ url: "/team/david.webp" }],
+      images: [OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [OG_IMAGE.url],
     },
   };
 }

@@ -9,34 +9,34 @@ type EngagementCopy = {
 export const engagementModels: Record<Locale, EngagementCopy> = {
   sk: {
     offersLead:
-      "Nech ide o audit, agenta alebo vlastný systém — väčšinou to riešime jedným z dvoch modelov.",
+      "Implementácia jedného agenta je jednorazová a patrí k nej konzultácia.",
     models: [
       {
-        title: "Zákazka na kľúč",
-        body: "Jasný rozsah, termín a výstup. Audit, pilot alebo dodávka do prevádzky.",
+        title: "Patrí k implementácii",
+        body: "Jeden agent pre jeden dohodnutý proces a konzultácia k tomu, ako má fungovať.",
       },
       {
-        title: "Kontinuálny vývoj",
-        body: "Prenájom IT tímu — kapacita mesačne, roadmapa s vami, bez náboru naviac.",
+        title: "Je osobitne",
+        body: "Predplatné modelu, API, hosting a prípadná podpora po odovzdaní.",
       },
     ],
     offerNote:
-      "Túto ponuku vieme riešiť v oboch modeloch. Konkrétny postup dohodneme na úvodnom calle.",
+      "Podpora po odovzdaní sa dá dohodnúť. Nie je automaticky súčasťou implementácie.",
   },
   en: {
     offersLead:
-      "Whether it’s an audit, an agent, or a custom system — we usually work in one of two ways.",
+      "Implementing one agent is a one-off fee, and the consultation belongs with it.",
     models: [
       {
-        title: "Fixed-scope project",
-        body: "Clear scope, timeline, and deliverable. Audit, pilot, or production rollout.",
+        title: "In the implementation",
+        body: "One agent for one agreed process, and a consultation on how it should work.",
       },
       {
-        title: "Ongoing development",
-        body: "Embedded IT team — monthly capacity, shared roadmap, no extra hiring.",
+        title: "Separate",
+        body: "Model subscriptions, API use, hosting, and any support after handover.",
       },
     ],
     offerNote:
-      "This offer works in either model. We’ll agree the right setup on the intro call.",
+      "Support after handover can be agreed. It is not automatically part of the implementation.",
   },
 };

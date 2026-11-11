@@ -84,7 +84,7 @@ export default function Header({ locale }: { locale: Locale }) {
           className="hidden items-center gap-8 md:flex"
           aria-label={t.primaryNav}
         >
-          <Link href="/#offers" className={navLinkClass}>
+          <Link href="/#ponuka" className={navLinkClass}>
             {t.navOffers}
           </Link>
           <Link href="/about" className={navLinkClass}>
@@ -92,6 +92,9 @@ export default function Header({ locale }: { locale: Locale }) {
           </Link>
           <Link href="/#work" className={navLinkClass}>
             {t.work}
+          </Link>
+          <Link href="/#kontakt" className={navLinkClass}>
+            {t.navCall}
           </Link>
           <LocaleSwitcher locale={locale} />
         </nav>
@@ -164,11 +167,18 @@ export default function Header({ locale }: { locale: Locale }) {
               <div className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-6">
                 <div className="space-y-1">
                   <Link
-                    href="/#offers"
+                    href="/#ponuka"
                     onClick={closeMenu}
                     className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
                   >
                     {t.navOffers}
+                  </Link>
+                  <Link
+                    href="/#kontakt"
+                    onClick={closeMenu}
+                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
+                  >
+                    {t.navCall}
                   </Link>
                   <Link
                     href="/about"
