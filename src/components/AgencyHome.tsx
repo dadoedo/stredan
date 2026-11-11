@@ -266,6 +266,10 @@ export function AgencyHome({ locale }: { locale: Locale }) {
             <p className="agency-cta-note">{t.note}</p>
           </div>
         </div>
+        <p className="agency-hero-card">
+          <span className="agency-hero-card-name">{t.founderName}</span>
+          <span className="agency-hero-card-role">{t.founderRole}</span>
+        </p>
       </section>
       <div className="agency-hero-detail">
         <div className="agency-shell">
@@ -280,34 +284,6 @@ export function AgencyHome({ locale }: { locale: Locale }) {
           <p className="agency-cta-note">{t.note}</p>
         </div>
       </div>
-
-      <section className="agency-trust" aria-labelledby="founder-heading">
-        <div className="agency-shell">
-          <article className="agency-trust-card">
-            <img
-              src="/team/david-portrait.webp"
-              srcSet="/team/david-portrait-480.webp 480w, /team/david-portrait.webp 800w"
-              sizes="148px"
-              alt={t.founderAlt}
-              width={800}
-              height={800}
-              loading="lazy"
-              decoding="async"
-            />
-            <div>
-              <p className="agency-section-label">{t.founderEyebrow}</p>
-              <h2 id="founder-heading" className="agency-team-name">
-                {t.founderName}
-              </h2>
-              <p className="agency-role">{t.founderRole}</p>
-              <p className="agency-body">{t.founderLead}</p>
-              <Link href="/about" className="agency-text-link">
-                {t.founderCta} →
-              </Link>
-            </div>
-          </article>
-        </div>
-      </section>
 
       <section id="ponuka" className="agency-offers">
         <div className="agency-shell">

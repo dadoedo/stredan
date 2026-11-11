@@ -44,6 +44,9 @@ describe("public marketing copy", () => {
     );
     assert.deepEqual(homeCopy.sk.mobileTitle, ["Jeden proces.", "Jeden agent."]);
     assert.deepEqual(homeCopy.en.mobileTitle, ["One process.", "One agent."]);
+    assert.equal(homeCopy.sk.founderName, "Dávid Stredánsky");
+    assert.equal(homeCopy.sk.founderRole, "zakladateľ Stredan");
+    assert.equal(homeCopy.en.founderRole, "Founder of Stredan");
     assert.equal(homeCopy.sk.auditCta, "Napísať ohľadom auditu");
     assert.equal(
       PUBLIC_OFFERS.find((offer) => offer.slug === "ai-audit")?.cta.sk,

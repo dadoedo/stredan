@@ -10,13 +10,8 @@ export const homeCopy = {
     email: "Alebo napíšte na david@stredan.sk",
     note: "Hovor trvá 45 minút a je na Google Meet. Kalendár Google je po anglicky. Toto tlačidlo ho len otvorí. Termín potvrdíte v ňom.",
     heroAlt: "Dávid Stredánsky",
-    founderEyebrow: "S kým hovoríte",
     founderName: "Dávid Stredánsky",
-    founderRole: "Zakladateľ Stredanu",
-    founderLead:
-      "Na úvodnom hovore hovoríte priamo s ním. Stredan je jeho firma, nie anonymný tím za formulárom.",
-    founderAlt: "Dávid Stredánsky, zakladateľ Stredanu",
-    founderCta: "Celý profil",
+    founderRole: "zakladateľ Stredan",
     offerEyebrow: "Ponuka",
     offerTitle: "Jeden agent na jeden proces",
     offerLead:
@@ -136,13 +131,8 @@ export const homeCopy = {
     email: "Or write to david@stredan.sk",
     note: "The call is 45 minutes on Google Meet. Google Calendar is in English. This button only opens it. You confirm the time there.",
     heroAlt: "Dávid Stredánsky",
-    founderEyebrow: "Who you talk to",
     founderName: "Dávid Stredánsky",
     founderRole: "Founder of Stredan",
-    founderLead:
-      "On the intro call you talk to him directly. Stredan is his company, not an anonymous team behind a form.",
-    founderAlt: "Dávid Stredánsky, founder of Stredan",
-    founderCta: "Full profile",
     offerEyebrow: "The offer",
     offerTitle: "One agent for one process",
     offerLead:
