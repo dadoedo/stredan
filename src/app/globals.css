@@ -552,30 +552,48 @@ button.agency-btn-secondary:disabled {
 
 @media (min-width: 960px) {
   .agency-hero {
-    min-height: 40rem;
-    justify-content: center;
-    padding: 4.5rem 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 32rem);
+    align-items: start;
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+    width: min(100% - 3rem, 76rem);
+    margin-inline: auto;
+    padding: 3.25rem 0 3.75rem;
   }
 
   .agency-hero-media {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
+    position: relative;
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 794 / 720;
+    overflow: hidden;
+    justify-self: end;
   }
 
   .agency-hero-media img {
+    position: absolute;
+    top: 0;
+    right: 0;
     height: 100%;
-    object-fit: cover;
-    object-position: right center;
+    width: auto;
+    max-width: none;
   }
 
   .agency-hero .agency-shell {
     position: relative;
     z-index: 1;
+    grid-column: 1;
+    grid-row: 1;
+    max-width: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
   }
 
   .agency-hero-copy {
-    width: min(32rem, 42vw);
+    width: auto;
   }
 }
 
