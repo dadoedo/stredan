@@ -221,17 +221,26 @@ export function AgencyHome({ locale }: { locale: Locale }) {
   return (
     <div className="agency">
       <section className="agency-hero">
-        <div className="agency-hero-media">
-          <img
-            src="/team/david-hero.webp"
-            srcSet="/team/david-hero-720.webp 720w, /team/david-hero-960.webp 960w, /team/david-hero.webp 1280w"
+        <picture className="agency-hero-media">
+          <source
+            media="(min-width: 720px)"
+            srcSet="/team/david-hero-desktop.webp"
+            type="image/webp"
+          />
+          <source
+            media="(max-width: 719px)"
+            srcSet="/team/david-hero-mobile-640.webp 640w, /team/david-hero-mobile.webp 864w"
             sizes="100vw"
+            type="image/webp"
+          />
+          <img
+            src="/team/david-hero-desktop.webp"
             alt={t.heroAlt}
             width={1280}
             height={720}
             decoding="async"
           />
-        </div>
+        </picture>
         <div className="agency-shell">
           <div className="agency-hero-copy">
             <p className="agency-kicker">{t.kicker}</p>
