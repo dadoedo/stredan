@@ -267,6 +267,10 @@ iframe[src^="https://calendar.google.com/calendar/appointments/schedules/"] {
   letter-spacing: -0.03em;
 }
 
+.agency-h2.max-w-none {
+  max-width: none;
+}
+
 .agency-lede {
   margin-top: 1.25rem;
   max-width: 40ch;
@@ -1035,4 +1039,46 @@ button.agency-btn-secondary:disabled {
 
 .footer-agency a {
   color: var(--ink);
+}
+
+.agency-hiring {
+  padding: 3.5rem 0 4.5rem;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.agency-facts {
+  margin: 2.5rem 0 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+@media (min-width: 640px) {
+  .agency-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.agency-facts .agency-stack-item dd {
+  display: block;
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.agency-offer-salary {
+  margin-top: 0.45rem;
+  max-width: 62ch;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.agency-privacy {
+  margin-top: 1.25rem;
+  max-width: 68ch;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--mist);
 }

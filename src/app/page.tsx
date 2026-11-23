@@ -1,4 +1,5 @@
 import { AgencyHome } from "@/components/AgencyHome";
+import { CareersTeaser } from "@/components/CareersTeaser";
 import { SiteShell } from "@/components/SiteShell";
 import { getLocale } from "@/lib/locale";
 import { getActiveOffers, type OfferPublic } from "@/lib/offers";
@@ -116,6 +117,7 @@ export default async function AgencyHomePage() {
   return (
     <SiteShell locale={locale}>
       <AgencyHome locale={locale} offers={offers} />
+      <CareersTeaser locale={locale} />
     </SiteShell>
   );
 }

@@ -35,6 +35,7 @@ export const ui = {
     opensInNewTab: "opens in new tab",
     navAbout: "About / CV",
     navOffers: "Offers",
+    navCareers: "Careers",
     agencyHeroTitle: "AI that runs in your company, not another workshop.",
   },
   sk: {
@@ -73,6 +74,7 @@ export const ui = {
     opensInNewTab: "otvorí sa v novom okne",
     navAbout: "O mne / CV",
     navOffers: "Ponuky",
+    navCareers: "Kariéra",
     agencyHeroTitle: "AI, ktoré beží vo firme, nie ďalší workshop.",
   },
 } as const;
