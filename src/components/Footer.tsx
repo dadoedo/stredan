@@ -1,4 +1,5 @@
-import { type Locale } from "@/lib/translations";
+import Link from "next/link";
+import { ui, type Locale } from "@/lib/translations";
 import { OpensInNewTab } from "@/components/OpensInNewTab";
 import { TrackedAnchor } from "@/components/TrackedAnchor";
 
@@ -15,6 +16,9 @@ export default function Footer({ locale }: { locale: Locale }) {
               &copy; {new Date().getFullYear()} Dávid Stredánsky
             </p>
             <div className="flex gap-6">
+              <Link href="/careers" className={linkClass}>
+                {ui[locale].navCareers}
+              </Link>
               <TrackedAnchor
                 href="mailto:david@stredan.sk"
                 className={linkClass}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AgencyHome } from "@/components/AgencyHome";
+import { CareersTeaser } from "@/components/CareersTeaser";
 import { SiteShell } from "@/components/SiteShell";
 import { getLocale } from "@/lib/locale";
 import { routeMetadata } from "@/lib/site";
@@ -29,6 +30,7 @@ export default async function AgencyHomePage() {
   return (
     <SiteShell locale={locale}>
       <AgencyHome locale={locale} />
+      <CareersTeaser locale={locale} />
     </SiteShell>
   );
 }

@@ -93,6 +93,9 @@ export default function Header({ locale }: { locale: Locale }) {
           <Link href="/#work" className={navLinkClass}>
             {t.work}
           </Link>
+          <Link href="/careers" className={navLinkClass}>
+            {t.navCareers}
+          </Link>
           <Link href="/#kontakt" className={navLinkClass}>
             {t.navCall}
           </Link>
@@ -193,6 +196,13 @@ export default function Header({ locale }: { locale: Locale }) {
                     className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
                   >
                     {t.work}
+                  </Link>
+                  <Link
+                    href="/careers"
+                    onClick={closeMenu}
+                    className="block min-h-11 rounded-lg px-4 py-3 text-base text-foreground transition-colors hover:bg-surface-2"
+                  >
+                    {t.navCareers}
                   </Link>
                 </div>
                 <div className="my-2 h-px bg-border" />
