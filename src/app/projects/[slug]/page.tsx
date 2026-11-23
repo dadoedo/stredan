@@ -10,6 +10,7 @@ import { getLocale } from "@/lib/locale";
 import { prisma } from "@/lib/prisma";
 import { ui } from "@/lib/translations";
 import { BADGE_CONFIG } from "@/lib/badges";
+import { absoluteUrl } from "@/lib/site";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -63,6 +64,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description: description ?? undefined,
+    alternates: { canonical: absoluteUrl(`/projects/${slug}`) },
+    openGraph: { url: absoluteUrl(`/projects/${slug}`) },
   };
 }
 

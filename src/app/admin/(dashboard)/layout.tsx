@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE, verifySession } from "@/lib/admin";
 import { AdminShell } from "@/components/admin/AdminShell";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function AdminDashboardLayout({
   children,

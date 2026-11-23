@@ -34,8 +34,9 @@ export const ui = {
     showExperienceFirst: "Show experience first",
     opensInNewTab: "opens in new tab",
     navAbout: "About / CV",
-    navOffers: "Offers",
+    navOffers: "Offer",
     navCareers: "Careers",
+    navCall: "Intro call",
     agencyHeroTitle: "AI that runs in your company, not another workshop.",
   },
   sk: {
@@ -73,8 +74,9 @@ export const ui = {
     showExperienceFirst: "Zobraziť skúsenosti navrchu",
     opensInNewTab: "otvorí sa v novom okne",
     navAbout: "O mne / CV",
-    navOffers: "Ponuky",
+    navOffers: "Ponuka",
     navCareers: "Kariéra",
+    navCall: "Úvodný hovor",
     agencyHeroTitle: "AI, ktoré beží vo firme, nie ďalší workshop.",
   },
 } as const;

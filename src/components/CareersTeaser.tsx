@@ -13,7 +13,12 @@ export function CareersTeaser({ locale }: { locale: Locale }) {
   return (
     <section className="agency-hiring" aria-labelledby="careers-teaser-title">
       <div className="agency-shell">
-        <p className="agency-section-label">{ui.teaserLabel}</p>
+        <div className="agency-label-row">
+          <p className="agency-section-label">{ui.teaserLabel}</p>
+          <span className="agency-pill">
+            {locale === "en" ? "Open roles" : "Otvorené pozície"}
+          </span>
+        </div>
         <h2 id="careers-teaser-title" className="agency-h2">
           {ui.teaserTitle}
         </h2>

@@ -9,6 +9,7 @@ import {
   careers,
 } from "@/data/careers";
 import { getLocale } from "@/lib/locale";
+import { ogImage } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -27,6 +28,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Stredan",
       locale: locale === "sk" ? "sk_SK" : "en_US",
       type: "website",
+      images: [ogImage(locale)],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage(locale)],
     },
   };
 }
@@ -37,10 +45,11 @@ export default async function CareersPage() {
 
   return (
     <SiteShell locale={locale}>
-      <div className="agency-shell py-24">
+      <div className="agency-careers">
+        <div className="agency-shell">
         <p className="agency-kicker">{ui.listKicker}</p>
-        <h1 className="agency-h2 max-w-none sm:text-5xl">{ui.listTitle}</h1>
-        <p className="agency-lede max-w-none sm:max-w-[46rem]">{ui.listLede}</p>
+        <h1 className="agency-h1 max-w-none">{ui.listTitle}</h1>
+        <p className="agency-lede">{ui.listLede}</p>
 
         <ul className="agency-offer-list">
           {careers.map((role) => {
@@ -71,12 +80,11 @@ export default async function CareersPage() {
             {ui.privacyLink}
           </a>
         </p>
-        <section id="osobne-udaje" className="mt-8">
-          <h2 className="font-heading text-xl font-semibold tracking-tight">
-            {ui.privacyTitle}
-          </h2>
+        <section id="osobne-udaje" className="agency-career-note">
+          <h2 className="agency-career-heading">{ui.privacyTitle}</h2>
           <p className="agency-privacy">{ui.privacy}</p>
         </section>
+        </div>
       </div>
     </SiteShell>
   );

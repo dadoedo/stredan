@@ -16,6 +16,7 @@ import {
   jobPostingJsonLd,
 } from "@/data/careers";
 import { getLocale } from "@/lib/locale";
+import { ogImage } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -47,6 +48,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "Stredan",
       locale: locale === "sk" ? "sk_SK" : "en_US",
       type: "website",
+      images: [ogImage(locale)],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage(locale)],
     },
   };
 }
@@ -82,18 +90,14 @@ export default async function CareerDetailPage({ params }: Props) {
           __html: jobPostingJsonLd(role, locale),
         }}
       />
-      <div className="agency-shell py-24">
-        <Link
-          href="/careers"
-          className="text-sm text-muted underline-offset-2 hover:text-foreground hover:underline"
-        >
+      <div className="agency-careers">
+        <div className="agency-shell">
+        <Link href="/careers" className="agency-text-link agency-career-back">
           ← {ui.detailBack}
         </Link>
-        <p className="agency-kicker mt-8">{ui.listKicker}</p>
-        <h1 className="agency-h2 max-w-none sm:text-5xl">{role.title[locale]}</h1>
-        <p className="agency-lede max-w-none sm:max-w-[46rem]">
-          {role.pitch[locale]}
-        </p>
+        <p className="agency-kicker">{ui.listKicker}</p>
+        <h1 className="agency-h1 max-w-none">{role.title[locale]}</h1>
+        <p className="agency-lede">{role.pitch[locale]}</p>
 
         <dl className="agency-facts">
           {facts.map((fact) => (
@@ -107,10 +111,8 @@ export default async function CareerDetailPage({ params }: Props) {
         </dl>
 
         {sections.map((section) => (
-          <section key={section.title} className="mt-12">
-            <h2 className="font-heading text-xl font-semibold tracking-tight">
-              {section.title}
-            </h2>
+          <section key={section.title} className="agency-career-block">
+            <h2 className="agency-career-heading">{section.title}</h2>
             <ul className="agency-team-bullets">
               {section.items.map((item) => (
                 <li key={item}>{item}</li>
@@ -119,13 +121,14 @@ export default async function CareerDetailPage({ params }: Props) {
           </section>
         ))}
 
-        <section className="mt-16 border-t border-border pt-10">
+        <section className="agency-career-apply">
           <h2 className="agency-h2 max-w-none">{ui.applyTitle}</h2>
           <p className="agency-body">{ui.applyBody}</p>
           <div className="agency-cta-row">
             <AgencyEmailButton
               href={careerApplyHref(role, locale)}
-              eventProps={{ location: "careers", method: "email", role: role.slug }}
+              location="careers"
+              offer={role.slug}
             >
               {ui.applyCta} {CAREERS_EMAIL}
             </AgencyEmailButton>
@@ -134,6 +137,7 @@ export default async function CareerDetailPage({ params }: Props) {
             {ui.privacy}
           </p>
         </section>
+        </div>
       </div>
     </SiteShell>
   );

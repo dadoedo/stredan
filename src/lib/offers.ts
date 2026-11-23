@@ -28,6 +28,14 @@ export async function getActiveOffers(locale: Locale): Promise<OfferPublic[]> {
   }));
 }
 
+export async function isOfferRetired(slug: string): Promise<boolean> {
+  const row = await prisma.offer.findUnique({
+    where: { slug },
+    select: { status: true },
+  });
+  return row?.status === "retired";
+}
+
 export async function getOfferBySlug(slug: string, locale: Locale) {
   const o = await prisma.offer.findUnique({ where: { slug } });
   if (!o || o.status === "retired") return null;

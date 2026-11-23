@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { StatsDashboard } from "@/components/StatsDashboard";
 import { WorkExperienceSection } from "@/components/WorkExperienceSection";
 import { SiteShell } from "@/components/SiteShell";
@@ -6,6 +7,23 @@ import { getStats } from "@/lib/stats";
 import { getLocale } from "@/lib/locale";
 import { ui } from "@/lib/translations";
 import { CURSOR_HANDLE, getCursorProfile } from "@/lib/cursor-profile";
+import { routeMetadata } from "@/lib/site";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return routeMetadata({
+    path: "/about",
+    locale,
+    title:
+      locale === "sk"
+        ? "Dávid Stredánsky | Stredan"
+        : "Dávid Stredánsky | Stredan",
+    description:
+      locale === "sk"
+        ? "Osobný profil Dávida Stredánskeho."
+        : "Personal profile of Dávid Stredánsky.",
+  });
+}
 
 /** Personal brand / CV — previously the homepage */
 export default async function AboutPage() {
