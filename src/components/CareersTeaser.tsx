@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  careerSalaryLine,
   careerStartLabel,
   careerUi,
   careers,
@@ -26,6 +27,7 @@ export function CareersTeaser({ locale }: { locale: Locale }) {
                 <p className="agency-offer-price">
                   {role.cooperation[locale]} · {careerStartLabel(role, locale)}
                 </p>
+                <p className="agency-offer-salary">{careerSalaryLine(role, locale)}</p>
               </div>
               <Link href={`/careers/${role.slug}`} className="agency-offer-cta">
                 {ui.teaserView}

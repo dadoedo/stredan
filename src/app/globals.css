@@ -267,6 +267,10 @@ iframe[src^="https://calendar.google.com/calendar/appointments/schedules/"] {
   letter-spacing: -0.03em;
 }
 
+.agency-h2.max-w-none {
+  max-width: none;
+}
+
 .agency-lede {
   margin-top: 1.25rem;
   max-width: 40ch;
@@ -1065,13 +1069,16 @@ button.agency-btn-secondary:disabled {
 
 .agency-offer-salary {
   margin-top: 0.45rem;
+  max-width: 62ch;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--ink);
 }
 
-.agency-salary-placeholder {
-  text-decoration: underline dashed;
-  text-decoration-color: var(--mark);
-  text-underline-offset: 0.2em;
+.agency-privacy {
+  margin-top: 1.25rem;
+  max-width: 68ch;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--mist);
 }

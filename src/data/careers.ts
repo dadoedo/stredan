@@ -3,35 +3,35 @@ import type { Locale } from "@/lib/translations";
 /**
  * Open roles for stredan.sk. Edit this file to change copy, dates, and pay.
  *
- * Salary
- * - kind: "base" — set `amountEur` (gross EUR). Both locales format that number.
- * - kind: "placeholder" — shown until a real base figure exists. Slovak job ads
- *   must state the base salary, so do not treat a placeholder as final.
- * Both unfilled roles share SALARY_PLACEHOLDER. Give a role its own figure by
- * switching that role to kind: "base".
+ * Salary (`amountEur` is gross EUR; both locales format that number):
+ * - kind: "base" — exact monthly base.
+ * - kind: "from-base" — monthly minimum. Optional `note` is appended.
+ * - kind: "hourly-base" — exact hourly amount. Do not round it.
  */
 
 export const CAREERS_EMAIL = "david@stredan.sk";
 
 export const CAREERS_SITE = "https://stredan.sk";
 
-/** Shown verbatim after the "Mzda:" / "Salary:" prefix. */
-export const SALARY_PLACEHOLDER = {
-  sk: "dohodou / TBD",
-  en: "by agreement / TBD",
-} as const;
-
 export type CareerSalary =
   | {
       kind: "base";
-      /** Gross base salary in EUR for the period in `per`. */
+      /** Exact gross base salary in EUR per month. */
       amountEur: number;
       per: "month";
     }
   | {
-      kind: "placeholder";
-      sk: string;
-      en: string;
+      kind: "from-base";
+      /** Monthly minimum, gross EUR. */
+      amountEur: number;
+      per: "month";
+      note?: Record<Locale, string>;
+    }
+  | {
+      kind: "hourly-base";
+      /** Exact gross EUR per hour. Keep the decimals; do not round. */
+      amountEur: number;
+      note?: Record<Locale, string>;
     };
 
 export type CareerStart =
@@ -133,13 +133,21 @@ export const careers: readonly CareerRole[] = [
     },
     start: { kind: "date", iso: "2027-01-01" },
     employmentType: ["FULL_TIME"],
-    salary: { kind: "base", amountEur: 3240, per: "month" },
+    salary: {
+      kind: "from-base",
+      amountEur: 2800,
+      per: "month",
+      note: {
+        sk: "podľa znalostí a skúseností",
+        en: "depending on knowledge and experience",
+      },
+    },
   },
   {
     slug: "admin-assistant",
     postedOn: "2026-11-21",
     title: {
-      sk: "Administratívna výpomoc",
+      sk: "Administratívna výpomoc (m/ž)",
       en: "Administrative assistant",
     },
     teaser: {
@@ -185,87 +193,94 @@ export const careers: readonly CareerRole[] = [
         "Flexibilné hodiny, len keď je reálna práca.",
         "Remote alebo Bratislava.",
         "Krátke zadanie. Žiadna umelá agenda.",
-        "Dohoda alebo čiastočný úväzok.",
+        "Dohoda o vykonaní práce. Nepravidelná výpomoc, najviac 350 hodín v kalendárnom roku.",
       ],
       en: [
         "Flexible hours, only when there is real work.",
         "Remote or Bratislava.",
         "A short brief. No invented busywork.",
-        "An agreement (dohoda) or part-time.",
+        "Agreement on work performance (DoVP). Irregular help, at most 350 hours per calendar year.",
       ],
     },
     cooperation: {
-      sk: "Dohoda (podľa potreby) alebo čiastočný úväzok",
-      en: "Agreement (dohoda), as needed, or part-time",
+      sk: "Dohoda o vykonaní práce. Nepravidelná výpomoc, najviac 350 hodín v kalendárnom roku.",
+      en: "Agreement on work performance (DoVP). Irregular help, at most 350 hours per calendar year.",
     },
     location: {
       sk: "Remote alebo Bratislava",
       en: "Remote or Bratislava",
     },
     start: OPEN_START,
-    employmentType: ["PART_TIME"],
-    salary: { kind: "placeholder", ...SALARY_PLACEHOLDER },
+    employmentType: ["TEMPORARY", "PART_TIME"],
+    salary: {
+      kind: "hourly-base",
+      amountEur: 5.259,
+      note: {
+        sk: "Vypláca sa za vykonanú prácu, v rozsahu najviac 350 hodín v kalendárnom roku.",
+        en: "Paid for work performed, up to 350 hours per calendar year.",
+      },
+    },
   },
   {
     slug: "ai-developer",
     postedOn: "2026-11-21",
     title: {
-      sk: "Vývojár s AI agentmi",
+      sk: "Vývojár / vývojárka s AI agentmi",
       en: "AI-enabled developer",
     },
     teaser: {
-      sk: "TypeScript, Next.js, Postgres. Dodávate s AI coding agentmi.",
-      en: "TypeScript, Next.js, Postgres. You ship with AI coding agents.",
+      sk: "Dodávate s AI coding agentmi. Nástroje volíme podľa projektu.",
+      en: "You ship with AI coding agents. We pick the tools per project.",
     },
     pitch: {
-      sk: "Hľadáme vývojára, ktorý dodáva s AI coding agentmi. Cursor, cloud agenti a podobné nástroje sú súčasť práce. Stack je TypeScript, Next.js a Postgres: AI agenti a integrácie, ktoré u klienta bežia.",
-      en: "A developer who ships with AI coding agents. Cursor, cloud agents, and similar tools are part of the job. The stack is TypeScript, Next.js, and Postgres: AI agents and integrations that run for clients.",
+      sk: "Hľadáme človeka, ktorý s AI coding agentmi dodá klientovi fungujúci softvér do prevádzky. Stack nie je daný. Nástroje aj jazyk volíme podľa projektu. Jadro práce je tá dodávka a kontrola toho, čo agent vygeneruje.",
+      en: "Someone who ships working production software for clients with AI coding agents. The stack is not fixed. We pick the tools and the language per project. The core of the job is that delivery, and a review of what the agent generated.",
     },
     responsibilities: {
       sk: [
-        "Dodať AI agentov a integrácie pre klientov, až do prevádzky.",
-        "Denne TypeScript, Next.js a Postgres.",
-        "Používať Cursor a cloud agentov na dodávku a skontrolovať, čo vygenerujú.",
+        "Dodať klientom fungujúci softvér do prevádzky.",
+        "Voliť nástroje a jazyk podľa projektu. Pevný stack nemáme.",
+        "Pracovať s AI coding agentmi a skontrolovať ich výstup, kým ide von.",
         "Nechať po sebe kód, ktorý sa dá čítať aj bez agenta.",
       ],
       en: [
-        "Ship AI agents and integrations for clients, through to production.",
-        "TypeScript, Next.js, and Postgres as the daily stack.",
-        "Use Cursor and cloud agents to deliver, and check what they generate.",
+        "Ship working production software for clients.",
+        "Choose the tools and the language per project. There is no fixed stack.",
+        "Work with AI coding agents and review their output before it ships.",
         "Leave code that can be read without an agent in the loop.",
       ],
     },
     lookingFor: {
       sk: [
-        "Veci, ktoré ste reálne dodali v TypeScripte. Next.js je silné plus.",
-        "Praktická práca s Postgresom.",
-        "Už používate coding agentov a viete, kedy ich výstup zahodiť.",
+        "Nový nástroj alebo jazyk chytíte rýchlo.",
+        "Už dodávate s coding agentmi a viete, kedy ich výstup zahodiť.",
+        "Záleží vám na tom, či to u klienta naozaj beží.",
         "Zvládnete malý tím a priamy kontakt so zakladateľom.",
       ],
       en: [
-        "Things you have actually shipped in TypeScript. Next.js is a strong plus.",
-        "Practical work with Postgres.",
-        "You already use coding agents, and you know when to throw the output away.",
+        "You pick up a new tool or language quickly.",
+        "You already ship with coding agents, and you know when to throw the output away.",
+        "You care whether it actually runs for the client.",
         "You can work on a small team, in direct contact with the founder.",
       ],
     },
     offer: {
       sk: [
-        "Zmluva alebo pracovný pomer, podľa toho, čo sedí obom stranám.",
+        "Pracovný pomer na plný úväzok. Živnosť dohodou, ak to sedí obom stranám.",
         "Reálni klienti, nie interné demo.",
         "Remote, Slovensko.",
         "Priama spolupráca so zakladateľom.",
       ],
       en: [
-        "Contract or employment, whichever fits both sides.",
+        "Full-time employment. Self-employment (živnosť / B2B) if it fits both sides.",
         "Real clients, not an internal demo.",
         "Remote, Slovakia.",
         "Direct work with the founder.",
       ],
     },
     cooperation: {
-      sk: "Zmluva (kontrakt) alebo pracovný pomer",
-      en: "Contract or employment",
+      sk: "Pracovný pomer na plný úväzok; živnosť dohodou, ak to sedí obom stranám",
+      en: "Full-time employment; self-employment (živnosť / B2B) if it fits both sides",
     },
     location: {
       sk: "Remote, Slovensko",
@@ -273,7 +288,15 @@ export const careers: readonly CareerRole[] = [
     },
     start: OPEN_START,
     employmentType: ["FULL_TIME", "CONTRACTOR"],
-    salary: { kind: "placeholder", ...SALARY_PLACEHOLDER },
+    salary: {
+      kind: "from-base",
+      amountEur: 3000,
+      per: "month",
+      note: {
+        sk: "podľa skúseností a zručností",
+        en: "depending on skills and experience",
+      },
+    },
   },
 ];
 
@@ -294,10 +317,12 @@ type CareerUi = {
   cooperation: string;
   location: string;
   start: string;
-  salary: string;
   applyTitle: string;
   applyBody: string;
   applyCta: string;
+  privacyLink: string;
+  privacyTitle: string;
+  privacy: string;
   metaTitle: string;
   metaDescription: string;
 };
@@ -321,14 +346,16 @@ export const careerUi: Record<Locale, CareerUi> = {
     cooperation: "Forma spolupráce",
     location: "Miesto",
     start: "Nástup",
-    salary: "Mzda",
     applyTitle: "Ako sa prihlásiť",
     applyBody:
       "Do predmetu dajte názov pozície a v pár vetách, prečo sa hlásite. Životopis alebo odkaz na prácu stačí. Formulár nemáme.",
     applyCta: "Napísať na",
+    privacyLink: "Ako spracúvame životopis",
+    privacyTitle: "Spracúvanie osobných údajov",
+    privacy: `Životopis a sprievodný text spracúva Stredan s. r. o., IČO 57168504, ako prevádzkovateľ, na účel výberového konania na základe predzmluvných vzťahov a oprávneného záujmu. Údaje uchováme po dobu výberu, najdlhšie 6 mesiacov po jeho skončení, ak nedáte súhlas na dlhšie zaradenie do evidencie. Máte právo na prístup, opravu, výmaz, obmedzenie spracúvania, namietanie a sťažnosť na Úrad na ochranu osobných údajov SR. Kontakt: ${CAREERS_EMAIL}.`,
     metaTitle: "Kariéra · Stredan",
     metaDescription:
-      "Otvorené pozície v Stredan s. r. o.: CMO, administratívna výpomoc a vývojár s AI agentmi. Remote, Slovensko.",
+      "Otvorené pozície v Stredan s. r. o.: CMO, administratívna výpomoc (m/ž) a vývojár / vývojárka s AI agentmi. Remote, Slovensko.",
   },
   en: {
     teaserLabel: "Careers",
@@ -348,11 +375,13 @@ export const careerUi: Record<Locale, CareerUi> = {
     cooperation: "Form of cooperation",
     location: "Location",
     start: "Start",
-    salary: "Salary",
     applyTitle: "How to apply",
     applyBody:
       "Put the role in the subject and a few sentences on why you are writing. A CV or a link to your work is enough. There is no form.",
     applyCta: "Email",
+    privacyLink: "How we handle your CV",
+    privacyTitle: "Personal data",
+    privacy: `Stredan s. r. o., Company ID 57168504, is the controller. We process your CV and message for this recruitment, on the basis of pre-contractual steps and legitimate interest. We keep the data for the hiring process, and for at most 6 months after it ends, unless you consent to a longer talent record. You have the right of access, rectification, erasure, restriction, objection, and to lodge a complaint with the Slovak Data Protection Authority. Contact: ${CAREERS_EMAIL}.`,
     metaTitle: "Careers · Stredan",
     metaDescription:
       "Open roles at Stredan: CMO, an administrative assistant, and an AI-enabled developer. Remote, Slovakia.",
@@ -374,37 +403,56 @@ const MONTHS_EN = [
   "December",
 ] as const;
 
-function groupThousands(amount: number, separator: string): string {
-  return Math.round(amount)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+/** Groups the integer part. Fractional digits are kept as written, never rounded. */
+function formatAmount(amount: number, locale: Locale): string {
+  const [whole, frac] = amount.toString().split(".");
+  const separator = locale === "sk" ? " " : ",";
+  const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+  if (!frac) return grouped;
+  return `${grouped}${locale === "sk" ? "," : "."}${frac}`;
 }
 
 export function getCareer(slug: string): CareerRole | undefined {
   return careers.find((role) => role.slug === slug);
 }
 
-export function careerSalaryIsPlaceholder(role: CareerRole): boolean {
-  return role.salary.kind === "placeholder";
-}
-
-/** Value only, without the "Mzda:" / "Salary:" prefix. */
-export function careerSalaryValue(role: CareerRole, locale: Locale): string {
-  if (role.salary.kind === "placeholder") return role.salary[locale];
-  const amount = groupThousands(
-    role.salary.amountEur,
-    locale === "sk" ? " " : ",",
-  );
-  if (locale === "sk") {
-    return `${amount} € hrubého mesačne (základná zložka)`;
+export function careerSalaryLabel(role: CareerRole, locale: Locale): string {
+  if (role.salary.kind === "hourly-base") {
+    return locale === "sk" ? "Odmena" : "Pay";
   }
-  return `€${amount} gross per month (base)`;
+  return locale === "sk" ? "Mzda" : "Salary";
 }
 
-/** Full salary line, e.g. "Mzda: dohodou / TBD". */
+/** Value only, without the "Mzda:" / "Odmena:" / "Pay:" prefix. */
+export function careerSalaryValue(role: CareerRole, locale: Locale): string {
+  const { salary } = role;
+  const amount = formatAmount(salary.amountEur, locale);
+  if (salary.kind === "hourly-base") {
+    const rate =
+      locale === "sk"
+        ? `${amount} € hrubého za hodinu (základná odmena)`
+        : `€${amount} gross per hour (base)`;
+    return salary.note ? `${rate}. ${salary.note[locale]}` : rate;
+  }
+  const monthly =
+    locale === "sk"
+      ? `${amount} € hrubého mesačne (základná zložka)`
+      : `€${amount} gross per month (base)`;
+  const core = salary.kind === "from-base"
+    ? locale === "sk"
+      ? `od ${monthly}`
+      : `from ${monthly}`
+    : monthly;
+  if (salary.kind === "from-base" && salary.note) {
+    const note = salary.note[locale];
+    return /[.!?]$/.test(note) ? `${core}, ${note}` : `${core}, ${note}.`;
+  }
+  return core;
+}
+
+/** Full pay line, including the label. */
 export function careerSalaryLine(role: CareerRole, locale: Locale): string {
-  const prefix = locale === "sk" ? "Mzda" : "Salary";
-  return `${prefix}: ${careerSalaryValue(role, locale)}`;
+  return `${careerSalaryLabel(role, locale)}: ${careerSalaryValue(role, locale)}`;
 }
 
 export function careerStartLabel(role: CareerRole, locale: Locale): string {
@@ -435,7 +483,34 @@ function listHtml(items: readonly string[]): string {
   return `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
 }
 
-/** JobPosting JSON-LD. Omits baseSalary when the figure is still a placeholder. */
+function quantitativeValue(salary: CareerSalary): {
+  "@type": "QuantitativeValue";
+  unitText: "MONTH" | "HOUR";
+  value?: number;
+  minValue?: number;
+} {
+  if (salary.kind === "from-base") {
+    return {
+      "@type": "QuantitativeValue",
+      minValue: salary.amountEur,
+      unitText: "MONTH",
+    };
+  }
+  if (salary.kind === "hourly-base") {
+    return {
+      "@type": "QuantitativeValue",
+      value: salary.amountEur,
+      unitText: "HOUR",
+    };
+  }
+  return {
+    "@type": "QuantitativeValue",
+    value: salary.amountEur,
+    unitText: "MONTH",
+  };
+}
+
+/** JobPosting JSON-LD. Every role states a base salary. */
 export function jobPostingJsonLd(role: CareerRole, locale: Locale): string {
   const ui = careerUi[locale];
   const description = [
@@ -491,17 +566,11 @@ export function jobPostingJsonLd(role: CareerRole, locale: Locale): string {
     url: `${CAREERS_SITE}/careers/${role.slug}`,
   };
 
-  if (role.salary.kind === "base" && role.salary.per === "month") {
-    data.baseSalary = {
-      "@type": "MonetaryAmount",
-      currency: "EUR",
-      value: {
-        "@type": "QuantitativeValue",
-        value: role.salary.amountEur,
-        unitText: "MONTH",
-      },
-    };
-  }
+  data.baseSalary = {
+    "@type": "MonetaryAmount",
+    currency: "EUR",
+    value: quantitativeValue(role.salary),
+  };
 
   return JSON.stringify(data).replace(/</g, "\\u003c");
 }

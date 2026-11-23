@@ -7,7 +7,7 @@ import {
   CAREERS_EMAIL,
   CAREERS_SITE,
   careerApplyHref,
-  careerSalaryIsPlaceholder,
+  careerSalaryLabel,
   careerSalaryValue,
   careerStartLabel,
   careerUi,
@@ -63,9 +63,8 @@ export default async function CareerDetailPage({ params }: Props) {
     { label: ui.location, value: role.location[locale] },
     { label: ui.start, value: careerStartLabel(role, locale) },
     {
-      label: ui.salary,
+      label: careerSalaryLabel(role, locale),
       value: careerSalaryValue(role, locale),
-      placeholder: careerSalaryIsPlaceholder(role),
     },
   ];
 
@@ -102,13 +101,7 @@ export default async function CareerDetailPage({ params }: Props) {
               <dt>
                 <strong>{fact.label}</strong>
               </dt>
-              <dd
-                className={
-                  fact.placeholder ? "agency-salary-placeholder" : undefined
-                }
-              >
-                {fact.value}
-              </dd>
+              <dd>{fact.value}</dd>
             </div>
           ))}
         </dl>
@@ -137,6 +130,9 @@ export default async function CareerDetailPage({ params }: Props) {
               {ui.applyCta} {CAREERS_EMAIL}
             </AgencyEmailButton>
           </div>
+          <p className="agency-privacy" id="osobne-udaje">
+            {ui.privacy}
+          </p>
         </section>
       </div>
     </SiteShell>

@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import {
-  SALARY_PLACEHOLDER,
   careerSalaryLine,
   careerStartLabel,
   careers,
@@ -10,33 +9,47 @@ import {
 } from "./careers";
 
 describe("career salary lines", () => {
-  test("CMO base salary is formatted from the single EUR figure", () => {
+  test("CMO is a monthly minimum with the experience note", () => {
     const cmo = getCareer("cmo");
     assert.ok(cmo);
+    assert.equal(cmo.salary.kind, "from-base");
     assert.equal(
       careerSalaryLine(cmo, "sk"),
-      "Mzda: 3 240 € hrubého mesačne (základná zložka)",
+      "Mzda: od 2 800 € hrubého mesačne (základná zložka), podľa znalostí a skúseností.",
     );
     assert.equal(
       careerSalaryLine(cmo, "en"),
-      "Salary: €3,240 gross per month (base)",
+      "Salary: from €2,800 gross per month (base), depending on knowledge and experience.",
     );
   });
 
-  test("admin and developer salaries stay on the shared placeholder", () => {
-    for (const slug of ["admin-assistant", "ai-developer"]) {
-      const role = getCareer(slug);
-      assert.ok(role);
-      assert.equal(role.salary.kind, "placeholder");
-      assert.equal(
-        careerSalaryLine(role, "sk"),
-        `Mzda: ${SALARY_PLACEHOLDER.sk}`,
-      );
-      assert.equal(
-        careerSalaryLine(role, "en"),
-        `Salary: ${SALARY_PLACEHOLDER.en}`,
-      );
-    }
+  test("admin pay is the exact hourly rate, with no annual total", () => {
+    const admin = getCareer("admin-assistant");
+    assert.ok(admin);
+    assert.equal(admin.salary.kind, "hourly-base");
+    assert.equal(
+      careerSalaryLine(admin, "sk"),
+      "Odmena: 5,259 € hrubého za hodinu (základná odmena). Vypláca sa za vykonanú prácu, v rozsahu najviac 350 hodín v kalendárnom roku.",
+    );
+    assert.equal(
+      careerSalaryLine(admin, "en"),
+      "Pay: €5.259 gross per hour (base). Paid for work performed, up to 350 hours per calendar year.",
+    );
+    assert.equal(careerSalaryLine(admin, "sk").includes("5,26"), false);
+    assert.equal(careerSalaryLine(admin, "en").includes("5.26"), false);
+  });
+
+  test("developer pay is a monthly minimum", () => {
+    const developer = getCareer("ai-developer");
+    assert.ok(developer);
+    assert.equal(
+      careerSalaryLine(developer, "sk"),
+      "Mzda: od 3 000 € hrubého mesačne (základná zložka), podľa skúseností a zručností.",
+    );
+    assert.equal(
+      careerSalaryLine(developer, "en"),
+      "Salary: from €3,000 gross per month (base), depending on skills and experience.",
+    );
   });
 });
 
@@ -47,31 +60,63 @@ describe("career start labels", () => {
     assert.equal(careerStartLabel(cmo, "sk"), "1. 1. 2027");
     assert.equal(careerStartLabel(cmo, "en"), "1 January 2027");
   });
+
+  test("admin start stays open", () => {
+    const admin = getCareer("admin-assistant");
+    assert.ok(admin);
+    assert.equal(careerStartLabel(admin, "sk"), "Dohodou");
+    assert.equal(careerStartLabel(admin, "en"), "By agreement");
+  });
 });
 
 describe("JobPosting JSON-LD", () => {
-  test("includes baseSalary only when a figure exists", () => {
+  test("maps each salary kind onto schema.org", () => {
     const cmo = getCareer("cmo");
     const admin = getCareer("admin-assistant");
     const developer = getCareer("ai-developer");
     assert.ok(cmo && admin && developer);
 
     const cmoLd = JSON.parse(jobPostingJsonLd(cmo, "sk")) as {
+      baseSalary: { value: { minValue?: number; value?: number; unitText: string } };
+    };
+    assert.equal(cmoLd.baseSalary.value.minValue, 2800);
+    assert.equal(cmoLd.baseSalary.value.unitText, "MONTH");
+    assert.equal("value" in cmoLd.baseSalary.value, false);
+
+    const devLd = JSON.parse(jobPostingJsonLd(developer, "en")) as {
+      baseSalary: { value: { minValue?: number; unitText: string } };
+      employmentType: string[];
+    };
+    assert.equal(devLd.baseSalary.value.minValue, 3000);
+    assert.equal(devLd.baseSalary.value.unitText, "MONTH");
+    assert.deepEqual(devLd.employmentType, ["FULL_TIME", "CONTRACTOR"]);
+
+    const adminLd = JSON.parse(jobPostingJsonLd(admin, "sk")) as {
       baseSalary: { value: { value: number; unitText: string } };
+      employmentType: string[];
       description: string;
     };
-    assert.equal(cmoLd.baseSalary.value.value, 3240);
-    assert.equal(cmoLd.baseSalary.value.unitText, "MONTH");
-    assert.match(cmoLd.description, /3 240/);
+    assert.equal(adminLd.baseSalary.value.value, 5.259);
+    assert.equal(adminLd.baseSalary.value.unitText, "HOUR");
+    assert.deepEqual(adminLd.employmentType, ["TEMPORARY", "PART_TIME"]);
+    assert.match(adminLd.description, /5,259/);
+    assert.equal(/\d[\d\s]*\s*€/.test(adminLd.description.replace("5,259 €", "")), false);
+  });
 
-    for (const role of [admin, developer]) {
-      const parsed = JSON.parse(jobPostingJsonLd(role, "sk")) as {
-        baseSalary?: unknown;
-        description: string;
-      };
-      assert.equal("baseSalary" in parsed, false);
-      assert.match(parsed.description, /dohodou \/ TBD/);
+  test("developer copy does not lock a stack", () => {
+    const developer = getCareer("ai-developer");
+    assert.ok(developer);
+    const blob = JSON.stringify({
+      teaser: developer.teaser,
+      pitch: developer.pitch,
+      responsibilities: developer.responsibilities,
+      lookingFor: developer.lookingFor,
+    });
+    for (const fixed of ["TypeScript", "Next.js", "Postgres", "Cursor"]) {
+      assert.equal(blob.includes(fixed), false, fixed);
     }
+    assert.match(developer.teaser.sk, /Nástroje volíme podľa projektu/);
+    assert.match(developer.teaser.en, /pick the tools per project/);
   });
 
   test("lists every open role", () => {

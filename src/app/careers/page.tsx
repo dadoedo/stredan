@@ -3,7 +3,6 @@ import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
 import {
   CAREERS_SITE,
-  careerSalaryIsPlaceholder,
   careerSalaryLine,
   careerStartLabel,
   careerUi,
@@ -54,15 +53,7 @@ export default async function CareersPage() {
                   <p className="agency-offer-price">
                     {role.cooperation[locale]} · {careerStartLabel(role, locale)}
                   </p>
-                  <p
-                    className={
-                      careerSalaryIsPlaceholder(role)
-                        ? "agency-offer-salary agency-salary-placeholder"
-                        : "agency-offer-salary"
-                    }
-                  >
-                    {salary}
-                  </p>
+                  <p className="agency-offer-salary">{salary}</p>
                 </div>
                 <Link
                   href={`/careers/${role.slug}`}
@@ -74,6 +65,18 @@ export default async function CareersPage() {
             );
           })}
         </ul>
+
+        <p className="mt-10">
+          <a href="#osobne-udaje" className="agency-text-link">
+            {ui.privacyLink}
+          </a>
+        </p>
+        <section id="osobne-udaje" className="mt-8">
+          <h2 className="font-heading text-xl font-semibold tracking-tight">
+            {ui.privacyTitle}
+          </h2>
+          <p className="agency-privacy">{ui.privacy}</p>
+        </section>
       </div>
     </SiteShell>
   );
