@@ -4,7 +4,7 @@ import "./globals.css";
 import { getLocale } from "@/lib/locale";
 import LocaleScript from "@/components/LocaleScript";
 import { SkipLink } from "@/components/SkipLink";
-import { OG_IMAGE, SITE_ORIGIN } from "@/lib/site";
+import { ogImage, SITE_ORIGIN } from "@/lib/site";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -40,11 +40,11 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Stredan",
       locale: isSk ? "sk_SK" : "en_US",
       type: "website",
-      images: [OG_IMAGE],
+      images: [ogImage(locale)],
     },
     twitter: {
       card: "summary_large_image",
-      images: [OG_IMAGE.url],
+      images: [ogImage(locale)],
     },
   };
 }

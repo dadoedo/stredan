@@ -16,6 +16,7 @@ import {
   jobPostingJsonLd,
 } from "@/data/careers";
 import { getLocale } from "@/lib/locale";
+import { ogImage } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -47,6 +48,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "Stredan",
       locale: locale === "sk" ? "sk_SK" : "en_US",
       type: "website",
+      images: [ogImage(locale)],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage(locale)],
     },
   };
 }

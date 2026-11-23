@@ -9,6 +9,45 @@ import { OpensInNewTab } from "@/components/OpensInNewTab";
 import { trackEvent } from "@/lib/analytics";
 import { homeCopy } from "@/lib/home-copy";
 
+const HIGHLIGHT = {
+  sk: {
+    process: "jeden proces",
+    fee: "jednorazová implementácia",
+    price: "Jednorazová cena",
+  },
+  en: {
+    process: "one process",
+    fee: "one-off implementation fee",
+    price: "One-off fee",
+  },
+} as const;
+
+function Scribble({ children }: { children: string }) {
+  return <span className="agency-scribble">{children}</span>;
+}
+
+function withPhrase(
+  text: string,
+  phrase: string,
+  kind: "scribble" | "marker",
+) {
+  const at = text.indexOf(phrase);
+  if (at < 0) return text;
+  const mark =
+    kind === "scribble" ? (
+      <Scribble>{phrase}</Scribble>
+    ) : (
+      <span className="agency-marker">{phrase}</span>
+    );
+  return (
+    <>
+      {text.slice(0, at)}
+      {mark}
+      {text.slice(at + phrase.length)}
+    </>
+  );
+}
+
 const CLIENTS = [
   { name: "Foodient", logo: "/logos/foodient.png", href: "https://foodient.app" },
   { name: "ViralSky", logo: "/logos/viralsky.png", href: "https://viralsky.ai" },
@@ -245,14 +284,18 @@ export function AgencyHome({ locale }: { locale: Locale }) {
           <div className="agency-hero-copy">
             <p className="agency-kicker">{t.kicker}</p>
             <h1 className="agency-h1">
-              <span className="agency-hero-title-full">{t.headline}</span>
+              <span className="agency-hero-title-full">
+                {withPhrase(t.headline, HIGHLIGHT[locale].process, "scribble")}
+              </span>
               <span className="agency-hero-title-short" aria-hidden="true">
-                {t.mobileTitle[0]}
+                <Scribble>{t.mobileTitle[0]}</Scribble>
                 <br />
                 {t.mobileTitle[1]}
               </span>
             </h1>
-            <p className="agency-lede">{t.lede}</p>
+            <p className="agency-lede">
+              {withPhrase(t.lede, HIGHLIGHT[locale].fee, "marker")}
+            </p>
             <div className="agency-cta-row">
               <IntroCallButton locale={locale} location="hero" />
             </div>
@@ -273,7 +316,9 @@ export function AgencyHome({ locale }: { locale: Locale }) {
       </section>
       <div className="agency-hero-detail">
         <div className="agency-shell">
-          <p className="agency-lede">{t.lede}</p>
+          <p className="agency-lede">
+            {withPhrase(t.lede, HIGHLIGHT[locale].fee, "marker")}
+          </p>
           <AgencyEmailButton
             href="mailto:david@stredan.sk"
             className="agency-text-link agency-hero-mail"
@@ -288,7 +333,10 @@ export function AgencyHome({ locale }: { locale: Locale }) {
       <section id="ponuka" className="agency-offers">
         <div className="agency-shell">
           <Reveal>
-            <p className="agency-section-label">{t.offerEyebrow}</p>
+            <div className="agency-label-row">
+              <p className="agency-section-label">{t.offerEyebrow}</p>
+              <span className="agency-pill">{HIGHLIGHT[locale].price}</span>
+            </div>
             <h2 className="agency-h2">{t.offerTitle}</h2>
             <p className="agency-body">{t.offerLead}</p>
           </Reveal>

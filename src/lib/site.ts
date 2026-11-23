@@ -3,12 +3,17 @@ import type { Locale } from "@/lib/translations";
 
 export const SITE_ORIGIN = "https://stredan.sk";
 
-export const OG_IMAGE = {
-  url: "/og.jpg",
-  width: 1200,
-  height: 630,
-  alt: "Dávid Stredánsky, Stredan",
-} as const;
+export function ogImage(locale: Locale = "sk") {
+  return {
+    url: "/og.jpg",
+    width: 1200,
+    height: 630,
+    alt:
+      locale === "en"
+        ? "One AI agent. One process."
+        : "Jeden AI agent. Jeden proces.",
+  };
+}
 
 /**
  * Language is a cookie on one URL, not a separate path.
@@ -38,13 +43,13 @@ export function routeMetadata(input: {
       siteName: "Stredan",
       locale: input.locale === "en" ? "en_US" : "sk_SK",
       type: "website",
-      images: [OG_IMAGE],
+      images: [ogImage(input.locale)],
     },
     twitter: {
       card: "summary_large_image",
       title: input.title,
       description: input.description,
-      images: [OG_IMAGE.url],
+      images: [ogImage(input.locale)],
     },
   };
 }
